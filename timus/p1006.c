@@ -82,7 +82,14 @@ static void * stb__sbgrowf(void *arr, int increment, int itemsize)
 }
 #endif // STB_STRETCHY_BUFFER_H_INCLUDED
 
-int solve(char* orig, char *moves);
+struct square {
+	char x;
+	char y;
+	char a;
+	int matches;
+};
+
+struct square* solve(char* orig);
 
 // == UTILITY ==
 
@@ -125,7 +132,7 @@ void print_board(char *screen) {
 
 
 void draw_rect(char *screen, char x, char y, char a) {
-	printf("DRAWING RECT: %d %d %d\n", x, y, a);
+	// printf("DRAWING RECT: %d %d %d\n", x, y, a);
 	// first we draw the vertical lines.
 	for (char k = 1; k < a-1; k++) {
 		// Upper horiz. 
@@ -165,7 +172,8 @@ void wtf() {
 
 
 
-void gen_screen(char *screen) {
+struct square* gen_screen(char *screen) {
+	struct square* mvs = NULL;
 	// we zero out the previous board, just to be secure.
 	clear_screen(screen);
 
@@ -188,9 +196,16 @@ void gen_screen(char *screen) {
 			a = random_at_most(W-x-2) + 2;
 		}
 
+		struct square tmp;
+		tmp.x = x;
+		tmp.y = y;
+		tmp.a = a;
+		sb_push(mvs, tmp);
+
 		// Now we simply draw the rectangle.
 		draw_rect(screen, x, y, a);
 	}
+	return mvs;
 }
 
 
@@ -200,19 +215,21 @@ int test() {
 	srand(10);
 
 	char screen[W*H];
-	char moves[3*N_MAX];
 	char comp_screen[W*H];
 
 	while (1) {
-		gen_screen(screen);
-		clear_screen(comp_screen);
+		struct square *actual = gen_screen(screen);
+		/*
+		sb_free(actual);
+		actual = gen_screen(screen);
+		*/
 
 
-		int nmoves = solve(screen, moves);
-		
+		struct square *computed = solve(screen);	
 		// Now generate the screen
-		for (int i = 0; i < nmoves; i++) {
-			draw_rect(comp_screen, moves[3*i + 0], moves[3*i + 1], moves[3*i + 2]);
+		clear_screen(comp_screen);
+		for (int i = 0; i < sb_count(computed); i++) {
+			draw_rect(comp_screen, computed[i].x, computed[i].y, computed[i].a);
 		}
 
 		// check if the two boards are equal.
@@ -220,8 +237,24 @@ int test() {
 			print_board(screen);
 			printf("\n");
 			print_board(comp_screen);
+
+			// Print out actual moves.
+			printf("Actual moves: \n");
+			for (int i = 0; i < sb_count(actual); i++) {
+				printf(" %d %d %d\n", actual[i].x, actual[i].y, actual[i].a);
+			}
+			// Print out actual moves.
+			printf("Our moves: \n");
+			for (int i = 0; i < sb_count(computed); i++) {
+				printf(" %d %d %d\n", computed[i].x, computed[i].y, computed[i].a);
+			}
+
+			sb_free(actual);
+			sb_free(computed);
 			break;
 		}
+		sb_free(actual);
+		sb_free(computed);
 	}
 
 	return 0;
@@ -251,12 +284,6 @@ int main() {
 	return test();
 }
 
-struct square {
-	char x;
-	char y;
-	char a;
-	int matches;
-};
 
 // The x and y are the upper left corner.
 struct square *
@@ -399,11 +426,16 @@ int *collide_map(char *screen, struct square *squares) {
 	}
 
 	// This is where you would do the comparison then		
-	int *useless = NULL;
+	char *useless = malloc(SN*sizeof(char));
 	int *ones = malloc(SN*sizeof(int));
-	if (ones == NULL) {
+	if (ones == NULL || useless == NULL) {
 		printf("MALLOC ERROR!\n");
 		return NULL;
+	}
+
+	for (int i = 0; i < SN; i++) {
+		ones[i] = 0;
+		useless[i] = 0;
 	}
 
 
@@ -416,19 +448,20 @@ int *collide_map(char *screen, struct square *squares) {
 
 	// Look for the ones which have no ones, and see if they are perfect.
 	for (int i = 0; i < SN; i++) {
+		/*
+		struct square tmp = squares[i];
+		printf("TESTING SQUARE #%d: %d %d %d\n", i, tmp.x, tmp.y, tmp.a);
+		printf("\tOnes: %d\n", ones[i]);
+		printf("\tPerfect?: %d %d\n", tmp.matches, (tmp.a-1)*4);
+		*/
 		if (ones[i] == 0 && (squares[i].matches != (squares[i].a-1)*4)) {
-			sb_push(useless, i);
+			useless[i] = 1;
 		}
 	}
 	
 	// Done with the one count.
 	// Free ones.
 	free(ones);
-
-	for (int i = 0; i < sb_count(useless); i++) {
-		struct square s = squares[useless[i]];
-		printf("USELESS RECT: %d %d %d\n", s.x, s.y, s.a);
-	}
 	
 
 	// Now we are going to create the directed graph.
@@ -439,6 +472,106 @@ int *collide_map(char *screen, struct square *squares) {
 		return NULL;
 	}
 
+	for (int i = 0; i < SN*SN; i++) {
+		edges[i] = 0;
+	}
+
+
+	// We have to do this scan first.
+	// We do the all useless scan first.
+	for (int i = 0; i < W*H; i++) {
+		int* cc = collides[i];
+
+		if (sb_count(cc) < 2) {
+			continue;
+		}
+
+		// OK, so we are going to have to cheat a little bit here.
+		// if there are only useless ones here, we have a case where
+		// there is one that is not useless. we test this by checking
+		// if they are all useless.
+		int all_useless = 0;
+		for (int j = 0; j < sb_count(cc); j++) {
+			all_useless += useless[cc[j]];
+		}
+		if (all_useless == sb_count(cc)) {
+			// TODO(rhermes): This can be optimized by only looking at the borders of
+			// both rectangles, but I couldn't be bothered to check write the code.
+			// This will only happen a very few times and the extra overhead is very
+			// small
+			
+			// Everyone there was useless.
+			// printf("WE HAVE AN ALL USELESS SPACE WITH %d POSSIBILITIES.\n", all_useless);
+			// What we do now, is we check all the other places where they intersect and
+			// if there is a place there where they have different expected values, we check it out.
+			if (sb_count(cc) != 2) {
+				printf("THERE ARE MORE THAN 2 USELESS!\n");
+				continue;
+			}
+
+
+			int u1 = cc[0];
+			int u2 = cc[1];
+			
+			// 0 means u1, 1 means u2;
+			int overall_res = -1;
+
+			for (int y = 0; y < H; y++) {
+				for (int x = 0; x < W; x++) {
+					int* dcc = collides[y*W + x];
+
+					// we now have to check if they are here.
+					int found1 = 0;
+					int found2 = 0;
+
+					for (int jj = 0; jj < sb_count(dcc); jj++) {
+						if (dcc[jj] == u1) {
+							found1 = 1;
+						} else if (dcc[jj] == u2) {
+							found2 = 1;
+						}
+					}
+
+					if (!found1 || !found2) {
+						continue;
+					}
+
+					// Now we simply check what the expected value for both is
+					// here and then we see what the actual answer is.
+					int sup1 = supposed_to_be(squares[u1], x, y);
+					int sup2 = supposed_to_be(squares[u2], x, y);
+					int act  = (unsigned char)screen[y*W + x];
+
+					if (sup1 == sup2) {
+						continue;
+					} else if (sup1 == act) {
+						// This means that sup1 is the one who is over.
+						// therfor we add an edge from sup2 to sup 1
+						overall_res = 0;
+					} else if (sup2 == act) {
+						overall_res = 1;
+					} else {
+						printf("THIS IS NOT SUPPOSED TO HAPPEN!\n");
+					}
+				}
+
+				if (overall_res != -1) {
+					break;
+				}
+			}
+
+			// if the overall result is still -1, then we simply pick one at random.
+			if (overall_res == 0) {
+				useless[u1] = 0;
+			} else if (overall_res == 1) {
+				useless[u2] = 0;
+			} else {
+				// THis means we found no conflicting place where one was dominant.
+				printf("WTF!\n");
+			}
+		}
+	}
+
 	// Here we build the dag,
 	for (int i = 0; i < W*H; i++) {
 		int* cc = collides[i];
@@ -446,31 +579,57 @@ int *collide_map(char *screen, struct square *squares) {
 			printf("\n");
 		}
 		printf("%d", sb_count(cc));
-		
-		// Only the places where only one intersects are important to us.
-		if (sb_count(cc) != 2) {
+
+		if (sb_count(cc) < 2) {
 			sb_free(collides[i]);
 			continue;
 		}
 
+		// We cheat a little here, to speed things up.
+		// if a square is perfect is must be first,
+		// and so we can simply set the other ones up to it.
+		for (int per = 0; per < sb_count(cc); per++) {
+			struct square pers = squares[cc[per]];
+			if (pers.matches != (pers.a-1)*4) {
+				continue;
+			}
+			// Since only 1 can be perfect in such overlaps, we can now loop through again.
 
-		int c1 = cc[0];
-		int c2 = cc[1];
+			for (int uper = 0; uper < sb_count(cc); uper++) {
+				// Skip if either is uless or the same as the upper.
+				if (uper == per || useless[cc[uper]]) {
+					continue;
+				}
 
-		// We skip this if it's useless;
-		int ubreak = 0;
-		for (int i = 0; i < sb_count(useless); i++) {
-			if (useless[i] == c1 || useless[i] == c2) {
-				ubreak = 1;	
-				break;
+				// Else set the edge
+				edges[SN*cc[uper] + cc[per]] = 1;
+			}
+			
+			break;
+		}
+		
+
+		// Make sure that there are 2 usefull ones.
+		int un = 0;
+		int una[2];
+		for (int j = 0; j < sb_count(cc); j++) {
+			if (!useless[cc[j]]) {
+				if (un < 2) {
+					una[un] = cc[j];
+				}
+				un++;
 			}
 		}
-		if (ubreak) {
+		sb_free(collides[i]);
+		if (un != 2) {
+			// Too many.
 			continue;
 		}
 
-		// we now have the integers we need
-		sb_free(collides[i]);
+
+		int c1 = una[0];
+		int c2 = una[1];
+
 
 		// Check if we already have them ordered.
 		if (edges[SN*c1 + c2] || edges[SN*c2 + c1]) {
@@ -508,16 +667,10 @@ int *collide_map(char *screen, struct square *squares) {
 	// Find the nodes with no incoming edge.
 	for (int i = 0; i < SN; i++) {
 		// We skip this if it's useless;
-		int ubreak = 0;
-		for (int j = 0; j < sb_count(useless); j++) {
-			if (useless[j] == i) {
-				ubreak = 1;	
-				break;
-			}
-		}
-		if (ubreak) {
+		if (useless[i]) {
 			continue;
 		}
+
 		// Check if anyone has a node to this.
 		int clean = 1;
 
@@ -565,17 +718,15 @@ int *collide_map(char *screen, struct square *squares) {
 	// Free S
 	sb_free(S);
 
-
-	sb_free(useless);
-
 	// Free the edges.
+	free(useless);
 	free(edges);
 
 	return ans;
 }
 
 // Returns amount of moves added to the moves array.
-int solve(char* orig, char *moves) {
+struct square *solve(char* orig) {
 	// First we are going to run a though experiment though, we are going
 	// First thing we do is try to identify the rectangles that are here.
 	//
@@ -589,6 +740,8 @@ int solve(char* orig, char *moves) {
 	//
 	// to generate all the possible squares, not thinking about the actual
 	// signs there.
+	struct square *solution = NULL;
+
 	struct square *pos_squares = NULL;
 	for (char y = 0; y < H; y++) {
 		for (char x = 0; x < W; x++) {
@@ -600,20 +753,21 @@ int solve(char* orig, char *moves) {
 
 	// Time to free them.
 	printf("We counted %d possible squares in total.\n", npos);
+	for (int i = 0; i < npos; i++) {
+		struct square tmp = pos_squares[i];
+		printf(" %d %d %d\n", tmp.x, tmp.y, tmp.a);
+	}
 	
 	// Build a map over all collisions on the map.
 	int* draw_order = collide_map(orig, pos_squares);
 	
 	// Return the moves.
-	int ans = 0;
 	for (int i = 0; i < sb_count(draw_order); i++) {
 		struct square sq = pos_squares[draw_order[i]];
-		moves[ans*3] = sq.x;
-		moves[ans*3 + 1] = sq.y;
-		moves[ans*3 + 2] = sq.a;
-		ans++;
+		sb_push(solution, sq);
 	}
 	sb_free(pos_squares);
+	sb_free(draw_order);
 
-	return ans;
+	return solution;
 }
