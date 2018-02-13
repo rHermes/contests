@@ -500,13 +500,15 @@ int *collide_map(char *screen, struct square *squares) {
 			// This will only happen a very few times and the extra overhead is very
 			// small
 			
+			// OK. The way we do this is simple. We simply check if there is a spot
+			// where only one uselss actually matches.
+			
 			// Everyone there was useless.
 			// printf("WE HAVE AN ALL USELESS SPACE WITH %d POSSIBILITIES.\n", all_useless);
 			// What we do now, is we check all the other places where they intersect and
 			// if there is a place there where they have different expected values, we check it out.
 			if (sb_count(cc) != 2) {
 				printf("THERE ARE MORE THAN 2 USELESS!\n");
-				continue;
 			}
 
 
@@ -608,27 +610,61 @@ int *collide_map(char *screen, struct square *squares) {
 			break;
 		}
 		
-
+		
+		int *useful = NULL;
 		// Make sure that there are 2 usefull ones.
-		int un = 0;
-		int una[2];
 		for (int j = 0; j < sb_count(cc); j++) {
 			if (!useless[cc[j]]) {
-				if (un < 2) {
-					una[un] = cc[j];
-				}
-				un++;
+				sb_push(useful, cc[j]);
 			}
 		}
 		sb_free(collides[i]);
-		if (un != 2) {
+
+		// OK so check here is very simple. We check if there is only 1
+		// with the correct expected value, and if it is, we add that
+		// as an edge to all the others that are here.
+		int y = i/W;
+		int x = i % W;
+
+		int act  = (unsigned char)screen[y*W + x];
+		
+		int thecor = -1;
+		for (int j = 0; j < sb_count(useful); j++) {
+			int sup = supposed_to_be(squares[useful[j]], x, y);
+			if (sup == act) {
+				if (thecor < 0) {
+					thecor = useful[j];
+				} else {
+					thecor = -2;
+					break;
+				}
+			}
+		}
+
+		// Now we check if there is only one.
+		if (thecor >= 0) {
+			// Since there is only one correct here, it must
+			// mean that the others ones must be beneath it.
+			for (int j = 0; j < sb_count(useful); j++) {
+				if (useful[j] == thecor) {
+					continue;
+				}
+
+				// add the link.
+				edges[SN*useful[j] + thecor] = 1;
+			}
+		}
+
+		sb_free(useful);
+/*
+		if (sb_count(useful) != 2) {
 			// Too many.
 			continue;
 		}
 
 
-		int c1 = una[0];
-		int c2 = una[1];
+		int c1 = useful[0];
+		int c2 = useful[1];
 
 
 		// Check if we already have them ordered.
@@ -655,6 +691,7 @@ int *collide_map(char *screen, struct square *squares) {
 		} else {
 			printf("THIS IS NOT SUPPOSED TO HAPPEN!\n");
 		}
+		*/
 	}
 	printf("\n");
 
