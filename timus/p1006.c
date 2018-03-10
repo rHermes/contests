@@ -255,6 +255,8 @@ int test() {
 		}
 		sb_free(actual);
 		sb_free(computed);
+
+		printf("This went well!\n");
 	}
 
 	return 0;
@@ -448,12 +450,8 @@ int *collide_map(char *screen, struct square *squares) {
 
 	// Look for the ones which have no ones, and see if they are perfect.
 	for (int i = 0; i < SN; i++) {
-		/*
-		struct square tmp = squares[i];
-		printf("TESTING SQUARE #%d: %d %d %d\n", i, tmp.x, tmp.y, tmp.a);
-		printf("\tOnes: %d\n", ones[i]);
-		printf("\tPerfect?: %d %d\n", tmp.matches, (tmp.a-1)*4);
-		*/
+		// If a square has no point of no conflict, and it is not a perfect
+		// square, we mark it as useless
 		if (ones[i] == 0 && (squares[i].matches != (squares[i].a-1)*4)) {
 			useless[i] = 1;
 		}
@@ -481,11 +479,14 @@ int *collide_map(char *screen, struct square *squares) {
 	// We do the all useless scan first.
 	for (int i = 0; i < W*H; i++) {
 		int* cc = collides[i];
-
+		
+		// if there are less than 2 collides, we simply ignore this.
 		if (sb_count(cc) < 2) {
 			continue;
 		}
 
+
+		// We have to figure out 
 		// OK, so we are going to have to cheat a little bit here.
 		// if there are only useless ones here, we have a case where
 		// there is one that is not useless. we test this by checking
@@ -574,13 +575,17 @@ int *collide_map(char *screen, struct square *squares) {
 		}
 	}
 
+	// So this is where we build the directed acyclic graph;
+
 	// Here we build the dag,
 	for (int i = 0; i < W*H; i++) {
 		int* cc = collides[i];
+		/*
 		if (i % W == 0) {
 			printf("\n");
 		}
 		printf("%d", sb_count(cc));
+		*/
 
 		if (sb_count(cc) < 2) {
 			sb_free(collides[i]);
@@ -656,44 +661,8 @@ int *collide_map(char *screen, struct square *squares) {
 		}
 
 		sb_free(useful);
-/*
-		if (sb_count(useful) != 2) {
-			// Too many.
-			continue;
-		}
-
-
-		int c1 = useful[0];
-		int c2 = useful[1];
-
-
-		// Check if we already have them ordered.
-		if (edges[SN*c1 + c2] || edges[SN*c2 + c1]) {
-			continue;
-		}
-
-		
-		int y = i/W;
-		int x = i % W;
-
-		int sup1 = supposed_to_be(squares[c1], x, y);
-		int sup2 = supposed_to_be(squares[c2], x, y);
-		int act  = (unsigned char)screen[y*W + x];
-
-		if (sup1 == sup2) {
-			continue;
-		} else if (sup1 == act) {
-			// This means that sup1 is the one who is over.
-			// therfor we add an edge from sup2 to sup 1
-			edges[SN*c2 + c1] = 1;
-		} else if (sup2 == act) {
-			edges[SN*c1 + c2] = 1;
-		} else {
-			printf("THIS IS NOT SUPPOSED TO HAPPEN!\n");
-		}
-		*/
 	}
-	printf("\n");
+
 
 	// Now the only thing left to do is to topologically sort them.
 
@@ -786,6 +755,7 @@ struct square *solve(char* orig) {
 		}
 	}
 
+	/*
 	int npos = sb_count(pos_squares);
 
 	// Time to free them.
@@ -794,6 +764,7 @@ struct square *solve(char* orig) {
 		struct square tmp = pos_squares[i];
 		printf(" %d %d %d\n", tmp.x, tmp.y, tmp.a);
 	}
+	*/
 	
 	// Build a map over all collisions on the map.
 	int* draw_order = collide_map(orig, pos_squares);
