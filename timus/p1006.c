@@ -131,9 +131,11 @@ struct square {
 	char y;
 	char a;
 	int matches;
+	int misses;
 };
 
 struct square* solve(char* orig);
+int instance_test(struct square* actual);
 
 
 void clear_screen(char *screen) {
@@ -172,6 +174,35 @@ void draw_rect(char *screen, char x, char y, char a) {
 	screen[(y+(a-1))*W + x + (a - 1)] = RBC; // DR
 }
 
+void remove_rect(char *screen, char x, char y, char a) {
+	// first we draw the vertical lines.
+	for (char k = 1; k < a-1; k++) {
+		// Upper horiz. 
+		screen[COORD(x + k, y)] = MIS;
+		// Lower horiz.
+		screen[COORD(x + k, y+a-1)] = MIS;
+		// Left vert
+		screen[(y+k)*W + x] = MIS;
+		// Right vert
+		screen[(y+k)*W + x + a-1] = MIS;
+	}
+
+	// corners.
+	screen[y*W + x] = MIS; // UL
+	screen[y*W + x + (a - 1)] = MIS; // UR
+	screen[(y+(a-1))*W + x] = MIS; // DL
+	screen[(y+(a-1))*W + x + (a - 1)] = MIS; // DR
+}
+
+// This draws the entire board, clearing the screen first.
+void draw_board(char *screen, struct square* squares) {
+	clear_screen(screen);
+	for (int i = 0; i < sb_count(squares); i++) {
+		draw_rect(screen, squares[i].x, squares[i].y, squares[i].a);
+	}
+}
+
+
 struct square*
 gen_random_screen(uint64_t initstate, uint64_t initseq) {
 	struct square* sqrs = NULL;
@@ -200,10 +231,7 @@ gen_random_screen(uint64_t initstate, uint64_t initseq) {
 			a = pcg32_boundedrand_r(&rng, (W-x-2)) + 2;
 		}
 
-		struct square tmp;
-		tmp.x = x;
-		tmp.y = y;
-		tmp.a = a;
+		struct square tmp = {x, y, a};
 		sb_push(sqrs, tmp);
 
 	}
@@ -219,9 +247,10 @@ int test() {
 	// Initialize the random generators.
 	pcg32_srandom_r(&rng1, 42u, 52u);
 	pcg32_srandom_r(&rng2, 79u, 1002u);
-
+/*
 	char screen[W*H];
 	char comp_screen[W*H];
+	*/
 
 	while (1) {
 		// We generate the initseq and the initstate.
@@ -231,6 +260,13 @@ int test() {
 
 		struct square *actual = gen_random_screen(initstate,initseq);
 
+		char rc = instance_test(actual);
+		sb_free(actual);
+		if (!rc) {
+			break;
+		}
+
+		/*
 		clear_screen(screen);
 		for (int i = 0; i < sb_count(actual); i++) {
 			draw_rect(screen, actual[i].x, actual[i].y, actual[i].a);
@@ -277,6 +313,7 @@ int test() {
 		}
 		sb_free(actual);
 		sb_free(computed);
+		*/
 	}
 
 	return 0;
@@ -319,6 +356,7 @@ could_be_square(char *screen, struct square *squares, char x, char y) {
 	// no longer gave anymore.
 	for (char a = 2; x + a <= W && y + a <= H; a++) {
 		int matches = 0;
+		int misses = 0;
 		char clz = 1;
 		for (char ca = 0; ca < a; ca++) {
 			char kx = x + ca;
@@ -341,12 +379,23 @@ could_be_square(char *screen, struct square *squares, char x, char y) {
 			// Now we check for matches. If it's the first or last round, we need to
 			// check for corners.
 			if (ca == 0) {
+				
+				misses += ld == MIS;
+				misses += dr == MIS;
+				misses += rd == MIS;
+
 				matches += ld == LUC;
 				matches += dr == LBC;
 				matches += rd == RUC;
 			} else if (ca == a-1) {
+				misses += dr == MIS;
 				matches += dr == RBC;
 			} else {
+				misses += ld == MIS;
+				misses += rd == MIS;
+				misses += ur == MIS;
+				misses += dr == MIS;
+
 				matches += ld == VER;
 				matches += rd == VER;
 				matches += ur == HOR;
@@ -359,6 +408,7 @@ could_be_square(char *screen, struct square *squares, char x, char y) {
 			sss.y = y;
 			sss.a = a;
 			sss.matches = matches;
+			sss.misses = misses;
 			sb_push(squares, sss);
 		}
 	}
@@ -401,20 +451,11 @@ int supposed_to_be(struct square s, int x, int y) {
 	}
 }
 
-
-// Ok, this becomes easier then. We build a map, figure out who is on top,
-// build a DAG from this and then use topological sorting to print out the
-// order.
-// It returns the order of the squares in squares, to print out.
-//
-// A way to filter down the squares we are going to need, to look at the
-// ones who don't have any 1 and aren't perfect.
-int *collide_map(char *screen, struct square *squares) {
+// This calculates the collide map into the collides variable.
+void real_collide_map(struct square *squares, int** collides) {
 	int SN = sb_count(squares);
-	// We generate a map over the places where two of them has collided.1
-	int *collides[W*H];
-
 	for (int i = 0; i < W*H; i++) {
+		// first we free and then set to null everything.
 		collides[i] = NULL;
 	}
 	
@@ -446,6 +487,22 @@ int *collide_map(char *screen, struct square *squares) {
 		sb_push(collides[(y+(a-1))*W + x], i); // DL
 		sb_push(collides[(y+(a-1))*W + x + (a - 1)], i); // DR
 	}
+}
+
+
+// Ok, this becomes easier then. We build a map, figure out who is on top,
+// build a DAG from this and then use topological sorting to print out the
+// order.
+// It returns the order of the squares in squares, to print out.
+//
+// A way to filter down the squares we are going to need, to look at the
+// ones who don't have any 1 and aren't perfect.
+int *collide_map(char *screen, struct square *squares) {
+	int SN = sb_count(squares);
+	// We generate a map over the places where two of them has collided.1
+	int *collides[W*H];
+
+	real_collide_map(squares, collides);
 
 	// This is where you would do the comparison then		
 	char *useless = malloc(SN*sizeof(char));
@@ -777,6 +834,474 @@ int *collide_map(char *screen, struct square *squares) {
 
 	return ans;
 }
+
+
+
+
+// This filters out the ones we are sure are there and the ones we don't know.
+void filter_out_phase_1(char* screen, struct square *squares, int** sure, int** doubt) {
+	int SN = sb_count(squares);
+	// We generate a map over the places where two of them has collided.1
+	int *collides[W*H];
+
+	real_collide_map(squares, collides);
+
+	// This is where you would do the comparison then		
+	char *useless = malloc(SN*sizeof(char));
+	char *jokers = malloc(SN*sizeof(char));
+	int *ones = malloc(SN*sizeof(int));
+	if (ones == NULL || useless == NULL || jokers == NULL) {
+		printf("MALLOC ERROR!\n");
+		return;
+	}
+
+	for (int i = 0; i < SN; i++) {
+		ones[i] = 0;
+		useless[i] = 0;
+		jokers[i] = 0;
+	}
+
+	for (int i = 0; i < W*H; i++) {
+		int* cc = collides[i];
+		if (sb_count(cc) == 1) {
+			ones[cc[0]]++;
+		} 
+	}
+
+	// Look for the ones which have no ones, and see if they are perfect.
+	for (int i = 0; i < SN; i++) {
+		char must = ones[i] != 0;
+		char perfect = squares[i].matches == (squares[i].a-1)*4;
+		
+		// If it is perfect, or we are sure, we add it to the sure pile.
+		if (must || perfect) { 
+			sb_push(*sure, i);
+		}  else {
+			// We set useless on this.
+			useless[i] = 1;
+		}
+	}
+	
+	// Done with the one count.
+	free(ones);
+
+	// We have to do this scan first.
+	// We do the all useless scan first.
+	for (int i = 0; i < W*H; i++) {
+		int* cc = collides[i];
+		// if there are less than 2 collides, we simply ignore this.
+		if (sb_count(cc) < 2) {
+			sb_free(cc);
+			continue;
+		}
+
+		// We must figure out if this is what we want.
+
+		int all_useless = 0;
+		for (int j = 0; j < sb_count(cc); j++) {
+			all_useless += useless[cc[j]];
+		}
+		if (all_useless == sb_count(cc)) {
+			for (int j = 0; j < sb_count(cc); j++) {
+				// we mark them all as not useless
+				jokers[cc[j]]++;
+				useless[cc[j]] = 0;
+			}
+		}
+		sb_free(cc);
+	}
+
+	// Now we simply loop through the list and find the ones we doubt.
+	for (int i = 0; i < SN; i++) {
+		if (jokers[i]) {
+			if (jokers[i] > 1) {
+				printf("WE GOT MORE THAN 1 THINGY HERE?!?!\n");
+			}
+			sb_push(*doubt, i);
+		}
+	}
+
+	free(useless);
+	free(jokers);
+}
+
+
+// Taken from here: 
+// http://rosettacode.org/wiki/Combinations#Lexicographic_ordered_generation
+
+
+// This function assumes that the squares are in the correct order, and it
+// checks if any of the squares we have, do not affect output in it's current place.
+// It returns a list of list over some which can be removed and not affect output.
+int* no_effect_on_output(struct square *squares) {
+	int SN = sb_count(squares);
+	int* ret = NULL;
+
+	
+	char orig[W*H];
+	char comp[W*H];
+
+	draw_board(orig, squares);
+
+	// we now check for each one.
+	for (int i = 0; i < SN; i++) {
+		clear_screen(comp);
+		for (int j = 0; j < SN; j++) {
+			if (j != i) {
+				draw_rect(comp, squares[j].x, squares[j].y, squares[j].a);
+			}
+		}
+
+		if (memcmp(orig,comp,W*H*sizeof(char)) == 0) {
+			sb_push(ret, i);
+		}
+	}
+	
+	int m = sb_count(ret);
+
+	int c[200] = {0};
+
+	// Now we know the ones that we can remove. Now we just need to create the groups that work.
+	for (int n = m; n >= 1; n--) {
+		int i = 0;
+		for (i = 0; i < n; i++) 
+			c[i] = n - i;
+
+		while (1) {
+			clear_screen(comp);
+			for (int j = 0; j < SN; j++) {
+				int found = 0;
+				for (int k = 0; k < n; k++) {
+					if (j == ret[c[k]-1]) {
+						found = 1;
+						break;
+					}
+				}
+				if (!found) {
+					draw_rect(comp, squares[j].x, squares[j].y, squares[j].a);
+				}
+			}
+
+			if (memcmp(orig,comp,W*H*sizeof(char)) == 0) {
+				int* kkk = NULL;
+				for (int k = 0; k < n; k++) {
+					sb_push(kkk, ret[c[k]-1]);
+				}
+				sb_free(ret);
+				return kkk;
+			}
+
+			/*
+			for (i = n; i--;)
+				printf("%d%c", c[i], i ? ' ': '\n');
+				*/
+
+
+			int totbreak = 0;
+			for (i = 0; c[i] >= m - i;) {
+				if (++i >= n)
+					totbreak = 1;
+			}
+			if (totbreak) {
+				break;
+			}
+			for (c[i]++; i; i--) c[i-1] = c[i] + 1;
+		}
+	}
+	return NULL;
+}
+
+
+int still_left(char* screen) {
+	for (int y = 0; y < H; y++) {
+		for (int x = 0; x < W; x++) {
+			if (screen[COORD(x,y)] != EMP && screen[COORD(x,y)] != MIS) {
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+struct square* 
+remove_solve(char* orig) {
+	// This is the solution in reverse.
+	struct square* sol = NULL;
+
+	// We must create a copy of orig, so that we don't mess it up.
+	char screen[W*H];
+	for (int y = 0; y < H; y++) {
+		for (int x = 0; x < W; x++) {
+			screen[COORD(x,y)] = orig[COORD(x,y)];
+		}
+	}
+	
+
+
+	while (still_left(screen)) {
+		// Gather possible squares.
+		struct square *pos_squares = NULL;
+		for (char y = 0; y < H; y++) {
+			for (char x = 0; x < W; x++) {
+				pos_squares = could_be_square(screen, pos_squares, x, y);
+			}
+		}
+
+		// Now just loop through these squares and try to find one that is perfect.
+		int found = 0;
+		for (int i = 0; i < sb_count(pos_squares); i++) {
+			struct square sq = pos_squares[i];
+			char perfect = sq.matches+sq.misses == (sq.a-1)*4;
+
+			if (perfect) {
+				sb_push(sol, sq);
+				remove_rect(screen, sq.x, sq.y, sq.a);
+				found++;
+			}
+		}
+
+		sb_free(pos_squares);
+
+		if (found == 0) {
+			printf("Couldn't find anyone, and we still haven't finished!\n");
+		}
+	}
+
+	
+	struct square* rev_sol = NULL;
+	for (int i = sb_count(sol)-1; i >= 0; i--) {
+		sb_push(rev_sol, sol[i]);
+	}
+
+	sb_free(sol);
+
+	// We are going to remove the ones we don't think have any effect.
+	struct square* real_sol = NULL;
+
+	int *noeff = no_effect_on_output(rev_sol);
+	if (sb_count(noeff) > 0) {
+		printf("Cleaning up %d squares!\n", sb_count(noeff));
+		for (int i = 0; i < sb_count(rev_sol); i++) {
+			int found = 0;
+			for (int j = 0; j < sb_count(noeff); j++) {
+				// We here simply 
+				if (noeff[j] == i) {
+					found = 1;
+					break;
+				}
+			}
+			if (!found) {
+				sb_push(real_sol, rev_sol[i]);
+			}
+		}
+
+
+		sb_free(rev_sol);
+	} else {
+		real_sol = rev_sol;
+	}
+	sb_free(noeff);
+
+
+	return real_sol;
+}
+
+// then pick out 1 by one, those who are "perfect" squares.
+// I'm going to try another tactic. Generate all possible squares,
+int instance_test2(struct square *actual) {
+	char orig_screen[W*H];
+	char comp_screen[W*H];
+	
+	draw_board(orig_screen, actual);
+
+
+	struct square* comp = remove_solve(orig_screen);
+	draw_board(comp_screen, comp);
+
+
+	if (sb_count(actual) != sb_count(comp)) {
+		/*
+		// First we figure out if the actual has some small flaws.
+		int *noeff = no_effect_on_output(comp);
+		if (sb_count(noeff) > 0) {
+			printf("There are certain squares which have no effect on the output!\n");
+		}
+		sb_free(noeff);
+		*/
+		printf("Unevencount: %d vs %d\n", sb_count(actual), sb_count(comp));
+	}
+
+	if (memcmp(orig_screen,comp_screen,W*H*sizeof(char)) != 0) {
+		printf("DIFFERED IN OUTPUT!\n");
+		print_board(orig_screen);
+		printf("\n");
+		print_board(comp_screen);
+		sb_free(comp);
+		return 0;
+	}
+
+	sb_free(comp);
+	return 1;
+}
+
+// This 
+int instance_test(struct square *actual) {
+	return instance_test2(actual);
+}
+
+
+
+// This is a simple test thing. returns 1 on succsessfull test.
+int instance_test1(struct square *actual) {
+	int retval = 1;
+
+	/*
+	// First we figure out if the actual has some small flaws.
+	int *noeff = no_effect_on_output(actual);
+	if (sb_count(noeff) > 0) {
+		printf("There are certain squares which have no effect on the output!\n");
+		retval = 0;
+	}
+
+	sb_free(noeff);
+
+	*/
+
+
+	char orig[W*H];
+
+	draw_board(orig, actual);
+
+	struct square *pos_squares = NULL;
+	for (char y = 0; y < H; y++) {
+		for (char x = 0; x < W; x++) {
+			pos_squares = could_be_square(orig, pos_squares, x, y);
+		}
+	}
+
+	// we do a quick check here to figure out if we have found all the squares we are
+	// going to need.
+	for (int i = 0; i < sb_count(actual); i++) {
+		struct square ac = actual[i];
+		int found = 0;
+		for (int j = 0; j < sb_count(pos_squares); j++) {
+			struct square tmp = pos_squares[j];
+			if (ac.x == tmp.x && ac.y == tmp.y && ac.a == tmp.a) {
+				found += 1;
+			}
+		}
+		
+		// Check if we didn't find him or there is something fishy going on
+		if (found != 1) {
+			printf("HERE WE HAVE FOUND! %d\n", found);
+		}
+	}
+
+
+	// Now we have the potential squares, we will now figure out
+	// who we for sure will have, and those we won't have.
+	int* sure_pass_1 = NULL;
+	int* doubt_pass_1 = NULL;
+	
+	// We filter these out.
+    filter_out_phase_1(orig, pos_squares, &sure_pass_1, &doubt_pass_1);
+	
+	// we build the list of the actual ones now.
+	struct square* post_pass_1 = NULL;
+	for (int j = 0; j < sb_count(sure_pass_1); j++) {
+		sb_push(post_pass_1, pos_squares[sure_pass_1[j]]);
+	}
+	for (int j = 0; j < sb_count(doubt_pass_1); j++) {
+		sb_push(post_pass_1, pos_squares[doubt_pass_1[j]]);
+	}
+
+	// See if all things went to shit here.
+	
+
+
+	// Now the first test, being if we can find one where a required
+	// rectangle is not in the output.
+	for (int i = 0; i < sb_count(actual); i++) {
+		struct square ac = actual[i];
+		int found = 0;
+		for (int j = 0; j < sb_count(post_pass_1); j++) {
+			struct square tmp = post_pass_1[j];
+			if (ac.x == tmp.x && ac.y == tmp.y && ac.a == tmp.a) {
+				found += 1;
+			}
+		}
+		
+		// Check if we didn't find him or there is something fishy going on
+		if (found != 1) {
+			// We draw the comp screen here now:
+			char sure_screen[W*H];
+			char doubt_screen[W*H];
+			char comb_screen[W*H];
+
+			clear_screen(sure_screen);
+			clear_screen(doubt_screen);
+			clear_screen(comb_screen);
+
+			printf("Fpund was: %d\n", found);
+			printf("Move missing: %d %d %d\n", ac.x, ac.y, ac.a);
+
+			printf("Moves before first pass: %d\n", sb_count(pos_squares));
+			printf("Moves after first pass: %d\n", sb_count(post_pass_1));
+
+			printf("Actual moves %d:\n", sb_count(actual));
+			for (int i = 0; i < sb_count(actual); i++) {
+				printf(" %d %d %d\n", actual[i].x, actual[i].y, actual[i].a);
+			}
+			// Print out actual moves.
+			printf("Our moves:\n");
+
+			printf(" Sure moves %d:\n", sb_count(sure_pass_1));
+			for (int i = 0; i < sb_count(sure_pass_1); i++) {
+				int kk = sure_pass_1[i];
+				printf("  %d %d %d\n", pos_squares[kk].x, pos_squares[kk].y, pos_squares[kk].a);
+				draw_rect(sure_screen, pos_squares[kk].x, pos_squares[kk].y, pos_squares[kk].a);
+				draw_rect(comb_screen, pos_squares[kk].x, pos_squares[kk].y, pos_squares[kk].a);
+
+			}
+
+			printf(" Doubt moves %d:\n", sb_count(doubt_pass_1));
+			for (int i = 0; i < sb_count(doubt_pass_1); i++) {
+				int kk = doubt_pass_1[i];
+				printf("  %d %d %d\n", pos_squares[kk].x, pos_squares[kk].y, pos_squares[kk].a);
+				draw_rect(doubt_screen, pos_squares[kk].x, pos_squares[kk].y, pos_squares[kk].a);
+				draw_rect(comb_screen, pos_squares[kk].x, pos_squares[kk].y, pos_squares[kk].a);
+			}
+			
+			// Now we print.
+			
+
+			printf("Sure Board:\n");
+			print_board(sure_screen);
+			
+			printf("Doubt Board:\n");
+			print_board(doubt_screen);
+
+			printf("Comb Board:\n");
+			print_board(comb_screen);
+
+			printf("Actual Board:\n");
+			print_board(orig);
+			printf("Missing board:\n");
+			clear_screen(comb_screen);
+			draw_rect(comb_screen, ac.x, ac.y, ac.a);
+			print_board(comb_screen);
+			
+			retval = 0;
+		}
+	}
+	sb_free(pos_squares);
+
+	sb_free(sure_pass_1);
+	sb_free(doubt_pass_1); 
+	sb_free(post_pass_1);
+	return retval;
+}
+
 
 // Returns amount of moves added to the moves array.
 struct square *solve(char* orig) {
