@@ -19,20 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define N_MAX 15
-#define W 50
-#define H 20
-
-
-#define LUC 218
-#define RUC 191
-#define LBC 192
-#define RBC 217
-
-#define VER 179
-#define HOR 196
-#define EMP 46
+#include <stdint.h>
 
 // This is from stb. I use it to get vectors easy for my tests.
 #ifndef STB_STRETCHY_BUFFER_H_INCLUDED
@@ -82,6 +69,63 @@ static void * stb__sbgrowf(void *arr, int increment, int itemsize)
 }
 #endif // STB_STRETCHY_BUFFER_H_INCLUDED
 
+// Simple random code from pcb-c-basic
+struct pcg_state_setseq_64 {    // Internals are *Private*.
+    uint64_t state;             // RNG state.  All values are possible.
+    uint64_t inc;               // Controls which RNG sequence (stream) is
+                                // selected. Must *always* be odd.
+};
+typedef struct pcg_state_setseq_64 pcg32_random_t;
+
+uint32_t pcg32_random_r(pcg32_random_t* rng)
+{
+    uint64_t oldstate = rng->state;
+    rng->state = oldstate * 6364136223846793005ULL + rng->inc;
+    uint32_t xorshifted = ((oldstate >> 18u) ^ oldstate) >> 27u;
+    uint32_t rot = oldstate >> 59u;
+    return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
+}
+
+void pcg32_srandom_r(pcg32_random_t* rng, uint64_t initstate, uint64_t initseq)
+{
+    rng->state = 0U;
+    rng->inc = (initseq << 1u) | 1u;
+    pcg32_random_r(rng);
+    rng->state += initstate;
+    pcg32_random_r(rng);
+}
+
+uint32_t pcg32_boundedrand_r(pcg32_random_t* rng, uint32_t bound) {
+	uint32_t threshold = -bound % bound;
+	for (;;) {
+		uint32_t r = pcg32_random_r(rng);
+		if (r >= threshold)
+			return r % bound;
+	}
+}
+
+// == HERE BEGINS MY CODE! ==
+#define N_MAX 15
+#define W 50
+#define H 20
+
+
+#define LUC 218
+#define RUC 191
+#define LBC 192
+#define RBC 217
+
+#define VER 179
+#define HOR 196
+#define EMP 46
+
+// This is the missing one.
+#define MIS 88
+
+
+#define COORD(X,Y) ((Y)*W + (X))
+
+
 struct square {
 	char x;
 	char y;
@@ -90,29 +134,6 @@ struct square {
 };
 
 struct square* solve(char* orig);
-
-// == UTILITY ==
-
-// // Assumes 0 <= max <= RAND_MAX
-// Returns in the closed interval [0, max]
-long random_at_most(long max) {
-	unsigned long
-		// max <= RAND_MAX < ULONG_MAX, so this is okay.
-		num_bins = (unsigned long) max + 1,
-				 num_rand = (unsigned long) RAND_MAX + 1,
-				 bin_size = num_rand / num_bins,
-				 defect   = num_rand % num_bins;
-
-	long x;
-	do {
-		x = rand();
-	}
-	// This is carefully written not to overflow
-	while (num_rand - defect <= (unsigned long)x);
-
-	// Truncated division is intentional
-	return x/bin_size;
-}
 
 
 void clear_screen(char *screen) {
@@ -124,7 +145,7 @@ void clear_screen(char *screen) {
 void print_board(char *screen) {
 	for (int y = 0; y < H; y++) {
 		for (int x = 0; x < W; x++) {
-			printf("%c", screen[y*W + x]);
+			printf("%c", screen[COORD(x,y)]);
 		}
 		printf("\n");
 	}
@@ -132,18 +153,14 @@ void print_board(char *screen) {
 
 
 void draw_rect(char *screen, char x, char y, char a) {
-	// printf("DRAWING RECT: %d %d %d\n", x, y, a);
 	// first we draw the vertical lines.
 	for (char k = 1; k < a-1; k++) {
 		// Upper horiz. 
-		screen[y*W + x + k] = HOR;
-
+		screen[COORD(x + k, y)] = HOR;
 		// Lower horiz.
-		screen[(y+a-1)*W + x + k] = HOR;
-
+		screen[COORD(x + k, y+a-1)] = HOR;
 		// Left vert
 		screen[(y+k)*W + x] = VER;
-
 		// Right vert
 		screen[(y+k)*W + x + a-1] = VER;
 	}
@@ -155,77 +172,75 @@ void draw_rect(char *screen, char x, char y, char a) {
 	screen[(y+(a-1))*W + x + (a - 1)] = RBC; // DR
 }
 
-void wtf() {
-	char screen[W*H];
+struct square*
+gen_random_screen(uint64_t initstate, uint64_t initseq) {
+	struct square* sqrs = NULL;
 
-	clear_screen(screen);
+	pcg32_random_t rng;
 
-	draw_rect(screen, 16, 11, 7);
-	draw_rect(screen, 32, 14, 4);
-	draw_rect(screen, 4, 8, 8);
-	draw_rect(screen, 11, 6, 7);
-	draw_rect(screen, 36, 11, 3);
-	draw_rect(screen, 28, 8, 3);
-
-	print_board(screen);
-}
-
-
-
-struct square* gen_screen(char *screen) {
-	struct square* mvs = NULL;
-	// we zero out the previous board, just to be secure.
-	clear_screen(screen);
+	// Init the random number generator for this board.
+	pcg32_srandom_r(&rng, initstate, initseq);
 
 	// Now then, we figure out how many squares to draw.
-	int N = random_at_most(N_MAX-1) + 1;
+	int N = pcg32_boundedrand_r(&rng, (N_MAX-1)) + 1;
 
 	// ok, we now loop through the screens.
 	for (int i = 0; i < N; i++) {
 		// Now we need to generate a rectangle.
 		// Since the smallest value we can get is 2 on the sides,
 		// we set the limit at W-2 and H-2
-		char x = random_at_most(W-2);
-		char y = random_at_most(H-2);
+		char x = pcg32_boundedrand_r(&rng, (W-2));
+		char y = pcg32_boundedrand_r(&rng, (H-2));
 
 		// Now the most we can get for the length of the smallest.
 		char a = 0;
 		if (W-x > H-y) {
-			a = random_at_most(H-y-2) + 2;
+			a = pcg32_boundedrand_r(&rng, (H-y-2)) + 2;
 		} else {
-			a = random_at_most(W-x-2) + 2;
+			a = pcg32_boundedrand_r(&rng, (W-x-2)) + 2;
 		}
 
 		struct square tmp;
 		tmp.x = x;
 		tmp.y = y;
 		tmp.a = a;
-		sb_push(mvs, tmp);
+		sb_push(sqrs, tmp);
 
-		// Now we simply draw the rectangle.
-		draw_rect(screen, x, y, a);
 	}
-	return mvs;
+	return sqrs;
 }
 
 
-
+// This function generates tests and tests it against my solutions.
 int test() {
-	// we want the same test sequence each time, so that we don't 
-	srand(10);
+	// We are going to get the same things each time.
+	pcg32_random_t rng1, rng2;
+	
+	// Initialize the random generators.
+	pcg32_srandom_r(&rng1, 42u, 52u);
+	pcg32_srandom_r(&rng2, 79u, 1002u);
 
 	char screen[W*H];
 	char comp_screen[W*H];
 
 	while (1) {
-		struct square *actual = gen_screen(screen);
-		/*
-		sb_free(actual);
-		actual = gen_screen(screen);
-		*/
+		// We generate the initseq and the initstate.
+		uint64_t initstate = ((uint64_t)(pcg32_random_r(&rng1)) << 32) | pcg32_random_r(&rng2);
+		uint64_t initseq = ((uint64_t)(pcg32_random_r(&rng1)) << 32) | pcg32_random_r(&rng2);
+		printf("BOARD ID: 0x%016lX, 0x%016lX\n", initstate, initseq);
+
+		struct square *actual = gen_random_screen(initstate,initseq);
+
+		clear_screen(screen);
+		for (int i = 0; i < sb_count(actual); i++) {
+			draw_rect(screen, actual[i].x, actual[i].y, actual[i].a);
+		}
 
 
+		// Now we have a screen and we can compute the list of moves for it.
 		struct square *computed = solve(screen);	
+
+
 		// Now generate the screen
 		clear_screen(comp_screen);
 		for (int i = 0; i < sb_count(computed); i++) {
@@ -234,6 +249,13 @@ int test() {
 
 		// check if the two boards are equal.
 		if (memcmp(screen,comp_screen,W*H*sizeof(char)) != 0) {
+			// Now we have something which is not good.
+			// First we print out the id of the board.
+			printf("Something went wrong!\n");
+			//printf("BOARD ID: 0x%08lX, 0x%08lX\n", initstate, initseq);
+
+
+
 			print_board(screen);
 			printf("\n");
 			print_board(comp_screen);
@@ -255,8 +277,6 @@ int test() {
 		}
 		sb_free(actual);
 		sb_free(computed);
-
-		printf("This went well!\n");
 	}
 
 	return 0;
@@ -429,8 +449,9 @@ int *collide_map(char *screen, struct square *squares) {
 
 	// This is where you would do the comparison then		
 	char *useless = malloc(SN*sizeof(char));
+	char *jokers = malloc(SN*sizeof(char));
 	int *ones = malloc(SN*sizeof(int));
-	if (ones == NULL || useless == NULL) {
+	if (ones == NULL || useless == NULL || jokers == NULL) {
 		printf("MALLOC ERROR!\n");
 		return NULL;
 	}
@@ -438,8 +459,8 @@ int *collide_map(char *screen, struct square *squares) {
 	for (int i = 0; i < SN; i++) {
 		ones[i] = 0;
 		useless[i] = 0;
+		jokers[i] = 0;
 	}
-
 
 	for (int i = 0; i < W*H; i++) {
 		int* cc = collides[i];
@@ -475,6 +496,7 @@ int *collide_map(char *screen, struct square *squares) {
 	}
 
 
+
 	// We have to do this scan first.
 	// We do the all useless scan first.
 	for (int i = 0; i < W*H; i++) {
@@ -496,6 +518,13 @@ int *collide_map(char *screen, struct square *squares) {
 			all_useless += useless[cc[j]];
 		}
 		if (all_useless == sb_count(cc)) {
+			for (int j = 0; j < sb_count(cc); j++) {
+				// we mark them all as not useless
+				jokers[cc[j]]++;
+				useless[cc[j]] = 0;
+			}
+			// If this is the case, we simply add them all to not useless
+
 			// TODO(rhermes): This can be optimized by only looking at the borders of
 			// both rectangles, but I couldn't be bothered to check write the code.
 			// This will only happen a very few times and the extra overhead is very
@@ -508,6 +537,7 @@ int *collide_map(char *screen, struct square *squares) {
 			// printf("WE HAVE AN ALL USELESS SPACE WITH %d POSSIBILITIES.\n", all_useless);
 			// What we do now, is we check all the other places where they intersect and
 			// if there is a place there where they have different expected values, we check it out.
+			/*
 			if (sb_count(cc) != 2) {
 				printf("THERE ARE MORE THAN 2 USELESS!\n");
 			}
@@ -572,6 +602,22 @@ int *collide_map(char *screen, struct square *squares) {
 				// THis means we found no conflicting place where one was dominant.
 				printf("WTF!\n");
 			}
+			*/
+
+		}
+	}
+
+
+	// Here we loop through the jokers.
+	int first_first = 0;	
+	for (int i = 0; i < SN; i++) {
+		if (jokers[i]) {
+			struct square sp = squares[i];
+			if (first_first == 0) {
+				printf("Jokers:\n");
+				first_first = 1;
+			}
+			printf("- %d : %d : %d %d %d\n", i, jokers[i], sp.x, sp.y, sp.a);
 		}
 	}
 
@@ -726,6 +772,7 @@ int *collide_map(char *screen, struct square *squares) {
 
 	// Free the edges.
 	free(useless);
+	free(jokers);
 	free(edges);
 
 	return ans;
@@ -754,6 +801,9 @@ struct square *solve(char* orig) {
 			pos_squares = could_be_square(orig, pos_squares, x, y);
 		}
 	}
+
+	/* Now we have all the possible squares. Out of these there are a maximum of
+	 * 15 which are the actual solution. */
 
 	/*
 	int npos = sb_count(pos_squares);
