@@ -88,9 +88,7 @@ static void * stb__sbgrowf(void *arr, int increment, int itemsize)
 // This is the missing one.
 #define MIS 88
 
-
 #define COORD(X,Y) ((Y)*W + (X))
-
 
 struct square {
 	char x;
@@ -105,16 +103,6 @@ void clear_screen(char *screen) {
 		screen[i] = EMP;
 	}
 }
-
-void print_board(char *screen) {
-	for (int y = 0; y < H; y++) {
-		for (int x = 0; x < W; x++) {
-			printf("%c", screen[COORD(x,y)]);
-		}
-		printf("\n");
-	}
-}
-
 
 void draw_rect(char *screen, char x, char y, char a) {
 	// first we draw the vertical lines.
