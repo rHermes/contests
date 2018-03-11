@@ -15,6 +15,12 @@
  *
  * On the output.
  *
+ * The idea for this solution is that we remove one square at a time and
+ * and overwrite it with MISSED symbols which are like jokers. They can be
+ * anything. We always pick a perfect rectangle, in that it has all matches.
+ *
+ * This works since we don't have to find the optimal solution.
+ *
  */
 #include <stdio.h>
 #include <stdlib.h>

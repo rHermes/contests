@@ -2,5 +2,14 @@
 for f in glob(["*.c"]):
 	c_binary(
 			name = f[:-2],
-			srcs = [f]
+			srcs = [f],
+			compiler_flags = [
+					"-fno-strict-aliasing","-std=c11", "-Wl,--stack=67108864","-O2"
+					],
+			linker_flags = [
+					"-lm"
+					]
 			)
+
+# -static -fno-strict-aliasing -DONLINE_JUDGE -lm -s 
+#   -std=c11 -Wl,--stack=67108864 -O2
