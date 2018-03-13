@@ -11,5 +11,16 @@ for f in glob(["*.c"]):
 					]
 			)
 
+for f in glob(["*.cpp"]):
+	cc_binary(
+			name = f[:-4],
+			srcs = [f],
+			compiler_flags = [
+					"-fno-strict-aliasing","-std=c++14", "-Wl,--stack=67108864","-O2"
+					],
+			linker_flags = [
+					"-lm"
+					]
+			)
 # -static -fno-strict-aliasing -DONLINE_JUDGE -lm -s 
 #   -std=c11 -Wl,--stack=67108864 -O2

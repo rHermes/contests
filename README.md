@@ -1,6 +1,9 @@
 # Contests
 
-These are various programming contests that I've solved.
+These are various programming contests that I've solved. When I can, I try to
+solve these in C, but if it requires something like a set, I'll go for C++
+in most situations, since a proper set implementation takes a lot of code,
+and C++ has builtin versions.
 
 
 ## Status
