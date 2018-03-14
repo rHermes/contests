@@ -227,18 +227,31 @@ int main() {
 	// A possible optimi
 	//
 	// e2 e3 0 8 1 2 1 1
-	Cube test_1(0, 8, 1, 1, 1, 2);
-	std::vector<Node> pth = a_star(4, 1, 4, 2, test_1);
+	// Cube test_1(0, 8, 1, 1, 1, 2);
+	// std::vector<Node> pth = a_star(4, 1, 4, 2, test_1);
 
+	// here we read it in.
+	char m1x, m2x;
+	int m1y, m2y, f, b, u, r, d, l;
+	scanf("%c%d %c%d %d %d %d %d %d %d", &m1x, &m1y, &m2x, &m2y, &f, &b, &u, &r, &d, &l);
 
-	char fields[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+	Cube inn(f, b, u, d, l, r); 
+	std::vector<Node> pth = a_star(m1x-'a',m1y-1, m2x-'a', m2y-1, inn);
+
 
 	if (pth.size() == 0) {
 		printf("WTF!\n");
 	} else {
-		for (auto it = pth.rbegin(); it != pth.rend(); it++) {
-			printf("%c %d %d\n", fields[it->x], it->y+1, it->c.down);
+		long sum = 0;
+		for (auto it = pth.begin(); it != pth.end(); it++) {
+			sum += it->c.down;
 		}
+		printf("%ld", sum);
+
+		for (auto it = pth.rbegin(); it != pth.rend(); it++) {
+			printf(" %c%d", 'a'+(it->x), it->y+1);
+		}
+		printf("\n");
 	}
 	
 	return 0;
