@@ -10,15 +10,6 @@
 #include <map>
 #include <algorithm>
 
-// The directions for the faces in the cube array.
-#define FRONT 0
-#define BACK 1
-#define UP 2
-#define DOWN 3
-#define LEFT 4
-#define RIGHT 5
-
-
 template <template<class,class,class...> class C, typename K, typename V, typename... Args>
 V GetWithDef(const C<K,V,Args...>& m, K const& key, const V & defval)
 {
