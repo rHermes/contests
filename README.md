@@ -20,5 +20,6 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1006   | Square Frames    | c        | Accepted | 0.015 | 212 KB  |
 | 1007   | Code Words       | c        | Accepted | 0.265 | 216 KB  |
 | 1008   | Image Encoding   | cpp      | Accpeted | 0.015 | 284 KB  |
+| 1009   | K-based Numbers  | cpp      | Accepted | 0.001 | 288 KB  |
 | 1016   | Cube on the Walk | cpp      | Accepted | 0.001 | 448 KB  |
 | 1019   | Line Painting    | c        | Accepted | 0.062 | 520 KB  |
