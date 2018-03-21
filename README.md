@@ -11,15 +11,16 @@ and C++ has builtin versions.
 ### Timus
 http://acm.timus.ru/author.aspx?id=246961
 
-| Number | Name             | Language | Status   | Time  | Memory  |
-| ------ | ---------------  | -------- | -------- | ----- | ------- |
-| 1000   | A+B Problem      | c        | Accepted | 0.001 | 204 KB  |
-| 1001   | Reverse Root     | c        | Accepted | 0.124 | 1248 KB |
-| 1002   | Phone Numbers    | c        | Accepted | 0.031 | 752 KB  |
-| 1005   | Stone Pile       | c        | Accepted | 0.015 | 224 KB  |
-| 1006   | Square Frames    | c        | Accepted | 0.015 | 212 KB  |
-| 1007   | Code Words       | c        | Accepted | 0.265 | 216 KB  |
-| 1008   | Image Encoding   | cpp      | Accpeted | 0.015 | 284 KB  |
-| 1009   | K-based Numbers  | c        | Accepted | 0.001 | 212 KB  |
-| 1016   | Cube on the Walk | cpp      | Accepted | 0.001 | 448 KB  |
-| 1019   | Line Painting    | c        | Accepted | 0.062 | 520 KB  |
+| Number | Name                       | Language | Status   | Time  | Memory  |
+| ------ | -------------------------- | -------- | -------- | ----- | ------- |
+| 1000   | A+B Problem                | c        | Accepted | 0.001 | 204 KB  |
+| 1001   | Reverse Root               | c        | Accepted | 0.124 | 1248 KB |
+| 1002   | Phone Numbers              | c        | Accepted | 0.031 | 752 KB  |
+| 1005   | Stone Pile                 | c        | Accepted | 0.015 | 224 KB  |
+| 1006   | Square Frames              | c        | Accepted | 0.015 | 212 KB  |
+| 1007   | Code Words                 | c        | Accepted | 0.265 | 216 KB  |
+| 1008   | Image Encoding             | cpp      | Accpeted | 0.015 | 284 KB  |
+| 1009   | K-based Numbers            | c        | Accepted | 0.001 | 212 KB  |
+| 1013   | K-based Numbers. Version 3 | c        | Accepted | 0.015 | 232 KB  |
+| 1016   | Cube on the Walk           | cpp      | Accepted | 0.001 | 448 KB  |
+| 1019   | Line Painting              | c        | Accepted | 0.062 | 520 KB  |

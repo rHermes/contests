@@ -1,19 +1,45 @@
 /*
  *  p. 1009 - K-based Numbers
  *
- * I think this can be done recursively, with a function call like:
+ *  If you tinker with the equation for a bit, you can spot that it follows
+ *  the following recurrence equation:
  *
- * possible(prev_zero, K, left)
+ *  F(N) = (K-1) * F(N-1) + (K-1) * F(N-2) = (F(N-1) + F(N-2)) * (K-1)
  *
- * and then we can just cache that. The first call will just be:
- * possible(true, K, N)
+ *  The reason for this is not that hard to understand. When we add a new digit
+ *  space, that slot can have (K-1) values, remember it cannot be 0. We can combine
+ *  these (K-1) possibilites with all the sequences we found for F(N-1). The
+ *  problem is that F(N-1) doesn't account for the scenarios where the first
+ *  digit is 0. With this possibility, there are F(N-2) possible new sequences,
+ *  that we have to add.
  *
- * Even better, the formula for this is: ans[n] = (ans[n-1] + ans[n-2]) * (K-1)
+ *  Looking at this function, you can see that it closely resembles the Fibonacci
+ *  sequence. One of the fastest way to calculate this sequence is to convert it
+ *  to matrix form[1].
  *
- * The reason for this is the fact that the first character can only be (K-1)
- * things, since it cant be 0. ans[n-1] is obvious, because for each of the
- * prefixes, we can have that many variations, and finally we add ans[n-2],
- * because ans[n-1] doesn't contain the possibility of a 0 prefix.
+ *  The way to envision this is to say that we have:
+ *
+ *  L(N) = { { F(N+1), F(N) }, { F(N), F(N-1) } }
+ *
+ *  We want to find a matrix R such that:
+ *
+ *  L(N) * R = L(N+1)
+ *
+ *  It is easy to deduct that R must be:
+ *
+ *  R = { { K-1, 1 }, { K-1, 0 } }
+ *
+ *  Knowing this gives us the fact that
+ *
+ *  L(N) = L(1) * R^(N-1)
+ *
+ *  If we do the matrix exponation in the form of exponentation by squaring,
+ *  we now have O(log(n)) operations.
+ *
+ *  However, for such small numbers as this, the normal approach is equally
+ *  fast and requries less code, so I'm going for that here.
+ *
+ *  [1]: https://www.nayuki.io/page/fast-fibonacci-algorithms
  */
 
 #include <stdio.h>
@@ -34,6 +60,7 @@ int main() {
 
 	scanf(LONG_SCAN "\n" LONG_SCAN, &N,&K);
 
+	// Now we just have to do the last little thing.
 	// we set and b2 to K-1.
 	// We therfor start at N = 2;
 	TT b2 = 1;
@@ -43,7 +70,6 @@ int main() {
 		b2 = b1;
 		b1 = tmp;
 	}
-
 
 	printf(LONG_SCAN "\n", b1);
 	return 0;
