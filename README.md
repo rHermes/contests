@@ -8,6 +8,13 @@ and C++ has builtin versions.
 
 ## Status
 
+### Codeforces
+http://codeforces.com/profile/rHermes
+
+| Problem     | Language | Status   | Time  | Memory  |
+| ----------- | -------- | -------- | ----- | ------- |
+| 13E - Holes | c        | Accepted | 654ms | 3400 KB |
+
 ### Timus
 http://acm.timus.ru/author.aspx?id=246961
 
