@@ -1,9 +1,7 @@
 /*
- * p. 1019 - Line Painting
+ * p1019 - Line Painting
  *
- * This seems to be something one could solve with a simple
- * linked list.
- *
+ * This seems to be something one could solve with a simple linked list.
  *
  * important to note here that the intervals are all of the form [a, b),
  * even the output.
@@ -18,7 +16,7 @@
  * and then a second stage where you merged things with equal color and freed
  * intervals with 0 length, but this would have been less effective overall.
  *
- * it doesn't really matter, but since I started down this road, I'm going to
+ * It doesn't really matter, but since I started down this road, I'm going to
  * finish it.
  * 
  * For completly optimal performance, I could have used a pool for the allocated

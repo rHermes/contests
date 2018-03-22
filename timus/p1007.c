@@ -1,6 +1,5 @@
 /*
- * p.1007	- Code Words
- *
+ * p1007 - Code Words
  *
  * This could be done faster. The trick is to recognize here that removing a digit
  * reduces the sum by the ones to the left of it.

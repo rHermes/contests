@@ -1,7 +1,5 @@
 /*
- * http://acm.timus.ru/problem.aspx?space=1&num=1006
- *
- * 1006. Square Frames.
+ * p1006 - Square Frames.
  *
  * N Square frames (1 <= N <= 15)
  *

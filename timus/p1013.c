@@ -1,5 +1,5 @@
 /*
- *  p. 1013 - K-based Numbers. Version 3
+ *  p1013 - K-based Numbers. Version 3
  *
  *  This is just a copy of my solution to p. 1009.
  *
@@ -72,16 +72,9 @@
  */
 
 #include <stdio.h>
-#include <stdint.h>
+#include <inttypes.h>
 #include <math.h>
 
-// This is because my machine uses slightly different scanners than the
-// online judge.
-#ifdef ONLINE_JUDGE
-	#define LONG_SCAN "%llu"
-#else
-	#define LONG_SCAN "%lu"
-#endif
 
 #define TT uint64_t
 
@@ -139,7 +132,7 @@ int just_works(TT N, TT K, TT M) {
 	//
 	// Now we get the answer by doing.
 	TT ans = (((((K%M)*KMM)%M) * d11)%M + ((KMM * d21 ) % M)) % M;
-	printf(LONG_SCAN "\n", ans);
+	printf("%" PRIu64 "\n", ans);
 	return 0;
 }
 
@@ -149,8 +142,7 @@ int just_works(TT N, TT K, TT M) {
 //
 // returns a * b % c
 //TT russianPeasant(TT a, TT b, TT c)
-TT rip(TT a, TT b, TT c)
-{
+TT rip(TT a, TT b, TT c) {
     TT res = 0;  // initialize result
  
     // While second number doesn't become 1
@@ -187,7 +179,7 @@ void mat_mod_rus(TT a11, TT a12, TT a21, TT a22, TT b, TT c, TT *o11, TT *o12, T
 		// Get the output
 		*o11 = (rip(a11,d11,c) + rip(a12,d21,c)) % c;
 		*o12 = (rip(a11,d12,c) + rip(a12,d22,c)) % c;
-		*o21 = (rip(a21,d11,c) + rip(a22,d21,c)) % c;
+		*o21 = (rip(a21,d11,c) + rip(a22,d21,c)) % c; 
 		*o22 = (rip(a21,d12,c) + rip(a22,d22,c)) % c;
 	} else {
 		// Here we create a matrix D,
@@ -220,7 +212,7 @@ int peasant_just_works(TT N, TT K, TT M) {
 	//
 	// Now we get the answer by doing.
 	TT ans = (rip(rip(K%M, KMM, M) , d11, M) + rip(KMM,d21,M)) % M;
-	printf(LONG_SCAN "\n", ans);
+	printf("%" PRIu64 "\n", ans);
 	return 0;
 }
 
@@ -228,7 +220,7 @@ int peasant_just_works(TT N, TT K, TT M) {
 int main() {
 	TT N, K, M;
 
-	scanf(LONG_SCAN "\n" LONG_SCAN "\n" LONG_SCAN, &N, &K, &M);
+	scanf("%" SCNu64 "\n" "%" SCNu64 "\n" "%" SCNu64, &N, &K, &M);
 
 	if (2*log2(M) > 63) {
 		return peasant_just_works(N, K, M);

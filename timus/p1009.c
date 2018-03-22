@@ -1,5 +1,5 @@
 /*
- *  p. 1009 - K-based Numbers
+ *  p1009 - K-based Numbers
  *
  *  If you tinker with the equation for a bit, you can spot that it follows
  *  the following recurrence equation:
@@ -43,22 +43,14 @@
  */
 
 #include <stdio.h>
-#include <stdint.h>
-
-// This is because my machine uses slightly different scanners than the
-// online judge.
-#ifdef ONLINE_JUDGE
-#define LONG_SCAN "%llu"
-#else
-#define LONG_SCAN "%lu"
-#endif
+#include <inttypes.h>
 
 #define TT uint_fast64_t
 
 int main() {
 	TT N, K;
 
-	scanf(LONG_SCAN "\n" LONG_SCAN, &N,&K);
+	scanf("%" SCNuFAST64 "\n" "%" SCNuFAST64, &N,&K);
 
 	// Now we just have to do the last little thing.
 	// we set and b2 to K-1.
@@ -71,6 +63,6 @@ int main() {
 		b1 = tmp;
 	}
 
-	printf(LONG_SCAN "\n", b1);
+	printf("%" PRIuFAST64 "\n", b1);
 	return 0;
 }

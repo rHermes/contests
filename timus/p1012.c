@@ -1,5 +1,5 @@
 /*
- *  p. 1012 - K-based Numbers. Version 2
+ *  p1012 - K-based Numbers. Version 2
  *
  *  This is just a copy of my solution to p. 1009, with big int support added.
  *
@@ -67,19 +67,7 @@
  */
 
 #include <stdio.h>
-#include <stdint.h>
-
-// This is because my machine uses slightly different scanners than the
-// online judge.
-#ifdef ONLINE_JUDGE
-#define LONG_SCAN "%llu"
-#define U32_SCAN "%lu"
-#define U32_TYPE "lu"
-#else
-#define LONG_SCAN "%lu"
-#define U32_SCAN "%u"
-#define U32_TYPE "u"
-#endif
+#include <inttypes.h>
 
 #define TT uint64_t
 
@@ -115,7 +103,7 @@ typedef BIG BIG_MAT[2][2];
 int main() {
 	uint32_t N, K;
 
-	scanf(U32_SCAN "\n" U32_SCAN, &N,&K);
+	scanf("%" SCNu32 "\n" "%" SCNu32, &N,&K);
 
 	BIG b2 = {0};
 	BIG b1 = {0};
@@ -145,12 +133,11 @@ int main() {
 
 	// Now the answer is in pb1. We figure it out by finding the length.
 	int length;
-	for (length = BIG_MAX-1; !pb1[length] && length >= 0; length--) {
-	}
+	for (length = BIG_MAX-1; !pb1[length] && length >= 0; length--) {}
 
-	printf(U32_SCAN, pb1[length--]);
+	printf("%" PRIu32, pb1[length--]);
 	while (length >= 0) {
-		printf("%.9" U32_TYPE, pb1[length--]);
+		printf("%.9" PRIu32, pb1[length--]);
 	}
 	printf("\n");
 

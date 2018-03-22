@@ -1,5 +1,5 @@
 /*
- * p. 1016 - Cube on the Walk
+ * p1016 - Cube on the Walk
  *
  * Seems to be a simple graph problem.
  */

@@ -1,5 +1,5 @@
 /*
- * p. 1008 - Image encoding
+ * p1008 - Image encoding
  *
  */
 

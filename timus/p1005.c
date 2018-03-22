@@ -1,5 +1,5 @@
 /*
- * p. 1005 Stone pile
+ * p1005 - Stone pile
  *
  *
  * This is a two-way partition problem. I use the CKK to find the
