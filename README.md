@@ -31,10 +31,9 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1012   | K-based Numbers. Version 2 | c        | Accepted | 0.015 | 208 KB  |
 | 1013   | K-based Numbers. Version 3 | c        | Accepted | 0.015 | 232 KB  |
 | 1014   | Product of Digits          | c        | Accepted | 0.015 | 208 KB  |
+| 1015   | Test the Difference!       | c        | Accepted | 0.015 | 344 KB  |
 | 1016   | Cube on the Walk           | cpp      | Accepted | 0.001 | 448 KB  |
 | 1019   | Line Painting              | c        | Accepted | 0.062 | 520 KB  |
-
-
 
 ## TODO
 

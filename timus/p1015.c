@@ -34,6 +34,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define max(a,b) \
    ({ __typeof__ (a) _a = (a); \
@@ -241,14 +242,29 @@ void top_down_mergesort(pair *A, uint32_t n) {
 	free(B);
 }
 
+// Get an int.
+int getint() {
+    int ret = 0, ch;
+    while(!isdigit(ch = getc(stdin)));
+    ret = ch - '0';
+    while(isdigit(ch = getc(stdin)))
+        ret = ret*10 + ch - '0';
+    return ret;
+}
+// get a digit.
+int getdigit() {
+	int ch;
+	while(!isdigit(ch = getc(stdin)));
+	return ch - '0';
+}
+
+
 int main() {
 	// This returns the first of a scheme and the second of a scheme.
 	uint32_t first_of_kind[30] = {0};
 	uint8_t different = 0;
 
-	// First we read in N.
-	uint32_t N;
-	scanf("%" SCNu32,&N);
+	uint32_t N = getint();
 
 	// allocate the pairs.
 	pair *pairs = malloc(sizeof(pair)*N);
@@ -258,7 +274,12 @@ int main() {
 
 	for (uint32_t i = 0; i < N; i++) {
 		uint8_t l, r, u, f, d, b;
-		scanf("%" SCNu8 " " "%" SCNu8 " " "%" SCNu8 " " "%" SCNu8 " " "%" SCNu8 " " "%" SCNu8, &l, &r, &u, &f, &d, &b);
+		l = getdigit();
+		r = getdigit();
+		u = getdigit();
+		f = getdigit();
+		d = getdigit();
+		b = getdigit();
 
 		uint8_t sc = normalize(l, r, u, f, d, b);
 
@@ -274,6 +295,8 @@ int main() {
 	// Now we sort.
 	top_down_mergesort(pairs, N);
 
+
+	// And now we print.
 	printf("%" PRIu8, different);
 
 	uint32_t prev = 0;
@@ -286,7 +309,6 @@ int main() {
 			printf(" %" PRIu32, p.idx);
 		}
 	}
-	
 	printf("\n");
 	free(pairs);
 	// ok, so since we are going to be outputting the
