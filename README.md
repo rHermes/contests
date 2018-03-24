@@ -34,6 +34,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1015   | Test the Difference!       | c        | Accepted | 0.015 | 344 KB  |
 | 1016   | Cube on the Walk           | cpp      | Accepted | 0.001 | 448 KB  |
 | 1019   | Line Painting              | c        | Accepted | 0.062 | 520 KB  |
+| 1110   | Power                      | c        | Accepted | 0.001 | 204 KB  |
 
 ## TODO
 
