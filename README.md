@@ -27,6 +27,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1007   | Code Words                 | c        | Accepted | 0.265 | 216 KB  |
 | 1008   | Image Encoding             | cpp      | Accpeted | 0.015 | 284 KB  |
 | 1009   | K-based Numbers            | c        | Accepted | 0.001 | 212 KB  |
+| 1010   | Discrete Function          | c        | Accepted | 0.031 | 208 KB  |
 | 1011   | Conductors                 | c        | Accepted | 0.015 | 204 KB  |
 | 1012   | K-based Numbers. Version 2 | c        | Accepted | 0.015 | 208 KB  |
 | 1013   | K-based Numbers. Version 3 | c        | Accepted | 0.015 | 232 KB  |
