@@ -28,6 +28,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1001   | Reverse Root               | c        | Accepted | 0.124 | 1248 KB |
 | 1002   | Phone Numbers              | c        | Accepted | 0.031 | 752 KB  |
 | 1003   | Parity                     | cpp      | Accepted | 0.062 | 952 KB  |
+| 1004   | Sightseeing Trip           | c        | Accepted | 0.031 | 288 KB  |
 | 1005   | Stone Pile                 | c        | Accepted | 0.015 | 224 KB  |
 | 1006   | Square Frames              | c        | Accepted | 0.015 | 212 KB  |
 | 1007   | Code Words                 | c        | Accepted | 0.265 | 216 KB  |
@@ -45,4 +46,5 @@ http://acm.timus.ru/author.aspx?id=246961
 
 ## TODO
 
++ Make sure to understand everything about timus 1004
 + Redo Timus p1006 to not use stretch buffers.
