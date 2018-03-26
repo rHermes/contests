@@ -43,6 +43,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1016   | Cube on the Walk           | cpp      | Accepted | 0.001 | 448 KB  |
 | 1017   | Staircases                 | c        | Accepted | 0.001 | 336 KB  |
 | 1019   | Line Painting              | c        | Accepted | 0.062 | 520 KB  |
+| 1021   | Sacrament of the Sum       | c        | Accepted | 0.031 | 260 KB  |
 | 1110   | Power                      | c        | Accepted | 0.001 | 204 KB  |
 
 #### Nice ones.
