@@ -41,8 +41,24 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1014   | Product of Digits          | c        | Accepted | 0.015 | 208 KB  |
 | 1015   | Test the Difference!       | c        | Accepted | 0.015 | 344 KB  |
 | 1016   | Cube on the Walk           | cpp      | Accepted | 0.001 | 448 KB  |
+| 1017   | Staircases                 | c        | Accepted | 0.001 | 336 KB  |
 | 1019   | Line Painting              | c        | Accepted | 0.062 | 520 KB  |
 | 1110   | Power                      | c        | Accepted | 0.001 | 204 KB  |
+
+#### Nice ones.
+
++ 1003 - Parity
+  + First time I have heard of or used a DSU. Slick way of solving the problem.
++ 1005 - Stone Pile
+  + I read a reasearch paper on two-way partitioning to solve it.
++ 1015 - Test The Difference!
+  + I really like how I do the rotation of the dice here and how I kind of
+  hand unrolled the loop.
++ 1016 - Cube on the Walk
+  + Nice implementation of A* 
++ 1019 - Line painting
+  + I implemented the damn datastructure myself, and I'm proud of it.
+ 
 
 ## TODO
 
