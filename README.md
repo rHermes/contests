@@ -52,7 +52,9 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1017   | Staircases                 | c        | Accepted | 0.001 | 336 KB  |
 | 1019   | Line Painting              | c        | Accepted | 0.062 | 520 KB  |
 | 1021   | Sacrament of the Sum       | c        | Accepted | 0.031 | 260 KB  |
+| 1100   | Final Standings            | c        | Accepted | 0.078 | 2560 KB |
 | 1110   | Power                      | c        | Accepted | 0.001 | 204 KB  |
+| 1877   | Bicycle Codes              | c        | Accepted | 0.001 | 192 KB  |
 
 #### Nice ones.
 
@@ -67,6 +69,8 @@ http://acm.timus.ru/author.aspx?id=246961
   + Nice implementation of A* 
 + 1019 - Line painting
   + I implemented the damn datastructure myself, and I'm proud of it.
++ 1100 - Final Standings
+  + First time I heard of counting sort.
  
 
 ## TODO
