@@ -19,6 +19,14 @@ http://codeforces.com/profile/rHermes
 | ----------- | -------- | -------- | ----- | ------- |
 | 13E - Holes | c        | Accepted | 654ms | 3400 KB |
 
+### DMOJ
+https://dmoj.ca/user/solace
+
+| Code      | Name                                             | Language | Points | Status | Time  | Memory   |
+| --------- | ------------------------------------------------ | -------- | ------ | ------ | ----- | -------- |
+| tle16c6j1 | TLE '16 Contest 6 (Mock CCC) J1 - Paper Printing | C11      | 4/4    | 15/15  | 0.29  | 992.0 KB |
+
+
 ### Timus
 http://acm.timus.ru/author.aspx?id=246961
 
