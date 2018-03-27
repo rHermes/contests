@@ -54,6 +54,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1021   | Sacrament of the Sum       | c        | Accepted | 0.031 | 260 KB  |
 | 1100   | Final Standings            | c        | Accepted | 0.078 | 2560 KB |
 | 1110   | Power                      | c        | Accepted | 0.001 | 204 KB  |
+| 1820   | Ural Steaks                | c        | Accepted | 0.015 | 208 KB  |
 | 1877   | Bicycle Codes              | c        | Accepted | 0.001 | 192 KB  |
 
 #### Nice ones.
