@@ -40,6 +40,5 @@ int main() {
 	}
 
 	printf("%" PTT "\n", K-1);
-
 	return 0;
 }

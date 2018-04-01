@@ -4,7 +4,7 @@
  * This is a fun little parser challenge. I'll just write a simple state parser.
  */
 
-#include <strings.h>
+#include <string.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <stdbool.h>
