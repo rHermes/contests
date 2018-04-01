@@ -53,6 +53,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1019   | Line Painting              | c        | Accepted | 0.062 | 520 KB  |
 | 1020   | Rope                       | c        | Accepted | 0.001 | 244 KB  |
 | 1021   | Sacrament of the Sum       | c        | Accepted | 0.031 | 260 KB  |
+| 1022   | Genealogical Tree          | cpp      | Accepted | 0.001 | 300 KB  |
 | 1023   | Buttons                    | c        | Accepted | 0.015 | 204 KB  |
 | 1024   | Permutations               | c        | Accepted | 0.001 | 208 KB  |
 | 1025   | Democracy in Danger        | c        | Accepted | 0.001 | 208 KB  |
