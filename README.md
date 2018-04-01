@@ -56,6 +56,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1023   | Buttons                    | c        | Accepted | 0.015 | 204 KB  |
 | 1024   | Permutations               | c        | Accepted | 0.001 | 208 KB  |
 | 1025   | Democracy in Danger        | c        | Accepted | 0.001 | 208 KB  |
+| 1026   | Questions and Answers      | c        | Accepted | 0.031 | 228 KB  |
 | 1027   | D++ Again                  | c        | Accepted | 0.001 | 176 KB  |
 | 1100   | Final Standings            | c        | Accepted | 0.078 | 2560 KB |
 | 1110   | Power                      | c        | Accepted | 0.001 | 204 KB  |

@@ -13,7 +13,7 @@
 #include <inttypes.h>
 
 #define MAXM 5000
-uint16_t db[MAXM+1] = {0};
+uint32_t db[MAXM+1] = {0};
 
 int main() {
 	// Building the database.
@@ -21,25 +21,23 @@ int main() {
 	scanf("%" SCNuFAST32, &N);
 
 	for (uint_fast32_t i = 0; i < N; i++) {
-		uint16_t a;
-		scanf("%" SCNu16, &a);
+		uint32_t a;
+		scanf("%" SCNu32, &a);
 		db[a]++;
 	}
 	
-	// We skip the three idiots and a whitespace.
-	fseek(stdin, 4, SEEK_CUR);
 	// Now get the amount of queries.
-	uint_fast8_t K;
-	scanf("%" SCNuFAST8, &K);
+	uint_fast8_t K; 
+	scanf("%*[\n #]%" SCNuFAST8, &K);
 
 	for (uint_fast8_t i = 0; i < K; i++) {
 		int_fast32_t a;
 		scanf("%" SCNdFAST32, &a);
 
 		// We now loop through the program until a becomes negative.
-		uint_fast16_t j;
+		uint_fast32_t j;
 		for (j = 1; a > 0; a -= db[j], j++);
-		printf("%" PRIuFAST16 "\n", j-1);
+		printf("%" PRIuFAST32 "\n", j-1);
 	}
 
 	return 0;
