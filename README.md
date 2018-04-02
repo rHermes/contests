@@ -58,6 +58,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1025   | Democracy in Danger        | c        | Accepted | 0.001 | 208 KB  |
 | 1026   | Questions and Answers      | c        | Accepted | 0.031 | 228 KB  |
 | 1027   | D++ Again                  | c        | Accepted | 0.001 | 176 KB  |
+| 1074   | Very Short Problem         | c        | Accepted | 0.015 | 192 KB  |
 | 1100   | Final Standings            | c        | Accepted | 0.078 | 2560 KB |
 | 1110   | Power                      | c        | Accepted | 0.001 | 204 KB  |
 | 1820   | Ural Steaks                | c        | Accepted | 0.015 | 208 KB  |
@@ -76,6 +77,8 @@ http://acm.timus.ru/author.aspx?id=246961
   + Nice implementation of A* 
 + 1019 - Line painting
   + I implemented the damn datastructure myself, and I'm proud of it.
++ 1074 - Very Short problem
+  + I like that I managed to implement it in C, and using so little memory.
 + 1100 - Final Standings
   + First time I heard of counting sort.
  
@@ -83,4 +86,5 @@ http://acm.timus.ru/author.aspx?id=246961
 ## TODO
 
 + Make sure to understand everything about timus 1004
++ Refine p1074, to use less structures.
 + Redo Timus p1006 to not use stretch buffers.
