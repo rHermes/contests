@@ -19,7 +19,6 @@ typedef struct {
 } UnsignedIntegerNumber;
 
 typedef struct {
-	bool positive;
 	bool negative;
 	UnsignedIntegerNumber* num;
 } IntegerNumber;
@@ -30,7 +29,6 @@ typedef struct {
 } SimpleUnsignedRealNumber;
 
 typedef struct {
-	bool positive;
 	bool negative;
 	SimpleUnsignedRealNumber *num;
 } SimpleRealNumber;
@@ -76,20 +74,12 @@ int read_IntegerNumber(char* inp, IntegerNumber* integ) {
 	int ret = 0;
 	// First we check if we have a sign.
 	char c = *inp;
-
-	// I don't know if signs are allowed or not.
-	if (c == '+') {
-		integ->positive = true;
-		integ->negative = false;
-		ret++;
-		inp++;
-	} else if (c == '-') {
-		integ->positive = false;
-		integ->negative = true;
+	
+	if (c == '+' || c == '-') {
+		integ->negative = c == '-';
 		ret++;
 		inp++;
 	} else {
-		integ->positive = false;
 		integ->negative = false;
 	}
 
@@ -150,19 +140,11 @@ int read_SimpleRealNumber(char* inp, SimpleRealNumber* num) {
 	// First we check if we have a sign.
 	char c = *inp;
 
-	// I don't know if signs are allowed or not.
-	if (c == '+') {
-		num->positive = true;
-		num->negative = false;
-		ret++;
-		inp++;
-	} else if (c == '-') {
-		num->positive = false;
-		num->negative = true;
+	if (c == '+' || c == '-') {
+		num->negative = c == '-';
 		ret++;
 		inp++;
 	} else {
-		num->positive = false;
 		num->negative = false;
 	}
 
