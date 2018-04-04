@@ -4,7 +4,7 @@ for f in glob(["*.c"]):
             name = f[:-2],
             srcs = [f],
             compiler_flags = [
-                    "-fno-strict-aliasing","-std=c11", "-Wl,--stack=67108864","-O2"
+                    "-g", "-fno-strict-aliasing","-std=c11", "-Wl,--stack=67108864","-O2"
                     ],
             linker_flags = [
                     "-lm"
@@ -16,7 +16,7 @@ for f in glob(["*.cpp"]):
             name = f[:-4],
             srcs = [f],
             compiler_flags = [
-                    "-fno-strict-aliasing","-std=c++14", "-Wl,--stack=67108864","-O2"
+                    "-g", "-fno-strict-aliasing","-std=c++14", "-Wl,--stack=67108864","-O2"
                     ],
             linker_flags = [
                     "-lm"
