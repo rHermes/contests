@@ -60,6 +60,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1026   | Questions and Answers      | c        | Accepted | 0.031 | 228 KB  |
 | 1027   | D++ Again                  | c        | Accepted | 0.001 | 176 KB  |
 | 1029   | Ministry                   | c        | Accepted | 0.015 | 652 KB  |
+| 1030   | Titanic                    | c        | Accepted | 0.001 | 240 KB  |
 | 1074   | Very Short Problem         | c        | Accepted | 0.015 | 192 KB  |
 | 1100   | Final Standings            | c        | Accepted | 0.078 | 2560 KB |
 | 1110   | Power                      | c        | Accepted | 0.001 | 204 KB  |

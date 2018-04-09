@@ -5,6 +5,8 @@
  * was to slow, I'm trying to understand the official solution.
  *
  * This seems to be a modified version of floyds algorithm.
+ *
+ * This might be an edge disjoint problem?
  */
 
 #include <stdio.h>
