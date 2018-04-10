@@ -50,6 +50,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1015   | Test the Difference!       | c        | Accepted | 0.015 | 344 KB  |
 | 1016   | Cube on the Walk           | cpp      | Accepted | 0.001 | 448 KB  |
 | 1017   | Staircases                 | c        | Accepted | 0.001 | 336 KB  |
+| 1018   | Binary Apple Tree          | c        | Accepted | 0.001 | 304 KB  |
 | 1019   | Line Painting              | c        | Accepted | 0.062 | 520 KB  |
 | 1020   | Rope                       | c        | Accepted | 0.001 | 244 KB  |
 | 1021   | Sacrament of the Sum       | c        | Accepted | 0.031 | 260 KB  |
@@ -59,7 +60,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1025   | Democracy in Danger        | c        | Accepted | 0.001 | 208 KB  |
 | 1026   | Questions and Answers      | c        | Accepted | 0.031 | 228 KB  |
 | 1027   | D++ Again                  | c        | Accepted | 0.001 | 176 KB  |
-| 1028   | Binary Apple Tree          | c        | Accepted | 0.001 | 304 KB  |
+| 1028   | Stars                      | c        | Accepted | 0.015 | 376 KB  |
 | 1029   | Ministry                   | c        | Accepted | 0.015 | 652 KB  |
 | 1030   | Titanic                    | c        | Accepted | 0.001 | 240 KB  |
 | 1033   | Labyrinth                  | c        | Accepted | 0.001 | 220 KB  |
@@ -83,6 +84,8 @@ http://acm.timus.ru/author.aspx?id=246961
   + Nice implementation of A* 
 + 1019 - Line painting
   + I implemented the damn datastructure myself, and I'm proud of it.
++ 1028 - Stars
+  + First time I heard of Binary Index Tree. Cool datastructure.
 + 1074 - Very Short problem
   + I like that I managed to implement it in C, and using so little memory.
 + 1100 - Final Standings
