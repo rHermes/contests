@@ -59,6 +59,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1025   | Democracy in Danger        | c        | Accepted | 0.001 | 208 KB  |
 | 1026   | Questions and Answers      | c        | Accepted | 0.031 | 228 KB  |
 | 1027   | D++ Again                  | c        | Accepted | 0.001 | 176 KB  |
+| 1028   | Binary Apple Tree          | c        | Accepted | 0.001 | 304 KB  |
 | 1029   | Ministry                   | c        | Accepted | 0.015 | 652 KB  |
 | 1030   | Titanic                    | c        | Accepted | 0.001 | 240 KB  |
 | 1033   | Labyrinth                  | c        | Accepted | 0.001 | 220 KB  |
@@ -93,3 +94,4 @@ http://acm.timus.ru/author.aspx?id=246961
 + Make sure to understand everything about timus 1004
 + Refine p1074, to use less structures.
 + Redo Timus p1006 to not use stretch buffers.
++ Redo Timus p1037 to be faster. This may involve queues?
