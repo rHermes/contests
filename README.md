@@ -63,6 +63,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1028   | Stars                      | c        | Accepted | 0.015 | 376 KB  |
 | 1029   | Ministry                   | c        | Accepted | 0.015 | 652 KB  |
 | 1030   | Titanic                    | c        | Accepted | 0.001 | 240 KB  |
+| 1031   | Railway Tickets            | c        | Accepted | 0.280 | 896 KB  |
 | 1033   | Labyrinth                  | c        | Accepted | 0.001 | 220 KB  |
 | 1037   | Memory Management          | c        | Accepted | 0.795 | 328 KB  |
 | 1074   | Very Short Problem         | c        | Accepted | 0.015 | 192 KB  |
@@ -98,3 +99,4 @@ http://acm.timus.ru/author.aspx?id=246961
 + Refine p1074, to use less structures.
 + Redo Timus p1006 to not use stretch buffers.
 + Redo Timus p1037 to be faster. This may involve queues?
++ Redo Timus p1031 to be faster. This is a lowhanging fruit, it can be done with queues.
