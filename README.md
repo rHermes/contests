@@ -67,6 +67,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1031   | Railway Tickets            | cpp      | Accepted | 0.015 | 628 KB  |
 | 1032   | Find A Multiple            | c        | Accepted | 0.015 | 312 KB  |
 | 1033   | Labyrinth                  | c        | Accepted | 0.001 | 220 KB  |
+| 1036   | Lucky Tickets              | c        | Accepted | 0.046 | 236 KB  |
 | 1037   | Memory Management          | c        | Accepted | 0.795 | 328 KB  |
 | 1074   | Very Short Problem         | c        | Accepted | 0.015 | 192 KB  |
 | 1100   | Final Standings            | c        | Accepted | 0.078 | 2560 KB |
