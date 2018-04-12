@@ -65,6 +65,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1030   | Titanic                    | c        | Accepted | 0.001 | 240 KB  |
 | 1031   | Railway Tickets            | c        | Accepted | 0.280 | 896 KB  |
 | 1031   | Railway Tickets            | cpp      | Accepted | 0.015 | 628 KB  |
+| 1032   | Find A Multiple            | c        | Accepted | 0.015 | 312 KB  |
 | 1033   | Labyrinth                  | c        | Accepted | 0.001 | 220 KB  |
 | 1037   | Memory Management          | c        | Accepted | 0.795 | 328 KB  |
 | 1074   | Very Short Problem         | c        | Accepted | 0.015 | 192 KB  |
@@ -88,6 +89,8 @@ http://acm.timus.ru/author.aspx?id=246961
   + I implemented the damn datastructure myself, and I'm proud of it.
 + 1028 - Stars
   + First time I heard of Binary Index Tree. Cool datastructure.
++ 1032 - Find a Multiple
+  + It has a nice mathematical proof behind it.
 + 1074 - Very Short problem
   + I like that I managed to implement it in C, and using so little memory.
 + 1100 - Final Standings
