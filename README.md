@@ -30,52 +30,53 @@ https://dmoj.ca/user/solace
 ### Timus
 http://acm.timus.ru/author.aspx?id=246961
 
-| Number | Name                       | Language | Status   | Time  | Memory  |
-| ------ | -------------------------- | -------- | -------- | ----- | ------- |
-| 1000   | A+B Problem                | c        | Accepted | 0.001 | 204 KB  |
-| 1001   | Reverse Root               | c        | Accepted | 0.124 | 1248 KB |
-| 1002   | Phone Numbers              | c        | Accepted | 0.031 | 752 KB  |
-| 1003   | Parity                     | cpp      | Accepted | 0.062 | 952 KB  |
-| 1004   | Sightseeing Trip           | c        | Accepted | 0.031 | 288 KB  |
-| 1005   | Stone Pile                 | c        | Accepted | 0.015 | 224 KB  |
-| 1006   | Square Frames              | c        | Accepted | 0.015 | 212 KB  |
-| 1007   | Code Words                 | c        | Accepted | 0.265 | 216 KB  |
-| 1008   | Image Encoding             | cpp      | Accpeted | 0.015 | 284 KB  |
-| 1009   | K-based Numbers            | c        | Accepted | 0.001 | 212 KB  |
-| 1010   | Discrete Function          | c        | Accepted | 0.031 | 208 KB  |
-| 1011   | Conductors                 | c        | Accepted | 0.015 | 204 KB  |
-| 1012   | K-based Numbers. Version 2 | c        | Accepted | 0.015 | 208 KB  |
-| 1013   | K-based Numbers. Version 3 | c        | Accepted | 0.015 | 232 KB  |
-| 1014   | Product of Digits          | c        | Accepted | 0.015 | 208 KB  |
-| 1015   | Test the Difference!       | c        | Accepted | 0.015 | 344 KB  |
-| 1016   | Cube on the Walk           | cpp      | Accepted | 0.001 | 448 KB  |
-| 1017   | Staircases                 | c        | Accepted | 0.001 | 336 KB  |
-| 1018   | Binary Apple Tree          | c        | Accepted | 0.001 | 304 KB  |
-| 1019   | Line Painting              | c        | Accepted | 0.062 | 520 KB  |
-| 1020   | Rope                       | c        | Accepted | 0.001 | 244 KB  |
-| 1021   | Sacrament of the Sum       | c        | Accepted | 0.031 | 260 KB  |
-| 1022   | Genealogical Tree          | cpp      | Accepted | 0.001 | 300 KB  |
-| 1023   | Buttons                    | c        | Accepted | 0.015 | 204 KB  |
-| 1024   | Permutations               | c        | Accepted | 0.001 | 208 KB  |
-| 1025   | Democracy in Danger        | c        | Accepted | 0.001 | 208 KB  |
-| 1026   | Questions and Answers      | c        | Accepted | 0.031 | 228 KB  |
-| 1027   | D++ Again                  | c        | Accepted | 0.001 | 176 KB  |
-| 1028   | Stars                      | c        | Accepted | 0.015 | 376 KB  |
-| 1029   | Ministry                   | c        | Accepted | 0.015 | 652 KB  |
-| 1030   | Titanic                    | c        | Accepted | 0.001 | 240 KB  |
-| 1031   | Railway Tickets            | c        | Accepted | 0.280 | 896 KB  |
-| 1031   | Railway Tickets            | cpp      | Accepted | 0.015 | 628 KB  |
-| 1032   | Find A Multiple            | c        | Accepted | 0.015 | 312 KB  |
-| 1033   | Labyrinth                  | c        | Accepted | 0.001 | 220 KB  |
-| 1036   | Lucky Tickets              | c        | Accepted | 0.046 | 236 KB  |
-| 1037   | Memory Management          | c        | Accepted | 0.795 | 328 KB  |
-| 1038   | Spell Checker              | c        | Accepted | 0.015 | 328 KB  |
-| 1039   | Anniversary Party          | c        | Accepted | 0.001 | 516 KB  |
-| 1074   | Very Short Problem         | c        | Accepted | 0.015 | 200 KB  |
-| 1100   | Final Standings            | c        | Accepted | 0.078 | 2560 KB |
-| 1110   | Power                      | c        | Accepted | 0.001 | 204 KB  |
-| 1820   | Ural Steaks                | c        | Accepted | 0.015 | 208 KB  |
-| 1877   | Bicycle Codes              | c        | Accepted | 0.001 | 192 KB  |
+| Number | Name                         | Language | Status   | Time  | Memory  |
+| ------ | ---------------------------- | -------- | -------- | ----- | ------- |
+| 1000   | A+B Problem                  | c        | Accepted | 0.001 | 204 KB  |
+| 1001   | Reverse Root                 | c        | Accepted | 0.124 | 1248 KB |
+| 1002   | Phone Numbers                | c        | Accepted | 0.031 | 752 KB  |
+| 1003   | Parity                       | cpp      | Accepted | 0.062 | 952 KB  |
+| 1004   | Sightseeing Trip             | c        | Accepted | 0.031 | 288 KB  |
+| 1005   | Stone Pile                   | c        | Accepted | 0.015 | 224 KB  |
+| 1006   | Square Frames                | c        | Accepted | 0.015 | 212 KB  |
+| 1007   | Code Words                   | c        | Accepted | 0.265 | 216 KB  |
+| 1008   | Image Encoding               | cpp      | Accpeted | 0.015 | 284 KB  |
+| 1009   | K-based Numbers              | c        | Accepted | 0.001 | 212 KB  |
+| 1010   | Discrete Function            | c        | Accepted | 0.031 | 208 KB  |
+| 1011   | Conductors                   | c        | Accepted | 0.015 | 204 KB  |
+| 1012   | K-based Numbers. Version 2   | c        | Accepted | 0.015 | 208 KB  |
+| 1013   | K-based Numbers. Version 3   | c        | Accepted | 0.015 | 232 KB  |
+| 1014   | Product of Digits            | c        | Accepted | 0.015 | 208 KB  |
+| 1015   | Test the Difference!         | c        | Accepted | 0.015 | 344 KB  |
+| 1016   | Cube on the Walk             | cpp      | Accepted | 0.001 | 448 KB  |
+| 1017   | Staircases                   | c        | Accepted | 0.001 | 336 KB  |
+| 1018   | Binary Apple Tree            | c        | Accepted | 0.001 | 304 KB  |
+| 1019   | Line Painting                | c        | Accepted | 0.062 | 520 KB  |
+| 1020   | Rope                         | c        | Accepted | 0.001 | 244 KB  |
+| 1021   | Sacrament of the Sum         | c        | Accepted | 0.031 | 260 KB  |
+| 1022   | Genealogical Tree            | cpp      | Accepted | 0.001 | 300 KB  |
+| 1023   | Buttons                      | c        | Accepted | 0.015 | 204 KB  |
+| 1024   | Permutations                 | c        | Accepted | 0.001 | 208 KB  |
+| 1025   | Democracy in Danger          | c        | Accepted | 0.001 | 208 KB  |
+| 1026   | Questions and Answers        | c        | Accepted | 0.031 | 228 KB  |
+| 1027   | D++ Again                    | c        | Accepted | 0.001 | 176 KB  |
+| 1028   | Stars                        | c        | Accepted | 0.015 | 376 KB  |
+| 1029   | Ministry                     | c        | Accepted | 0.015 | 652 KB  |
+| 1030   | Titanic                      | c        | Accepted | 0.001 | 240 KB  |
+| 1031   | Railway Tickets              | c        | Accepted | 0.280 | 896 KB  |
+| 1031   | Railway Tickets              | cpp      | Accepted | 0.015 | 628 KB  |
+| 1032   | Find A Multiple              | c        | Accepted | 0.015 | 312 KB  |
+| 1033   | Labyrinth                    | c        | Accepted | 0.001 | 220 KB  |
+| 1034   | Queens in Peaceful Positions | c        | Accepted | 0.001 | 192 KB  |
+| 1036   | Lucky Tickets                | c        | Accepted | 0.046 | 236 KB  |
+| 1037   | Memory Management            | c        | Accepted | 0.795 | 328 KB  |
+| 1038   | Spell Checker                | c        | Accepted | 0.015 | 328 KB  |
+| 1039   | Anniversary Party            | c        | Accepted | 0.001 | 516 KB  |
+| 1074   | Very Short Problem           | c        | Accepted | 0.015 | 200 KB  |
+| 1100   | Final Standings              | c        | Accepted | 0.078 | 2560 KB |
+| 1110   | Power                        | c        | Accepted | 0.001 | 204 KB  |
+| 1820   | Ural Steaks                  | c        | Accepted | 0.015 | 208 KB  |
+| 1877   | Bicycle Codes                | c        | Accepted | 0.001 | 192 KB  |
 
 #### Nice ones.
 
