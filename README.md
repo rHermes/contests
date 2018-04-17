@@ -75,6 +75,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1074   | Very Short Problem           | c        | Accepted | 0.015 | 200 KB  |
 | 1100   | Final Standings              | c        | Accepted | 0.078 | 2560 KB |
 | 1110   | Power                        | c        | Accepted | 0.001 | 204 KB  |
+| 1185   | Wall                         | c        | Accepted | 0.001 | 260 KB  |
 | 1820   | Ural Steaks                  | c        | Accepted | 0.015 | 208 KB  |
 | 1877   | Bicycle Codes                | c        | Accepted | 0.001 | 192 KB  |
 
@@ -95,10 +96,15 @@ http://acm.timus.ru/author.aspx?id=246961
   + First time I heard of Binary Index Tree. Cool datastructure.
 + 1032 - Find a Multiple
   + It has a nice mathematical proof behind it.
++ 1034 - Queens in Peaceful Positions
+  + I rank high on this one, and it is a problem that seems impossible when
+  starting, but turns out to be very possible.
 + 1074 - Very Short problem
   + I like that I managed to implement it in C, and using so little memory.
 + 1100 - Final Standings
   + First time I heard of counting sort.
++ 1185 - Wall
+  + First time I encountered convex hull algorithms.
  
 
 ## TODO
