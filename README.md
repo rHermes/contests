@@ -72,6 +72,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1037   | Memory Management            | c        | Accepted | 0.795 | 328 KB  |
 | 1038   | Spell Checker                | c        | Accepted | 0.015 | 328 KB  |
 | 1039   | Anniversary Party            | c        | Accepted | 0.001 | 516 KB  |
+| 1068   | Sum                          | c        | Accepted | 0.001 | 212 KB  |
 | 1074   | Very Short Problem           | c        | Accepted | 0.015 | 200 KB  |
 | 1100   | Final Standings              | c        | Accepted | 0.078 | 2560 KB |
 | 1110   | Power                        | c        | Accepted | 0.001 | 204 KB  |
