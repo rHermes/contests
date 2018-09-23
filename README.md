@@ -39,7 +39,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1004   | Sightseeing Trip             | c        | Accepted | 0.031 | 288 KB  |
 | 1005   | Stone Pile                   | c        | Accepted | 0.015 | 224 KB  |
 | 1006   | Square Frames                | c        | Accepted | 0.015 | 212 KB  |
-| 1007   | Code Words                   | c        | Accepted | 0.265 | 216 KB  |
+| 1007   | Code Words                   | c        | Accepted | 0.265 | 212 KB  |
 | 1008   | Image Encoding               | cpp      | Accpeted | 0.015 | 284 KB  |
 | 1009   | K-based Numbers              | c        | Accepted | 0.001 | 212 KB  |
 | 1010   | Discrete Function            | c        | Accepted | 0.031 | 208 KB  |
@@ -74,7 +74,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1039   | Anniversary Party            | c        | Accepted | 0.001 | 516 KB  |
 | 1040   | Airline Company              | c        | Accepted | 0.001 | 236 KB  |
 | 1042   | Central Heating              | c        | Accepted | 0.015 | 272 KB  |
-| 1067   | Disk Tree                    | cpp      | Accepted | 0.109 | 1752 KB |
+| 1067   | Disk Tree                    | cpp      | Accepted | 0.093 | 1756 KB |
 | 1068   | Sum                          | c        | Accepted | 0.001 | 212 KB  |
 | 1074   | Very Short Problem           | c        | Accepted | 0.015 | 200 KB  |
 | 1100   | Final Standings              | c        | Accepted | 0.078 | 2560 KB |
