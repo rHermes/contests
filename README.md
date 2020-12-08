@@ -7,31 +7,38 @@ and C++ has builtin versions.
 
 ## Gold gems:
 
-Various datastructures: 
+Various datastructures:
 	- [[http://codeforces.com/blog/entry/15729]]
 
 ## Status
+
+### Kattis
+https://open.kattis.com/users/rhermes
+
+| Problem                                                | Language | Status   | CPU  |
+|--------------------------------------------------------|----------|----------|------|
+| [Hello World!](https://open.kattis.com/problems/hello) | c        | Accepted | 0.00 |
 
 ### Codeforces
 http://codeforces.com/profile/rHermes
 
 | Problem     | Language | Status   | Time  | Memory  |
-| ----------- | -------- | -------- | ----- | ------- |
+|-------------|----------|----------|-------|---------|
 | 13E - Holes | c        | Accepted | 654ms | 3400 KB |
 
 ### DMOJ
 https://dmoj.ca/user/solace
 
-| Code      | Name                                             | Language | Points | Status | Time  | Memory   |
-| --------- | ------------------------------------------------ | -------- | ------ | ------ | ----- | -------- |
-| tle16c6j1 | TLE '16 Contest 6 (Mock CCC) J1 - Paper Printing | C11      | 4/4    | 15/15  | 0.29  | 992.0 KB |
+| Code      | Name                                             | Language | Points | Status | Time | Memory   |
+|-----------|--------------------------------------------------|----------|--------|--------|------|----------|
+| tle16c6j1 | TLE '16 Contest 6 (Mock CCC) J1 - Paper Printing | C11      | 4/4    | 15/15  | 0.29 | 992.0 KB |
 
 
 ### Timus
 http://acm.timus.ru/author.aspx?id=246961
 
 | Number | Name                         | Language | Status   | Time  | Memory  |
-| ------ | ---------------------------- | -------- | -------- | ----- | ------- |
+|--------|------------------------------|----------|----------|-------|---------|
 | 1000   | A+B Problem                  | c        | Accepted | 0.001 | 204 KB  |
 | 1001   | Reverse Root                 | c        | Accepted | 0.124 | 1248 KB |
 | 1002   | Phone Numbers                | c        | Accepted | 0.031 | 752 KB  |
@@ -93,7 +100,7 @@ http://acm.timus.ru/author.aspx?id=246961
   + I really like how I do the rotation of the dice here and how I kind of
   hand unrolled the loop.
 + 1016 - Cube on the Walk
-  + Nice implementation of A* 
+  + Nice implementation of A*
 + 1019 - Line painting
   + I implemented the damn datastructure myself, and I'm proud of it.
 + 1028 - Stars
@@ -111,7 +118,7 @@ http://acm.timus.ru/author.aspx?id=246961
   + First time I encountered convex hull algorithms.
 + 1042 - Central Heating
   + I like it when linear algebra comes into places you would not expect it!
- 
+
 
 ## TODO
 
