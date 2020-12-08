@@ -14,6 +14,7 @@
 #include <map>
 #include <list>
 #include <tuple>
+#include <string>
 
 class Node {
 private:

@@ -11,6 +11,7 @@
 #include <queue>
 #include <tuple>
 #include <vector>
+#include <cstdio>
 
 
 int main() {

@@ -1,4 +1,7 @@
 *.swp
 *̃~
 .plz-cache
+
+# Please output directory and local configuration
 plz-out
+.plzconfig.local
