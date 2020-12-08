@@ -15,9 +15,10 @@ Various datastructures:
 ### Kattis
 https://open.kattis.com/users/rhermes
 
-| Problem                                                | Language | Status   | CPU  |
-|--------------------------------------------------------|----------|----------|------|
-| [Hello World!](https://open.kattis.com/problems/hello) | c        | Accepted | 0.00 |
+| Problem                                                                  | Language | Status   | CPU  |
+|--------------------------------------------------------------------------|----------|----------|------|
+| [Hello World!](https://open.kattis.com/problems/hello)                   | C        | Accepted | 0.00 |
+| [I've Been Everywhere, Man](https://open.kattis.com/problems/everywhere) | C++      | Accepted | 0.00 |
 
 ### Codeforces
 http://codeforces.com/profile/rHermes

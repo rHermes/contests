@@ -20,5 +20,6 @@ for f in glob(["*.cpp"]):
                     ],
             linker_flags = []
             )
-# -static -fno-strict-aliasing -DONLINE_JUDGE -lm -s 
-#   -std=c11 -Wl,--stack=67108864 -O2
+
+# -g -O2 -std=gnu11 -static {files} -lm
+#  -g -O2 -std=gnu++17 -static {files}
