@@ -20,6 +20,9 @@ https://open.kattis.com/users/rhermes
 | [Hello World!](https://open.kattis.com/problems/hello)                   | C        | Accepted | 0.00 |
 | [I've Been Everywhere, Man](https://open.kattis.com/problems/everywhere) | C++      | Accepted | 0.00 |
 | [Pot](https://open.kattis.com/problems/pot)                              | C        | Accepted | 0.00 |
+| [Texture Analysis](https://open.kattis.com/problems/textureanalysis)     | C        | Accepted | 0.02 |
+| [Sibice](https://open.kattis.com/problems/sibice)                        | C        | Accepted | 0.00 |
+
 
 ### Codeforces
 http://codeforces.com/profile/rHermes
