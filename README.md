@@ -22,6 +22,7 @@ https://open.kattis.com/users/rhermes
 | [Pot](https://open.kattis.com/problems/pot)                              | C        | Accepted | 0.00 |
 | [Texture Analysis](https://open.kattis.com/problems/textureanalysis)     | C        | Accepted | 0.02 |
 | [Sibice](https://open.kattis.com/problems/sibice)                        | C        | Accepted | 0.00 |
+| [Skener](https://open.kattis.com/problems/skener)                        | C        | Accepted | 0.00 |
 
 
 ### Codeforces
