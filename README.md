@@ -23,6 +23,7 @@ https://open.kattis.com/users/rhermes
 | [Texture Analysis](https://open.kattis.com/problems/textureanalysis)     | C        | Accepted | 0.02 |
 | [Sibice](https://open.kattis.com/problems/sibice)                        | C        | Accepted | 0.00 |
 | [Skener](https://open.kattis.com/problems/skener)                        | C        | Accepted | 0.00 |
+| [Prsteni](https://open.kattis.com/problems/prsteni)                      | C        | Accepted | 0.00 |
 
 
 ### Codeforces
