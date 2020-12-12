@@ -15,15 +15,16 @@ Various datastructures:
 ### Kattis
 https://open.kattis.com/users/rhermes
 
-| Problem                                                                  | Language | Status   | CPU  |
-|--------------------------------------------------------------------------|----------|----------|------|
-| [Hello World!](https://open.kattis.com/problems/hello)                   | C        | Accepted | 0.00 |
-| [I've Been Everywhere, Man](https://open.kattis.com/problems/everywhere) | C++      | Accepted | 0.00 |
-| [Pot](https://open.kattis.com/problems/pot)                              | C        | Accepted | 0.00 |
-| [Texture Analysis](https://open.kattis.com/problems/textureanalysis)     | C        | Accepted | 0.02 |
-| [Sibice](https://open.kattis.com/problems/sibice)                        | C        | Accepted | 0.00 |
-| [Skener](https://open.kattis.com/problems/skener)                        | C        | Accepted | 0.00 |
-| [Prsteni](https://open.kattis.com/problems/prsteni)                      | C        | Accepted | 0.00 |
+| Problem                                                                  | Language | Status   | CPU  | Clues |
+|--------------------------------------------------------------------------|:--------:|----------|-----:|:-----:|
+| [Hello World!](https://open.kattis.com/problems/hello)                   | C        | Accepted | 0.00 | No    |
+| [I've Been Everywhere, Man](https://open.kattis.com/problems/everywhere) | C++      | Accepted | 0.00 | No    |
+| [Pot](https://open.kattis.com/problems/pot)                              | C        | Accepted | 0.00 | No    |
+| [Texture Analysis](https://open.kattis.com/problems/textureanalysis)     | C        | Accepted | 0.02 | No    |
+| [Sibice](https://open.kattis.com/problems/sibice)                        | C        | Accepted | 0.00 | No    |
+| [Skener](https://open.kattis.com/problems/skener)                        | C        | Accepted | 0.00 | No    |
+| [Prsteni](https://open.kattis.com/problems/prsteni)                      | C        | Accepted | 0.00 | No    |
+| [Zbrka](https://open.kattis.com/problems/zbrka)                          | C        | Accepted | 0.07 | Yes   |
 
 
 ### Codeforces
