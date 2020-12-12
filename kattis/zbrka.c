@@ -59,7 +59,7 @@ int main(void) {
 	}
 
 	UINT dp[2][MAX_C];
-	// We need to zero out the c first elements of the array
+	// We need to zero out the c+1 first elements of the array
 	memset(&(dp[1]), 0, sizeof(UINT)*(c+1));
 
 	// The only thing we know is that for a length of 1,
