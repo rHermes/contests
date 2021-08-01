@@ -10,5 +10,5 @@ for f in glob(["*.cpp"]):
     cc_binary(
         name = f[:-4],
         srcs = [f],
-        compiler_flags = ["-std=c++14"],
+        compiler_flags = ["-std=c++20"],
     )
