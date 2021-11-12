@@ -1,0 +1,12 @@
+cc_library(
+    name = "fmt",
+    visibility = ["PUBLIC"],
+    includes = [
+        "include",
+    ],
+    srcs = [
+        "src/os.cc",
+        "src/format.cc",
+    ],
+    hdrs = glob(["include/fmt/*.h"]),
+)
