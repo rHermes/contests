@@ -1,26 +1,27 @@
 #include "days.hpp"
-#include <string>
+#include <fmt/format.h>
 
-using aoc::Out;
 using aoc::In;
+using aoc::Out;
 
 Out aoc::y2015::day01(const In &in) {
-	int floor = 0;
-	int part2 = 0;
-	int inst = 1;
-	for (auto& c : in) {
-		if (c == ')') {
-			floor--;
-		} else if (c == '(') {
-			floor++;
-		}
+  int floor = 0;
+  int part2 = 0;
+  int inst = 1;
 
-		if (floor == -1 && part2 == 0) {
-			part2 = inst;
-		}
+  for (auto &c : in) {
+    if (c == ')') {
+      floor--;
+    } else if (c == '(') {
+      floor++;
+    }
 
-		inst++;
-	}
+    if (floor == -1 && part2 == 0) {
+      part2 = inst;
+    }
 
-	return Out{std::to_string(floor), std::to_string(part2)};
+    inst++;
+  }
+
+  return Out{fmt::to_string(floor), fmt::to_string(part2)};
 }

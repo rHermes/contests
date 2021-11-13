@@ -16,7 +16,7 @@ for x in glob(["[0-9]*/"]):
     )
     years += [ye]
 
-a = cc_library(
+cc_library(
     name = "years_lib",
     srcs = [
         "years.cpp",

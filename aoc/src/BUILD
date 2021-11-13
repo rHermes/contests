@@ -7,6 +7,9 @@ cc_binary(
         "-O2",
         "-std=c++20",
     ],
+    linker_flags = [
+        "-flto",
+    ],
     deps = [
         "//aoc/src/years:years_lib",
     ],
