@@ -5,22 +5,33 @@ using aoc::In;
 using aoc::Out;
 
 Out aoc::y2015::day01(const In &in) {
-  int floor = 0;
-  int part2 = 0;
-  int inst = 1;
+  int part1 = 0;
+  int part2 = -1;
 
-  for (auto &c : in) {
-    if (c == ')') {
-      floor--;
-      if (floor == -1 && part2 == 0) {
-        part2 = inst;
+  auto c = in.begin();
+  auto end = std::prev(in.end());
+
+  for (; c < end; c++) {
+    if (*c == ')') {
+      part1--;
+
+      if (part1 == -1) {
+        part2 = std::distance(in.begin(), c);
+        c++;
+        break;
       }
-    } else if (c == '(') {
-      floor++;
+    } else {
+      part1++;
     }
-
-    inst++;
   }
 
-  return {fmt::to_string(floor), fmt::to_string(part2)};
+  for (; c < end; c++) {
+    if (*c == ')') {
+      part1--;
+    } else {
+      part1++;
+    }
+  }
+
+  return {fmt::to_string(part1), fmt::to_string(part2)};
 }

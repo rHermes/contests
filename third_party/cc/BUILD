@@ -7,3 +7,10 @@ github_repo(
     repo = "fmtlib/fmt",
     revision = "8.0.1",
 )
+
+# github_repo(
+#     name = "benchmark",
+#     bazel_compat = True,
+#     repo = "google/benchmark",
+#     revision = "v1.6.0",
+# )

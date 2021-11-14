@@ -14,6 +14,7 @@ int main() {
   auto dur = 0ns;
   for (int year = 2015; year <= 2025; year++) {
     for (int day = 1; day <= 25; day++) {
+
       auto input = aoc::get_input(year, day);
       if (!input) {
         continue;
