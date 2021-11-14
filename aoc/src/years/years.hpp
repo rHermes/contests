@@ -2,6 +2,8 @@
 
 #include "../common/day.hpp"
 
+#include <functional>
+#include <map>
 #include <optional>
 
 namespace aoc {

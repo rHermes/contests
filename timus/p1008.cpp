@@ -94,7 +94,6 @@ void print_second(bool pixels[10][10]) {
 
 	// First we find the first pixel.
 	bool first = true;
-	std::pair<int,int> start_point;
 	for (int x = 0; x < 10 && first; x++) {
 		for (int y = 0; y < 10; y++) {
 			if (pixels[y][x]) {

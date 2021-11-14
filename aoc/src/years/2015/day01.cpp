@@ -12,16 +12,15 @@ Out aoc::y2015::day01(const In &in) {
   for (auto &c : in) {
     if (c == ')') {
       floor--;
+      if (floor == -1 && part2 == 0) {
+        part2 = inst;
+      }
     } else if (c == '(') {
       floor++;
-    }
-
-    if (floor == -1 && part2 == 0) {
-      part2 = inst;
     }
 
     inst++;
   }
 
-  return Out{fmt::to_string(floor), fmt::to_string(part2)};
+  return {fmt::to_string(floor), fmt::to_string(part2)};
 }
