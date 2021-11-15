@@ -2,10 +2,10 @@ github_repo(
     name = "fmt",
     build_file = "BUILD.fmt",
     hashes = [
-        "6747442c189064b857336007dd7fa3aaf58512aa1a0b2ba76bf1182eefb01025",
+        "b04cf4f72d7ea0bc8e5b3c43692f280ec6872f163b098be94001fdc5c34b21df",
     ],
     repo = "fmtlib/fmt",
-    revision = "8.0.1",
+    revision = "8b89454994efee04f69eea9f09273f5f3f2c185d",
 )
 
 # github_repo(
