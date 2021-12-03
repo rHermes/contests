@@ -17,7 +17,7 @@ Out aoc::y2021::day01(const In &in) {
   std::size_t part2 = 0;
 
   while (!inp.empty()) {
-    const std::string_view line = inp.substr(0, inp.find(0xa));
+    const std::string_view line = inp.substr(0, inp.find('\n'));
     inp = inp.substr(line.size() + 1);
 
     uint64_t d = 0;
