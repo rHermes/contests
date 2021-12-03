@@ -4,6 +4,4 @@
 using aoc::In;
 using aoc::Out;
 
-Out aoc::y2021::day03(const In &in) {
-	return {"", ""};
-}
+Out aoc::y2021::day03(const In &in) { return {"", ""}; }

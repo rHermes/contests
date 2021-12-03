@@ -7,7 +7,7 @@ const std::optional<aoc::Out> aoc::run(int year, int day, const aoc::In &in) {
   case 2015:
     return aoc::y2015::run(day, in);
   case 2021:
-	return aoc::y2021::run(day, in);
+    return aoc::y2021::run(day, in);
   default:
     return {};
   }

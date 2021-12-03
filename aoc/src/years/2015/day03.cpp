@@ -6,7 +6,6 @@
 #include <fmt/core.h>
 #include <fmt/format.h>
 
-
 using aoc::In;
 using aoc::Out;
 
