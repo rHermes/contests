@@ -1,6 +1,7 @@
 #include "days.hpp"
 #include <charconv>
 #include <fmt/format.h>
+#include <limits>
 
 using aoc::In;
 using aoc::Out;
@@ -8,7 +9,7 @@ using aoc::Out;
 Out aoc::y2021::day01(const In &in) {
   std::string_view inp = in;
 
-  uint64_t a = 9999999999;
+  uint64_t a = std::numeric_limits<uint64_t>::max();
   uint64_t b = a;
   uint64_t c = a;
 
