@@ -6,6 +6,7 @@ cc_binary(
     compiler_flags = [
         "-O2",
         "-std=c++20",
+        "-g",
     ],
     linker_flags = [
         "-flto",
