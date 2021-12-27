@@ -11,6 +11,8 @@ const std::optional<Out> run(int day, const In &in) {
     return day02(in);
   case 3:
     return day03(in);
+  case 4:
+    return day04(in);
   default:
     return {};
   }
