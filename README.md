@@ -38,9 +38,11 @@ http://codeforces.com/profile/rHermes
 ### DMOJ
 https://dmoj.ca/user/solace
 
-| Code      | Name                                             | Language | Points | Status | Time | Memory   |
-|-----------|--------------------------------------------------|----------|--------|--------|------|----------|
-| tle16c6j1 | TLE '16 Contest 6 (Mock CCC) J1 - Paper Printing | C11      | 4/4    | 15/15  | 0.29 | 992.0 KB |
+| Code        | Name                                                      | Language   | Points   | Status   | Time   | Memory     |
+| ----------- | --------------------------------------------------        | ---------- | -------- | -------- | ------ | ---------- |
+| tle16c6j1   | TLE '16 Contest 6 (Mock CCC) J1 - Paper Printing          | C11        | 4/4      | 15/15    | 0.29   | 992.0 KB   |
+| ichb2017p2  | ICHB Selection Contest '17 Problem 2 - Black Star's Visit | C++20      | 7/7      | 100/100  | 0.165  | 16.69 MB   |
+  
 
 
 ### Timus
