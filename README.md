@@ -42,7 +42,7 @@ https://dmoj.ca/user/solace
 | ----------- |    --------------------------------------------------     | ---------- | -------- | -------- | ------ | ---------- |
 |  tle16c6j1  |     TLE '16 Contest 6 (Mock CCC) J1 - Paper Printing      |    C11     |   4/4    |  15/15   |  0.29  |  992.0 KB  |
 | ichb2017p2  | ICHB Selection Contest '17 Problem 2 - Black Star's Visit |   C++20    |   7/7    | 100/100  | 0.165  |  16.69 MB  |
-| ichb2017p3  | ICHB Selection Contest '17 Problem 3 - Parallel Universe  |   C++20    |   7/7    | 100/100  |  1.02  |   4.2 MB   |
+| ichb2017p3  | ICHB Selection Contest '17 Problem 3 - Parallel Universe  |   C++20    |  12/12   | 100/100  |  1.02  |   4.2 MB   |
   
 
 
