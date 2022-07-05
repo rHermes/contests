@@ -44,6 +44,8 @@ https://dmoj.ca/user/solace
 | ichb2017p2  | [ICHB Selection Contest '17 Problem 2 - Black Star's Visit](https://dmoj.ca/problem/ichb2017p2) | C++20      | 7/7      | 100/100  | 0.165  | 16.69 MB   |
 | ichb2017p3  | [ICHB Selection Contest '17 Problem 3 - Parallel Universe](https://dmoj.ca/problem/ichb2017p3)  | C++20      | 12/12    | 100/100  | 1.02   | 4.2 MB     |
 | aplusb2     | [A Plus B (Hard)](https://dmoj.ca/problem/aplusb2)                                              | C++20      | 12/12    | 935/935  | 0.228  | 3.25 MB    |
+| tle17c4p3   | [TLE '17 Contest 4 P3 - Fax's Christmas Dish](https://dmoj.ca/problem/tle17c4p3)                | C++20      | 7/7      | 100/100  | 1.611  | 4.86 MB    |
+
   
 
 
