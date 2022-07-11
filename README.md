@@ -46,6 +46,12 @@ https://dmoj.ca/user/solace
 | aplusb2     | [A Plus B (Hard)](https://dmoj.ca/problem/aplusb2)                                              | C++20      | 12/12    | 935/935  | 0.228  | 3.25 MB    |
 | tle17c4p3   | [TLE '17 Contest 4 P3 - Fax's Christmas Dish](https://dmoj.ca/problem/tle17c4p3)                | C++20      | 7/7      | 100/100  | 1.611  | 4.86 MB    |
 | nwerc11c    | [ICPC NWERC 2011 C - Movie Collection](https://dmoj.ca/problem/nwerc11c)                        | C++20      | 10/10    | 2/2      | 0.076  | 4.39 MB    |
+| nwerc11a    | [ICPC NWERC 2011 A - Binomial Coefficients](https://dmoj.ca/problem/nwerc11a)                   | C++20      | 10/10    | 2/2      | 0.009  | 3.06 MB    |
+
+#### Nice ones
+
+- nwerc11a: Here I had to google to figure it out, but I learned a lot and I think my writeup is really nice.
+- nwerc11c: This is the task where I learned about Fenwick trees, which was really cool.
 
   
 
