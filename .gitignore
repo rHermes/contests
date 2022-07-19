@@ -8,3 +8,5 @@ plz-out
 
 .envrc
 .idea
+
+__pycache__
