@@ -48,11 +48,20 @@ https://dmoj.ca/user/solace
 | tle17c3p6   | [TLE '17 Contest 3 P6 - Donut Coupons](https://dmoj.ca/problem/tle17c3p6)                       | C++20      | 25/25    | 100/100  | 4.370  | 12.68 MB   |
 | nwerc11c    | [ICPC NWERC 2011 C - Movie Collection](https://dmoj.ca/problem/nwerc11c)                        | C++20      | 10/10    | 2/2      | 0.076  | 4.39 MB    |
 | nwerc11a    | [ICPC NWERC 2011 A - Binomial Coefficients](https://dmoj.ca/problem/nwerc11a)                   | C++20      | 10/10    | 2/2      | 0.009  | 3.06 MB    |
+| aac1p1      | [An Animal Contest 1 P1 - Alpaca Shapes](https://dmoj.ca/problem/aac1p1)                        | C++20      | 3/3      | 100/100  | 0.068  | 1.54 MB    |
+| aac1p2      | [An Animal Contest 1 P2 - Alpaca Racing](https://dmoj.ca/problem/aac1p2)                        | C++20      | 5/5      | 100/100  | 2.430  | 10.82 MB   |
+| mathp1      | [A Math Contest P1 - Arrays](https://dmoj.ca/problem/mathp1)                                    | C++20      | 5/5      | 100/100  | 0.057  | 1.52 MB    |
+| mathp2      | [A Math Contest P2 - Subsequence Sum](https://dmoj.ca/problem/mathp2)                           | C++20      | 5/5      | 100/100  | 0.442  | 1.43 MB    |
+| mathp3      | [A Math Contest P3 - LIS Reconstruction](https://dmoj.ca/problem/mathp3)                        | C++20      | 7/7      | 100/100  | 0.660  | 15.64 MB   |
+| mathp5      | [A Math Contest P5 - Good Arrays](https://dmoj.ca/problem/mathp5)                               | C++20      | 7/7      | 100/100  | 0.660  | 15.64 MB   |
 
 #### Nice ones
 
 - nwerc11a: Here I had to google to figure it out, but I learned a lot and I think my writeup is really nice.
 - nwerc11c: This is the task where I learned about Fenwick trees, which was really cool.
+- mathp1: This turns out to have a really cool solution with a GCD.
+- mathp2: This has a really cool solution for subsquence sums.
+- mathp5: AWESOME TASK! The solutions here are varied and I really learned a lot doing it!
 
   
 
@@ -103,6 +112,7 @@ http://acm.timus.ru/author.aspx?id=246961
 | 1038   | Spell Checker                | c        | Accepted | 0.015 | 328 KB  |
 | 1039   | Anniversary Party            | c        | Accepted | 0.001 | 516 KB  |
 | 1040   | Airline Company              | c        | Accepted | 0.001 | 236 KB  |
+| 1041   | Nikifor                      | cpp      | Accepted | 0.125 | 1380 KB |
 | 1042   | Central Heating              | c        | Accepted | 0.015 | 272 KB  |
 | 1067   | Disk Tree                    | cpp      | Accepted | 0.093 | 1756 KB |
 | 1068   | Sum                          | c        | Accepted | 0.001 | 212 KB  |
@@ -139,6 +149,8 @@ http://acm.timus.ru/author.aspx?id=246961
   + First time I heard of counting sort.
 + 1185 - Wall
   + First time I encountered convex hull algorithms.
++ 1401 - Nikifor
+  + It's fun when linear algebra AND modular arithmetic comes into play.
 + 1042 - Central Heating
   + I like it when linear algebra comes into places you would not expect it!
 

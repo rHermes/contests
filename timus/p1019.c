@@ -160,9 +160,9 @@ void repaint(mark *root, int a, int b, bool c) {
 						right_edge->next->next->prev = left_edge->prev;
 					}
 
-					free(left_edge);
 					free(right_edge->next);
 					free(right_edge);
+					free(left_edge);
 				} else if (on_left) {
 					// The one on the left gets swallowed
 					left_edge->prev->next = right_edge;

@@ -3,12 +3,12 @@ for f in glob(["*.c"]):
     c_binary(
         name = f[:-2],
         srcs = [f],
-        compiler_flags = ["-std=c11"],
+        compiler_flags = ["-std=c11", "-O2"],
     )
 
 for f in glob(["*.cpp"]):
     cc_binary(
         name = f[:-4],
         srcs = [f],
-        compiler_flags = ["-std=c++20"],
+        compiler_flags = ["-std=c++20", "-O2"],
     )
