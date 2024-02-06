@@ -36,21 +36,10 @@ int main(void) {
 			return 0;
 		}
 
-		if (arr[i] < arr[i+1])
-			less_than[i] = true;
-
+		less_than[i] = arr[i] < arr[i+1];
+		taken[i] = false;
 		spots.insert(i);
-
-		/* if (less_than[i]) */
-		/* 	printf("< "); */
-		/* else */
-		/* 	printf("> "); */
 	}
-	/* printf("\n"); */
-
-
-
-
 
 	// We now check if it is possible.
 	for (UT i = 1; i <= N; i++) {

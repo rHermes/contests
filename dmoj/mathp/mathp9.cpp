@@ -34,7 +34,10 @@ ST ipow(ST base, UT exp, UT m) {
 	return res;
 }
 
-
+// This is just the baby step giant step algorithm.
+// It's easy to use, since we know that by Fermats little theorem,
+// a^p = a (mod p), which gives us: a^(p-2) = a^(-1) (mod p)
+// https://en.wikipedia.org/wiki/Fermat%27s_little_theorem
 int main(void) {
 	UT A, N, P;
 	scanf("%lu %lu %lu", &A, &N, &P);

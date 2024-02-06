@@ -9,7 +9,6 @@ using UT = std::uint64_t;
 int main(void) {
 	ST N, M;
 	scanf("%ld %ld", &N, &M);
-	/* solve(N, M); */
 
 	const double DN = static_cast<double>(N);
 	const double DM = static_cast<double>(M);
@@ -21,7 +20,7 @@ int main(void) {
 	}
 
 	const double x = std::sqrt(q);
-	const double ans = std::max(DN + x, DN - x);
+	const double ans = DN + x;
 	printf("%.7f\n", ans/4.0);
 
 
