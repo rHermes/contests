@@ -27,8 +27,7 @@ int main() {
 		numbers[i] = i+1;
 	}
 
-	std::random_device rd;
-	std::mt19937 g(rd());
+	std::mt19937 g;
 
 	for (UT i = 0; i < 21; i++) {
 		std::shuffle(numbers.begin(), numbers.end(), g);
