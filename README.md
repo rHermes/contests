@@ -62,6 +62,8 @@ https://dmoj.ca/user/solace
 - mathp1: This turns out to have a really cool solution with a GCD.
 - mathp2: This has a really cool solution for subsquence sums.
 - mathp5: AWESOME TASK! The solutions here are varied and I really learned a lot doing it!
+- yac8p4: My first time encountering an interactive task! Really cool one.
+- yac8p5: My first time seeing a "run twice task", and it has such an awesome solution!
 
   
 

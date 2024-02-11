@@ -95,8 +95,8 @@ bool play_defensive_game(const UT N, const UT M) {
 						break;
 					}
 				}
-
-				throw std::runtime_error("Something messed up in him returning his own piece\n");
+				if (goodCol == M)
+					throw std::runtime_error("Something messed up in him returning his own piece\n");
 			}
 			else if (active == 1) {
 				// He just placed the first piece. Aka there is only 1 on the table.
@@ -190,7 +190,7 @@ bool play_off_single(const UT M) {
 			}
 
 			if (pos.size() < 2) {
-				throw std::runtime_error("WTF");
+				throw std::domain_error("WTF");
 			}
 
 			// we now find the diff
@@ -260,7 +260,7 @@ bool play_off_single(const UT M) {
 }
 
 bool play_off_full(const UT N, const UT M) {
-	bool myTurn = false;
+	bool myTurn = true;
 	UT lastR = 0;
 	UT lastC = 0;
 	char lel = 'a';
@@ -343,7 +343,7 @@ bool play_off_full(const UT N, const UT M) {
 		}
 
 		UT oldLastR = lastR;
-		UT oldLastC = lastC;
+		/* UT oldLastC = lastC; */
 
 
 		// What the machine does
@@ -372,7 +372,7 @@ bool play_off_full(const UT N, const UT M) {
 			doingVert = true;
 			constCol = midX;
 		} else {
-			// it picked something else, which is stupid, but it allows us to start doing vert, as it's the fastets
+			// it picked something else, which is stupid, but it allows us to start doing vert, as it's the fastest
 			doingVert = true;
 			constCol = midX;
 		}
@@ -389,7 +389,7 @@ bool play_off_full(const UT N, const UT M) {
 				}
 
 				if (pos.size() < 2) {
-					throw std::runtime_error("WTF");
+					throw std::out_of_range("WTF");
 				}
 
 				// we now find the diff
@@ -430,7 +430,7 @@ bool play_off_full(const UT N, const UT M) {
 				}
 
 				if (pos.size() < 2) {
-					throw std::runtime_error("WTF");
+					throw std::bad_alloc(); // ("WTF");
 				}
 
 				// we now find the diff
