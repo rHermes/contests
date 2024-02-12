@@ -74,7 +74,7 @@ uint32_t solve_with_mst(std::vector<uint32_t> input) {
 			if (newcost < acost) {
 				auto aanode = Q.extract(std::prev(cur,1));
 				aanode.value().first = newcost;
-				Q.insert(move(aanode));
+				Q.insert(std::move(aanode));
 			}
 		}
 

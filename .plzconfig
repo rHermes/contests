@@ -7,3 +7,10 @@
 ; when you change it all users will automatically get updated.
 ; [please]
 ; version = 15.9.1
+
+[parse]
+preloadsubincludes = ///cc//build_defs:cc
+preloadsubincludes = ///cc//build_defs:c
+
+[Plugin "cc"]
+Target = //plugins:cc
