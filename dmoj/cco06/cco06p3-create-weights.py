@@ -39,7 +39,7 @@ def build_tables(input):
 
         # We have a problem here, if there are too few rows, we want to replace it.
         num_not_zero = sum(x != 0 for x in tbl)
-        if num_not_zero < 5:
+        if num_not_zero < 1:
             c = 31 + i
             if c == 31:
                 c = 10
