@@ -20,30 +20,6 @@ using UT = std::uint64_t;
  * https://github.com/plasmatic1/dmoj-solutions/blob/32555fe4df6e2dc862de55c1a52ea5da155166f7/cpp/mathp13.cpp#L4
  */
 
-/* constexpr UT MAX_N = 1000; */
-/* constexpr double TOL = 0.0000000000001; */
-inline ST pmod(ST i, ST n) {
-    return (i % n + n) % n;
-}
-
-ST ipow(ST base, UT exp, UT m) {
-	ST res = 1;
-	base = pmod(base, m);
-
-	if (base == 0)
-		return 0;
-
-
-	while (exp > 0) {
-		if (exp % 2 == 1)
-			res = pmod(res * base, m);
-
-		exp >>= 1;
-		base = pmod(base*base, m);
-	}
-
-	return res;
-}
 
 std::vector<std::pair<UT,UT>> trial_division1(UT n) {
 	std::vector<std::pair<UT,UT>> fact;

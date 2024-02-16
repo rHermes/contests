@@ -71,8 +71,8 @@ class BinaryIndexedTree {
 		}
 
 		void add(ST index, ST delta) {
-			while (index < tree_.size()) {
-				tree_[index] += delta;
+			while (static_cast<UT>(index) < tree_.size()) {
+				tree_[static_cast<UT>(index)] += delta;
 				index = getNext(index);
 			}
 		}
@@ -81,7 +81,7 @@ class BinaryIndexedTree {
 			ST ret = 0;
 
 			while (0 <= index) {
-				ret += tree_[index];
+				ret += tree_[static_cast<UT>(index)];
 				index = getParent(index);
 			}
 
@@ -98,30 +98,32 @@ int main(void) {
 		UT N, M;
 		scanf("%u %u", &N, &M);
 
-		const ST extra_space =  M + 1;
+		const UT extra_space =  M + 1;
+		const ST extra_space_st = static_cast<ST>(extra_space);
+
 		BinaryIndexedTree bit(N + extra_space);
 		std::vector<ST> movies;
 		for (UT j = 0; j < N; j++) {
-			movies.push_back(j);
+			movies.emplace_back(j);
 			// we add one
-			bit.add(extra_space + j, 1);
+			bit.add(static_cast<ST>(extra_space + j), 1);
 		}
 
 
 		for (UT j = 0; j < M; j++) {
-			ST id;
+			UT id;
 			scanf("%u", &id);
 			id -= 1;
 
 			// Figure out how many was there now:
-			const ST before = bit.prefixSum(extra_space + movies[id]) - 1;
+			const ST before = bit.prefixSum(extra_space_st + movies[id]) - 1;
 			// Decrease it
-			bit.add(extra_space + movies[id], -1);
+			bit.add(extra_space_st + movies[id], -1);
 			// Set the new index
 			movies[id] = -static_cast<ST>(j) - 1;
 			
 			// Update the new one
-			bit.add(extra_space + movies[id], 1);
+			bit.add(extra_space_st + movies[id], 1);
 
 			if (j == 0) {
 				printf("%u", before);

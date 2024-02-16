@@ -40,7 +40,7 @@ int main(void) {
 
 	// we can optimize this further, by only doing this half N times.
 	for (UT i = 1; i < N; i++) {
-		const double area_ratio = static_cast<double>(N-i)/N;
+		const double area_ratio = static_cast<double>(N-i)/static_cast<double>(N);
 		const double angle = find_angle(area_ratio);
 		const double height = std::cos(angle / 2);
 		printf("%.11f\n", height);

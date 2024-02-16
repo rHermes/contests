@@ -68,18 +68,18 @@
 using UT = std::uint64_t;
 using ST = std::int64_t;
 
-constexpr UT MAX_K = 11;
+constexpr ST MAX_K = 11;
 /* constexpr UT MAX_K = 3; */
-constexpr UT MOD_M = 1000000007;
+constexpr ST MOD_M = 1000000007;
 
 // The multiplicative inverse of MAX_K! ^- 1 mod MOD_M
-constexpr UT INVERSE_MAX_K = 571199524;
+constexpr ST INVERSE_MAX_K = 571199524;
 
 inline ST pmod(ST i, ST n) {
     return (i % n + n) % n;
 }
 
-ST ipow(ST base, UT exp, UT m) {
+ST ipow(ST base, UT exp, ST m) {
 	ST res = 1;
 	base = pmod(base, m);
 
@@ -120,8 +120,8 @@ class BinaryIndexedTree {
 		}
 
 		void add(ST index, ST delta) {
-			while (index < tree_.size()) {
-				tree_[index] = pmod(tree_[index] + delta, MOD_M);
+			while (static_cast<UT>(index) < tree_.size()) {
+				tree_[static_cast<UT>(index)] = pmod(tree_[static_cast<UT>(index)] + delta, MOD_M);
 				index = getNext(index);
 			}
 		}
@@ -130,7 +130,7 @@ class BinaryIndexedTree {
 			ST ret = 0;
 
 			while (0 <= index) {
-				ret = pmod(ret + tree_[index], MOD_M);
+				ret = pmod(ret + tree_[static_cast<UT>(index)], MOD_M);
 				index = getParent(index);
 			}
 
@@ -149,7 +149,7 @@ class PowerTree {
 			std::fill(bits_.begin(), bits_.end(), BinaryIndexedTree(n+1));
 		}
 		
-		ST query(UT l) {
+		ST query(ST l) {
 			ST ret = 0;
 			for (UT i = 0; i < bits_.size(); i++) {
 				ret = pmod(ret + ipow(l, i, MOD_M)*bits_[i].prefixSum(l), MOD_M);
@@ -157,7 +157,7 @@ class PowerTree {
 			return pmod(ret * INVERSE_MAX_K, MOD_M);
 		}
 
-		ST query(UT l, UT r) {
+		ST query(ST l, ST r) {
 			if (l == 1) {
 				return pmod(query(r), MOD_M);
 			} else {
@@ -165,7 +165,7 @@ class PowerTree {
 			}
 		}
 
-		void update(UT l, UT r, UT k) {
+		void update(ST l, ST r, UT k) {
 			// This was generated with the tle17c3p6-eq-generator.py script.
 			switch (k) {
 				case 0:
@@ -348,18 +348,18 @@ class PowerTree {
 		}
 
 		void print_it() {
-			std::deque<std::pair<UT,UT>> Q;
+			std::deque<std::pair<ST,ST>> Q;
 			Q.push_back({1, n_});
 
 			while (!Q.empty()) {
 				auto [l, r] = Q.front();
 				Q.pop_front();
 
-				printf("[%lu - %lu]: %lu\n", l, r, query(l, r));
+				printf("[%ld - %ld]: %ld\n", l, r, query(l, r));
 				if (l == r)
 					continue;
 
-				const UT tm = (l + r) / 2;
+				const ST tm = (l + r) / 2;
 				Q.push_back({l, tm});
 				Q.push_back({tm+1, r});
 			}
@@ -384,10 +384,10 @@ int main(void) {
 			if (k > 10) {
 				throw std::runtime_error("wtf k is larger than 10");
 			}
-			tree.update(l, r, k);
+			tree.update(static_cast<ST>(l), static_cast<ST>(r), k);
 		} else {
-			UT l, r;
-			scanf("%lu %lu", &l, &r);
+			ST l, r;
+			scanf("%ld %ld", &l, &r);
 			printf("%ld\n", tree.query(l, r));
 		}
 	}

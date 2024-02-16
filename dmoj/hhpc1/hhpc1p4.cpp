@@ -73,7 +73,7 @@ UT solve(UT c) {
 	// We primefactor c
 	auto facs = factor(c);
 
-	auto ans = 1;
+	UT ans = 1;
 	for (const auto& [_, times] : facs) {
 		ans *= (2*times + 1);
 	}

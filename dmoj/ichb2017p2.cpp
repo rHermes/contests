@@ -26,6 +26,7 @@
 #include <array>
 
 using T = int_fast64_t; 
+using UT = uint_fast64_t; 
 
 constexpr T MAX_N = 1000000 + 1;
 constexpr T M = 666013;
@@ -47,14 +48,14 @@ int main(void) {
 	POW10[0] = 1;
 
 	// Precalculate powers
-	for (int i = 1; i < MAX_N; i++) {
+	for (std::size_t i = 1; i < MAX_N; i++) {
 		POW3[i] = (POW3[i-1]* 3) % M;
 		POW10[i] = (POW10[i-1]* 10) % M;
 	}
 
 	for (int i = 0; i < Q; i++) {
-		T q;
-		scanf("%ld", &q);
+		UT q;
+		scanf("%lu", &q);
 
 		const T total = 9 * POW10[q-1] % M;
 		

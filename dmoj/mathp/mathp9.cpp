@@ -9,15 +9,9 @@
 using ST = std::int64_t;
 using UT = std::uint64_t;
 
-/* constexpr UT MAX_N = 1000; */
-/* constexpr double TOL = 0.0000000000001; */
-inline ST pmod(ST i, ST n) {
-    return (i % n + n) % n;
-}
-
-ST ipow(ST base, UT exp, UT m) {
-	ST res = 1;
-	base = pmod(base, m);
+UT ipow(UT base, UT exp, UT m) {
+	UT res = 1;
+	base %= m;
 
 	if (base == 0)
 		return 0;
@@ -25,10 +19,10 @@ ST ipow(ST base, UT exp, UT m) {
 
 	while (exp > 0) {
 		if (exp % 2 == 1)
-			res = pmod(res * base, m);
+			res = (res * base) % m;
 
 		exp >>= 1;
-		base = pmod(base*base, m);
+		base = (base*base) % m;
 	}
 
 	return res;

@@ -9,6 +9,15 @@
 using UT = std::uint32_t;
 
 
+char readStatus() {
+	while (true) {
+		char p = static_cast<char>(getc(stdin));
+		if (!std::isspace(p))
+			return p;
+	}
+}
+
+
 bool play_super_simple_game() {
 	printf("2\n");
 	fflush(stdout);
@@ -25,33 +34,15 @@ bool play_super_simple_game() {
 				printf("1 1\n");
 
 			fflush(stdout);
-			while (true) {
-				lel = getc(stdin);
-				if (!isspace(lel))
-					break;
-			}
-
-			if (lel == 'L' || lel == 'I') {
-				return true;
-			}
-			else if (lel == 'W') {
-				return false;
-			}
 		} else {
 			scanf("%u %u", &lastR, &lastC);
-			while (true) {
-				lel = getc(stdin);
-				if (!isspace(lel))
-					break;
-			}
-
-			if (lel == 'L' || lel == 'I') {
-				return true;
-			}
-			else if (lel == 'W') {
-				return false;
-			}
 		}
+
+		lel = readStatus();
+		if (lel == 'L' || lel == 'I')
+			return true;
+		else if (lel == 'W')
+			return false;
 
 		myTurn = !myTurn;
 	}
@@ -120,34 +111,16 @@ bool play_defensive_game(const UT N, const UT M) {
 			}
 
 			fflush(stdout);
-			while (true) {
-				lel = getc(stdin);
-				if (!isspace(lel))
-					break;
-			}
-
-			if (lel == 'L' || lel == 'I') {
-				return true;
-			}
-			else if (lel == 'W') {
-				return false;
-			}
 		} else {
 			scanf("%u %u", &lastR, &lastC);
-			while (true) {
-				lel = getc(stdin);
-				if (!isspace(lel))
-					break;
-			}
 			rows[lastR-1][lastC-1] = !rows[lastR-1][lastC-1];
-
-			if (lel == 'L' || lel == 'I') {
-				return true;
-			}
-			else if (lel == 'W') {
-				return false;
-			}
 		}
+
+		lel = readStatus();
+		if (lel == 'L' || lel == 'I')
+			return true;
+		else if (lel == 'W')
+			return false;
 
 		myTurn = !myTurn;
 	}
@@ -167,18 +140,12 @@ bool play_off_single(const UT M) {
 	printf("1 %u\n", ((M-1)/2)+1);
 	row[((M-1)/2)] = true;
 	fflush(stdout);
-	while (true) {
-		lel = getc(stdin);
-		if (!isspace(lel))
-			break;
-	}
 
-	if (lel == 'L' || lel == 'I') {
+	lel = readStatus();
+	if (lel == 'L' || lel == 'I')
 		return true;
-	}
-	else if (lel == 'W') {
+	else if (lel == 'W')
 		return false;
-	}
 
 	while (1) {
 		if (myTurn) {
@@ -225,34 +192,16 @@ bool play_off_single(const UT M) {
 
 
 			fflush(stdout);
-			while (true) {
-				lel = getc(stdin);
-				if (!isspace(lel))
-					break;
-			}
-
-			if (lel == 'L' || lel == 'I') {
-				return true;
-			}
-			else if (lel == 'W') {
-				return false;
-			}
 		} else {
 			scanf("%u %u", &lastR, &lastC);
 			row[lastC-1] = !row[lastC-1];
-			while (true) {
-				lel = getc(stdin);
-				if (!isspace(lel))
-					break;
-			}
-
-			if (lel == 'L' || lel == 'I') {
-				return true;
-			}
-			else if (lel == 'W') {
-				return false;
-			}
 		}
+
+		lel = readStatus();
+		if (lel == 'L' || lel == 'I')
+			return true;
+		else if (lel == 'W')
+			return false;
 
 		myTurn = !myTurn;
 	}
@@ -279,38 +228,25 @@ bool play_off_full(const UT N, const UT M) {
 	printf("%u %u\n", midY+1, midX+1);
 	rows[midY][midX] = true;
 	fflush(stdout);
-	while (true) {
-		lel = getc(stdin);
-		if (!isspace(lel))
-			break;
-	}
 
-	if (lel == 'L' || lel == 'I') {
+	lel = readStatus();
+	if (lel == 'L' || lel == 'I')
 		return true;
-	}
-	else if (lel == 'W') {
+	else if (lel == 'W')
 		return false;
-	}
 
 	// What the machine does
 	scanf("%u %u", &lastR, &lastC);
 	rows[lastR-1][lastC-1] = true;
-	/* row[lastC-1] = !row[lastC-1]; */
-	while (true) {
-		lel = getc(stdin);
-		if (!isspace(lel))
-			break;
-	}
 
 	UT machineFirstR = lastR;
 	UT machineFirstC = lastC;
 
-	if (lel == 'L' || lel == 'I') {
+	lel = readStatus();
+	if (lel == 'L' || lel == 'I')
 		return true;
-	}
-	else if (lel == 'W') {
+	else if (lel == 'W')
 		return false;
-	}
 
 	bool doingVert = false;
 	UT constRow = 0;
@@ -329,38 +265,24 @@ bool play_off_full(const UT N, const UT M) {
 		printf("%u %u\n", lastR, midX+1);
 		rows[lastR-1][midX] = true;
 		fflush(stdout);
-		while (true) {
-			lel = getc(stdin);
-			if (!isspace(lel))
-				break;
-		}
-
-		if (lel == 'L' || lel == 'I') {
-			return true;
-		}
-		else if (lel == 'W') {
-			return false;
-		}
 
 		UT oldLastR = lastR;
-		/* UT oldLastC = lastC; */
 
+		lel = readStatus();
+		if (lel == 'L' || lel == 'I')
+			return true;
+		else if (lel == 'W')
+			return false;
 
 		// What the machine does
 		scanf("%u %u", &lastR, &lastC);
 		rows[lastR-1][lastC-1] = !rows[lastR-1][lastC-1];
-		/* row[lastC-1] = !row[lastC-1]; */
-		while (true) {
-			lel = getc(stdin);
-			if (!isspace(lel))
-				break;
-		}
-		if (lel == 'L' || lel == 'I') {
+
+		lel = readStatus();
+		if (lel == 'L' || lel == 'I')
 			return true;
-		}
-		else if (lel == 'W') {
+		else if (lel == 'W')
 			return false;
-		}
 	
 		// either it picked the last
 		if (lastR-1 == midY && lastC-1 == midX) {
@@ -466,34 +388,16 @@ bool play_off_full(const UT N, const UT M) {
 
 
 			fflush(stdout);
-			while (true) {
-				lel = getc(stdin);
-				if (!isspace(lel))
-					break;
-			}
-
-			if (lel == 'L' || lel == 'I') {
-				return true;
-			}
-			else if (lel == 'W') {
-				return false;
-			}
 		} else {
 			scanf("%u %u", &lastR, &lastC);
 			rows[lastR-1][lastC-1] = !rows[lastR-1][lastC-1];
-			while (true) {
-				lel = getc(stdin);
-				if (!isspace(lel))
-					break;
-			}
-
-			if (lel == 'L' || lel == 'I') {
-				return true;
-			}
-			else if (lel == 'W') {
-				return false;
-			}
 		}
+
+		lel = readStatus();
+		if (lel == 'L' || lel == 'I')
+			return true;
+		else if (lel == 'W')
+			return false;
 
 		myTurn = !myTurn;
 	}
@@ -507,7 +411,7 @@ int main() {
 	scanf("%u %u %u", &N, &M, &T);
 
 	// I will remove some common ones as it's easier then.
-	for (int i = 0; i < T; i++) {
+	for (UT i = 0; i < T; i++) {
 		if (M == 2) {
 			bool term = play_super_simple_game();
 			if (term)

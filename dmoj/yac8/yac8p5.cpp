@@ -165,7 +165,7 @@ void decode_mode() {
 			return;
 
 		auto c = std::max(a, b);
-		auto parent = decodePair(c);
+		auto parent = decodePair(static_cast<UT>(c));
 
 		// We have to remember to map the reverse the parent mapping;
 		printf("%u\n", reverseMapping[parent]);
@@ -174,7 +174,7 @@ void decode_mode() {
 }
 
 std::vector<UT> encode_graph(const Graph& G) {
-	const UT N = G.size()-1;
+	const UT N = static_cast<UT>(G.size()-1);
 
 	// First we are going to find the center. We are going to do that, by looking at
 	// each layer and find the degree of each node. We are going to keep track of the
@@ -185,7 +185,7 @@ std::vector<UT> encode_graph(const Graph& G) {
 
 	std::deque<UT> Q;
 	for (UT i = 1; i <= N; i++) {
-		degree[i] = G[i].size();
+		degree[i] = static_cast<UT>(G[i].size());
 		if (degree[i] == 1) {
 			layer[i] = 1;
 			Q.push_back(i);
@@ -273,8 +273,8 @@ void encode_mode() {
 
 	Graph G(N+1);
 	for (UT i = 0; i < N-1; i++) {
-		ST a = 0;
-		ST b = 0;
+		UT a = 0;
+		UT b = 0;
 		scanf("%u %u", &a, &b);
 	
 		G[a].insert(b);

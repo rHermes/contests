@@ -146,7 +146,7 @@ class SmolInt {
 				if (*it < '0' || '9' < *it)
 					throw std::runtime_error("invalid numeric input!");
 
-				std::uint8_t c = *it - '0';
+				std::uint8_t c = static_cast<std::uint8_t>(*it - '0');
 				digits_.push_back(c);
 			}
 

@@ -138,11 +138,11 @@ UT solveSumTable(const UT N, const UT K) {
 	for (UT col = 0; col <= nK; col++)
 		sumTable[2*rowSize + col] = (col + 1) % MOD_M;
 
-	for (ST row = 3; row <= N; row++) {
+	for (UT row = 3; row <= N; row++) {
 		sumTable[row*rowSize] = 1;
 
-		for (ST col = 1; col <= nK; col++) {
-			const ST maxK = col;
+		for (UT col = 1; col <= nK; col++) {
+			const UT maxK = col;
 			if (row-1 < maxK) {
 				// We are going from (maxK - (row-1)) to (maxK)
 				sumTable[row*rowSize + col] = pmod(
@@ -158,7 +158,7 @@ UT solveSumTable(const UT N, const UT K) {
 	}
 	
 
-	return pmod(sumTable[N*rowSize + nK] - sumTable[N*rowSize + nK - 1], MOD_M);
+	return static_cast<UT>(pmod(sumTable[N*rowSize + nK] - sumTable[N*rowSize + nK - 1], MOD_M));
 }
 
 int main(void) {

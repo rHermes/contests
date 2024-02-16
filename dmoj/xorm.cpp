@@ -60,7 +60,7 @@ private:
 			}
 		}
 
-		[[nodiscard]] const UT find_min_index(const UT xorm, const UT level) {
+		[[nodiscard]] UT find_min_index(const UT xorm, const UT level) const {
 			if (level == 32)
 				return *value;
 
@@ -90,7 +90,7 @@ public:
 	}
 
 	// We query the minimum given an XOR element
-	[[nodiscard]] const UT find_min_index(const UT xorm) {
+	[[nodiscard]] UT find_min_index(const UT xorm) const {
 		return root.find_min_index(xorm, 0);
 	}
 };

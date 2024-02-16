@@ -5,7 +5,7 @@
 using ST = std::int64_t;
 using UT = std::uint64_t;
 
-UT solve(std::vector<UT>& arr, ST L, ST R) {
+UT solve(std::vector<UT>& arr, UT L, UT R) {
 	if (L == R)
 		return 0;
 

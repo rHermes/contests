@@ -11,18 +11,18 @@
 using UT = std::uint64_t;
 using ST = std::int64_t;
 
-constexpr UT MAX_N = 100000 + 5;
-constexpr UT MAX_K = 10;
-constexpr UT MOD_M = 1000000007;
+constexpr ST MAX_N = 100000 + 5;
+constexpr ST MAX_K = 10;
+constexpr ST MOD_M = 1000000007;
 /* constexpr UT MAX_K = 3; */
 
-UT NN = 10;
+ST NN = 10;
 
 inline ST pmod(ST i, ST n) {
     return (i % n + n) % n;
 }
 
-ST ipow(ST base, UT exp, UT m) {
+ST ipow(ST base, ST exp, ST m) {
 	ST res = 1;
 	base = pmod(base, m);
 
@@ -43,17 +43,17 @@ ST ipow(ST base, UT exp, UT m) {
 
 
 struct Node {
-	UT value{0};
+	ST value{0};
 	bool is_lazy{false};
 	// This is (l, r, k, original_l) for the update values.
 	std::tuple<UT, UT, UT, UT> lazy_val{0, 0, 0, 0};
 };
 
 /* std::vector<std::vector<UT>> ranges; */
-std::array<std::array<UT, MAX_N+1>, MAX_K+1> ranges;
+std::array<std::array<ST, MAX_N+1>, MAX_K+1> ranges;
 std::array<Node, 4*(MAX_N+1)> TREE;
 
-void push_down(UT v, UT tl, UT tr) {
+void push_down(UT v, ST tl, ST tr) {
 	auto& nd = TREE[v];
 	if (!nd.is_lazy)
 		return;
@@ -70,14 +70,14 @@ void push_down(UT v, UT tl, UT tr) {
 	if (tl == tr)
 		return;
 
-	const UT tm = (tl + tr) / 2;
+	const ST tm = (tl + tr) / 2;
 
-	if (ir <= tm) {
+	if (ir <= static_cast<UT>(tm)) {
 		// The entire update range is on the left, we go down there
 		push_down(v*2, tl, tm);
 		TREE[v*2].is_lazy = true;
 		TREE[v*2].lazy_val = {il, ir, ik, ioffset};
-	} else if (tm < il) {
+	} else if (static_cast<UT>(tm) < il) {
 		// The entire update range is on the right
 		push_down(v*2 + 1, tm+1, tr);
 		TREE[v*2 + 1].is_lazy = true;
@@ -98,7 +98,7 @@ void push_down(UT v, UT tl, UT tr) {
 /* void update(UT v, UT tl, UT tr, UT l, UT r, UT k) { */
 /* } */
 
-void update(UT l, UT r, UT k) {
+void update(ST l, ST r, ST k) {
 	/* update(1, 1, MAX_N, l, r, k); */
 	// We push down the top
 	push_down(1, 1, NN);
@@ -107,14 +107,14 @@ void update(UT l, UT r, UT k) {
 	TREE[1].lazy_val = {l, r, k, l};
 }
 
-UT query(UT v, UT tl, UT tr, UT l, UT r) {
+ST query(UT v, ST tl, ST tr, ST l, ST r) {
 	push_down(v, tl, tr);
 
 	auto& nd = TREE[v];
 	if (tl == l && tr == r)
 		return nd.value;
 
-	const UT tm = (tl + tr) / 2;
+	const ST tm = (tl + tr) / 2;
 
 	if (r <= tm) {
 		// The entire update range is on the left, we go down there
@@ -123,29 +123,29 @@ UT query(UT v, UT tl, UT tr, UT l, UT r) {
 		// The entire update range is on the right
 		return query(v*2+1, tm+1, tr, l, r);
 	} else {
-		const UT left = query(v*2, tl, tm, l, tm);
-		const UT right = query(v*2 + 1, tm+1, tr, tm+1, r);
+		const ST left = query(v*2, tl, tm, l, tm);
+		const ST right = query(v*2 + 1, tm+1, tr, tm+1, r);
 		return pmod(left + right, MOD_M);
 	}
 }
 
-UT query(UT l, UT r) {
+ST query(ST l, ST r) {
 	return query(1, 1, NN, l, r);
 }
 
 void print_it() {
-	std::deque<std::pair<UT,UT>> Q;
+	std::deque<std::pair<ST,ST>> Q;
 	Q.push_back({1, NN});
 
 	while (!Q.empty()) {
 		auto [l, r] = Q.front();
 		Q.pop_front();
 
-		printf("[%lu - %lu]: %lu\n", l, r, query(l, r));
+		printf("[%ld - %ld]: %ld\n", l, r, query(l, r));
 		if (l == r)
 			continue;
 
-		const UT tm = (l + r) / 2;
+		const ST tm = (l + r) / 2;
 		Q.push_back({l, tm});
 		Q.push_back({tm+1, r});
 	}
@@ -153,8 +153,8 @@ void print_it() {
 
 
 int main(void) {
-	UT N, Q;
-	scanf("%lu %lu", &N, &Q);
+	ST N, Q;
+	scanf("%ld %ld", &N, &Q);
 	NN = N;
 
 	// We precompute the ranges
@@ -162,7 +162,7 @@ int main(void) {
 		ranges[k][0] = 0;
 
 		for (UT i = 1; i <= MAX_N; i++) {
-			ranges[k][i] = pmod(ipow(i, k, MOD_M) + ranges[k][i-1], MOD_M);
+			ranges[k][i] = pmod(ipow(static_cast<ST>(i), static_cast<ST>(k), MOD_M) + ranges[k][i-1], MOD_M);
 		}
 	}
 
@@ -173,11 +173,11 @@ int main(void) {
 
 
 	char buf[5];
-	for (UT i = 0; i < Q; i++) {
+	for (ST i = 0; i < Q; i++) {
 		scanf("%s", buf);
 		if (buf[0] == 'U') {
-			UT l, r, k;
-			scanf("%lu %lu %lu", &l, &r, &k);
+			ST l, r, k;
+			scanf("%ld %ld %ld", &l, &r, &k);
 			/* printf("Adding %lu %lu %lu, with a sum of %lu\n", l, r, k, ranges[k][r-l+1]); */
 			/* printf("BEFORE:\n"); */
 			/* print_it(); */
@@ -185,9 +185,9 @@ int main(void) {
 			/* printf("AFTER:\n"); */
 			/* print_it(); */
 		} else {
-			UT l, r;
-			scanf("%lu %lu", &l, &r);
-			printf("%lu\n", query(l, r));
+			ST l, r;
+			scanf("%ld %ld", &l, &r);
+			printf("%ld\n", query(l, r));
 		}
 	}
 

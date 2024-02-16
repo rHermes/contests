@@ -49,14 +49,14 @@ constexpr char firstContext = '\n';
 	if (num == 0)
 		return '\n';
 	else
-		return 31 + num;
+		return static_cast<char>(31 + num);
 }
 
 [[nodiscard]] std::uint8_t encodeChar(const char c) {
 	if (c == '\n')
 		return 0;
 	else
-		return c - 31;
+		return static_cast<std::uint8_t>(c - 31);
 }
 
 // We are creating a huffman tree

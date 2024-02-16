@@ -93,17 +93,17 @@ inline ST pmod(ST i, ST n) {
 
 ST ipow(ST base, UT exp, UT m) {
 	ST res = 1;
-	base = pmod(base, m);
+	base = pmod(base, static_cast<ST>(m));
 
 	if (base == 0)
 		return 0;
 
 	while (exp > 0) {
 		if (exp % 2 == 1)
-			res = pmod(res * base, m);
+			res = pmod(res * base, static_cast<ST>(m));
 
 		exp >>= 1;
-		base = pmod(base*base, m);
+		base = pmod(base*base, static_cast<ST>(m));
 	}
 
 	return res;
@@ -114,7 +114,7 @@ int main(void) {
 	UT N;
 	scanf("%lu", &N);
 
-	const UT gotit = ipow(2, N-1, MOD_M);
+	const UT gotit = static_cast<UT>(ipow(2, N-1, MOD_M));
 
 	UT ans = 0;
 	for (UT i = 0; i < N; i++) {

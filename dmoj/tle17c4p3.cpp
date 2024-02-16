@@ -15,10 +15,11 @@ using ST = std::int32_t;
 using UT = std::uint32_t;
 
 constexpr UT MAX_N = 300000 + 1;
+constexpr UT TERM_NODE = MAX_N + 5;
 
 struct Node {
-	// -1 if no parents are here.
-	ST parent{-1};
+	// TERM_NODE means there are no parents
+	UT parent{TERM_NODE};
 
 	bool done{false};
 
@@ -37,7 +38,7 @@ void update_nodes(const UT id) {
 	node.done = true;
 
 	// Now we get to update upwards,
-	if (node.parent == -1 && !NODES[node.parent].done)
+	if (node.parent == TERM_NODE || NODES[node.parent].done)
 		return;
 
 	NODES[node.parent].children--;

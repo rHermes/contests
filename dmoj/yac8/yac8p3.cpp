@@ -50,23 +50,24 @@ int main() {
 	}
 	
 	// We now update each node.
-	for (ST c = N-1; -1 < c; c--) {
-		for (const auto& child : G[c]) {
-			if (totalOres[c] < totalOres[child]) {
-				std::swap(totalOres[c], totalOres[child]);
-				swap(M[c], M[child]);
-				gis[c] = std::move(gis[child]);
-				best[c] = std::max(best[c], best[child]);
+	for (ST c = static_cast<ST>(N-1); -1 < c; c--) {
+		UT index = static_cast<UT>(c);
+		for (const auto& child : G[index]) {
+			if (totalOres[index] < totalOres[child]) {
+				std::swap(totalOres[index], totalOres[child]);
+				swap(M[index], M[child]);
+				gis[index] = std::move(gis[child]);
+				best[index] = std::max(best[index], best[child]);
 			}
 		}
 
-		auto& gi = gis[c];
-		for (const auto& child : G[c]) {
-			totalOres[c] += totalOres[child];
+		auto& gi = gis[index];
+		for (const auto& child : G[index]) {
+			totalOres[index] += totalOres[child];
 			for (const auto& [k, v] : M[child]) {
-				const auto before = M[c][k];
+				const auto before = M[index][k];
 				const auto num = before + v;
-				M[c][k] = num;
+				M[index][k] = num;
 
 				if (gi.size() <= num) {
 					gi.resize(num+1);
@@ -74,7 +75,7 @@ int main() {
 
 				for (auto j = before+1; j <= num; j++) {
 					gi[j]++;
-					best[c] = std::max(best[c], j*gi[j]);
+					best[index] = std::max(best[index], j*gi[j]);
 				}
 			}
 		}

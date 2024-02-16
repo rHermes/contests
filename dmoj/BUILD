@@ -22,5 +22,5 @@ for f in glob(["*/*.cpp", "*.cpp"]):
         name = target,
         srcs = [f],
         private_hdrs = priv_headers,
-        compiler_flags = ["-std=c++20", "-O2"],
+        compiler_flags = ["-Wall", "-Wextra", "-Wconversion", "-std=c++20", "-O2"],
     )

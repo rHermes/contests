@@ -345,7 +345,7 @@ class BigInt {
 					printf("We have a major problem, once character is outside: %c\n", *it);
 				}
 
-				uint8_t c = *it - '0';
+				uint8_t c = static_cast<uint8_t>(*it - '0');
 				/* printf("%u\n", c); */
 
 				BigInt w(c);
@@ -364,10 +364,10 @@ class BigInt {
 		BigInt(int a) : BigInt() {
 			if (a < 0) {
 				negative_ = true;
-				digits_[0] = -a;
+				digits_[0] = static_cast<DT>(-a);
 			} else {
 				negative_ = false;
-				digits_[0] = a;
+				digits_[0] = static_cast<DT>(a);
 			}
 		}
 
