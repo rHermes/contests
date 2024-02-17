@@ -1,22 +1,18 @@
+/**
+ * This is taken from this comment. Even if I am aboard with the general idea, 
+ * I am not totaly clear on all the points. I will revisit this tommorrow.
+ * https://codeforces.com/blog/entry/125840?#comment-1118399
+ */
 #include <cstdio>
 #include <vector>
-#include <set>
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
 #include <cinttypes>
 #include <algorithm>
 
 // Because codeforces has a different view of this.
 #define SCU "%" SCNu64 " "
-#define SCD "%" SCNd64 " "
 #define PRU "%" PRIu64
-#define PRD "%" PRId64
 
 using UT = std::uint64_t;
-using ST = std::int64_t;
-
-
 
 int main() {
 	UT T = 0;
@@ -26,19 +22,19 @@ int main() {
 		scanf(SCU, &N);
 
 		std::vector<UT> A(N);
-		for (UT i = 0; i < N; i++)
+		for (UT i = 0; i < N; i++) {
 			scanf(SCU, &A[i]);
-	
-		/*
-		std::set<UT> ans;
-		solveCase(A, ans);
-		
-		for (auto it = ans.rbegin(); it != ans.rend(); it++) {
-			printf(PRU " ", *it);
+			A[i] += i+1;
 		}
 
+		std::sort(A.begin(), A.end(), std::greater<>());
+
+		UT lastQ = 100000000000000;
+		for (UT i = 0; i < N; i++) {
+				lastQ = std::min(lastQ - 1, A[i]);
+				printf(PRU " ", lastQ);
+		}
 		printf("\n");
-		*/
 	}
 
 	return 0;
