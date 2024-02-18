@@ -21,7 +21,8 @@ class Solver {
 	private:
 		UT maxAns_{0};
 		UT inversionFilter_{0};
-		std::array<std::vector<bool>, 2> sets_;
+
+		std::array<std::vector<bool>, 2> sets_{};
 
 		void updateSet(const bool idx, const UT mask) {
 			if (sets_[idx][mask])
@@ -39,8 +40,10 @@ class Solver {
 			while (0 < ourMask) { 
 				const auto leadingZeros = std::countl_zero(ourMask);
 				const UT filter = 1<<(31-leadingZeros);
+				
+				if (!sets_[idx][mask^filter])
+					updateSet(idx, mask ^ filter);
 
-				updateSet(idx, mask ^ filter);
 				ourMask ^= filter;
 			}
 		}
@@ -52,8 +55,8 @@ class Solver {
 			// without also setting all the bits which will be identical for all
 			// values.
 			inversionFilter_ = (std::bit_floor(n)<<1) - 1;
-			sets_[0].resize(n);
-			sets_[1].resize(n);
+			sets_[0].resize(inversionFilter_+1);
+			sets_[1].resize(inversionFilter_+1);
 		}
 
 		
