@@ -24,39 +24,32 @@ int main() {
 		scanf(SCU, &M);
 
 		
-		std::vector<std::pair<UT,UT>> ranges;
+		std::vector<UT> nextRanges(N+1);
+		std::vector<ST> catsInSpot(N+1);
 		for (UT i = 0; i < M; i++) {
 			UT a = 0;
 			UT b = 0;
 			scanf(SCU, &a);
 			scanf(SCU, &b);
-			ranges.emplace_back(a,b);
+
+			a--;
+			b--;
+			catsInSpot[a] += 1;
+			catsInSpot[b+1] -= 1;
+			nextRanges[a] = std::max(nextRanges[a], b+1);
 		}
 
-		std::sort(ranges.begin(), ranges.end());
-		std::vector<UT> begin(M);
-		std::vector<UT> end(M);
-		for (UT i = 0; i < M; i++) {
-			begin[i] = ranges[i].first;
-			end[i] = ranges[i].second;
+		for (UT i = 0; i < N; i++)
+			catsInSpot[i+1] += catsInSpot[i];
+
+		for (UT i = 0; i < N; i++)
+			nextRanges[i+1] = std::max(nextRanges[i+1], nextRanges[i]);
+
+		std::vector<ST> maxCats(N+1);
+		for (UT i = N; 0 < i; i--) {
+			const UT idx = i-1;
+			maxCats[idx] = std::max(maxCats[idx+1], catsInSpot[idx] + maxCats[nextRanges[idx]]);
 		}
-
-
-		std::vector<UT> maxCats(M+1);
-		for (ST i = static_cast<ST>(M-1); 0 <= i; i--) {
-			UT j = static_cast<UT>(i);
-			// The array we can pick from next, will be the first one, which is greater
-			// than the current length
-			auto nextIT = upper_bound(begin.begin() + i + 1, begin.end(), end[j]);
-			auto dis = std::distance(begin.begin(), nextIT);
-			/* UT nextIndex = static_cast<UT>(std::distance(begin.begin(), upper_bound(begin.begin() + i + 1, begin.end(), end[j]))); */
-			/* printf("LOL %lu\n", nextIndex); */
-			UT nextIndex = static_cast<UT>(dis);
-			printf("The next index after %lu is %lu\n", i, nextIndex);
-			maxCats[j] = std::max(maxCats[j + 1], maxCats[nextIndex] + end[j] - begin[j] + 1);
-		}
-
-
 	
 		printf(PRU "\n", maxCats[0]);
 
