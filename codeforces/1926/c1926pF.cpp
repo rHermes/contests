@@ -6,7 +6,6 @@
 
 using UT = std::uint64_t;
 
-std::hash<std::bitset<32>> a;
 constexpr UT N = 7;
 struct Board {
 	std::bitset<N*N> board;
