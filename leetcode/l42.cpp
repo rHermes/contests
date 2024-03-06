@@ -80,6 +80,10 @@ int trap(std::vector<int>& height) {
 	return ans;
 }
 
+int trap2(std::vector<int>& height) {
+	// This is the internet solution. I'm implementing i
+}
+
 int main() {
 	std::vector<int> t1 = {0,1,0,2,1,0,1,3,2,1,2,1};
 	/* std::vector<int> t1 = {0}; */
