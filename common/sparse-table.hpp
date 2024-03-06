@@ -1,69 +1,14 @@
-#include <iostream>
-#include <vector>
-#include <cinttypes>
+#pragma once
+
+#include "vector2d.hpp"
+
 #include <bit>
 
 
 // This is for training on implementing the range minimum query for static data.
 // I'll do this using multiple techniques.
-
-
 using UT = std::uint64_t;
 using ST = std::int64_t;
-
-template <typename T>
-class Vector2D {
-	private:
-	std::size_t rows_{0};
-	std::size_t cols_{0};
-	std::vector<T> data_;
-
-	public:
-
-	Vector2D(std::size_t rows, std::size_t cols) : rows_{rows}, cols_{cols}, data_(rows_*cols_) {}
-
-	Vector2D(const Vector2D& other) : 
-		rows_{other.rows_} , cols_{other.cols_}
-	, data_{other.data_}
-	{}
-
-	Vector2D(Vector2D&& other) noexcept : 
-		rows_{other.rows_} , cols_{other.cols_}
-	, data_{std::move(other.data_)}
-	{}
-
-	Vector2D& operator=(const Vector2D& other) {
-		*this = Vector2D(other);
-		return *this;
-	}
-
-	Vector2D& operator=(Vector2D&& other) noexcept {
-		rows_ = other.rows_;
-		cols_ = other.cols_;
-		data_ = std::move(other.data_);
-		return *this;
-	}
-
-	[[nodiscard]] std::size_t idx(std::size_t row, std::size_t col) const {
-		return row*cols_ + col;
-	}
-
-	[[nodiscard]] const T& get(std::size_t row, std::size_t col) const {
-		return data_[idx(row, col)];
-	}
-
-	[[nodiscard]] T& get(std::size_t row, std::size_t col) {
-		return data_[idx(row, col)];
-	}
-
-	[[nodiscard]] T* data() noexcept {
-		return data_.data();
-	}
-
-	[[nodiscard]] const T* data() const {
-		return data_.data();
-	}
-};
 
 template <typename T, typename F, bool IDEMPOTENT = false>
 class SparseTable {
@@ -104,11 +49,7 @@ public:
 			return func_(data_.get(i, l), data_.get(i, r- (static_cast<std::size_t>(1) << i) + 1));
 		} else {
 			std::size_t i = maxK_+1;
-			
-
-			// As the operator can have many start values, we cannot assume anything.
-			// We must therefore first search for the first match. This is ugly, but it's
-			// get's us where we want to be.
+			// We need the first hit here.
 			for (; 0 < i; i--) {
 				const auto ii = i-1;
 				// If we can fit the size.
@@ -120,15 +61,18 @@ public:
 			if (i == 0)
 				throw std::runtime_error("we couldn't find a query range?");
 
+			/* std::cout << "Our first range is [" << l << ", " << l + (1 << (i-1)) - 1 << "]" <<  std::endl; */
 
 			T ans = data_.get(i-1, l);
 			l += (1 << (i-1));
 	
 			// decrement ones, as we have already done this.
 			i--;
+			// Now we repeat the pattern, for the rest.
 			for (; 0 < i; i--) {
 				const auto ii = i-1;
 				if ((static_cast<std::size_t>(1) << ii) <= r - l + 1) {
+					/* std::cout << "Our nth range is [" << l << ", " << l + (1 << ii) - 1 << "]" <<  std::endl; */
 					ans = func_(ans, data_.get(ii, l));
 					l += (1 << ii);
 				}
@@ -138,37 +82,3 @@ public:
 		}
 	}
 };
-
-
-
-void solveWithSparseTable() {
-	UT N = 0;
-	std::cin >> N;
-
-	std::vector<int> in(N);
-	for (UT i = 0; i < N; i++)
-		std::cin >> in[i];
-
-
-	auto f = std::min<int>;
-	SparseTable<int, decltype(f), true> st(f, N);
-
-	st.precompute(in.begin(), in.end());
-
-	UT Q = 0;
-	std::cin >> Q;
-	for (UT i = 0; i < Q; i++) {
-		UT l = 0; UT r = 0;
-		std::cin >> l >> r;
-		std::cout << st.query(l, r) << std::endl;
-	}
-}
-
-int main() {
-	std::cin.tie(0);
-	std::cin.sync_with_stdio(false);
-
-	solveWithSparseTable();
-
-	return 0;
-}

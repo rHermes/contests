@@ -6,8 +6,6 @@
 
 // This is for training on implementing the range minimum query for static data.
 // I'll do this using multiple techniques.
-
-
 using UT = std::uint64_t;
 using ST = std::int64_t;
 
@@ -94,7 +92,6 @@ public:
 	}
 
 	[[nodiscard]] T query(std::size_t l, const std::size_t r) const {
-		/* std::cout << "we are querying the range: [" << l << ", " << r << "]" << std::endl; */
 		// we assume that l < r
 		if constexpr (IDEMPOTENT) {
 			// as this operation is idempotent, there is no need to carefully
@@ -104,11 +101,7 @@ public:
 			return func_(data_.get(i, l), data_.get(i, r- (static_cast<std::size_t>(1) << i) + 1));
 		} else {
 			std::size_t i = maxK_+1;
-			
-
-			// As the operator can have many start values, we cannot assume anything.
-			// We must therefore first search for the first match. This is ugly, but it's
-			// get's us where we want to be.
+			// We need the first hit here.
 			for (; 0 < i; i--) {
 				const auto ii = i-1;
 				// If we can fit the size.
@@ -120,12 +113,12 @@ public:
 			if (i == 0)
 				throw std::runtime_error("we couldn't find a query range?");
 
-
 			T ans = data_.get(i-1, l);
 			l += (1 << (i-1));
 	
 			// decrement ones, as we have already done this.
 			i--;
+			// Now we repeat the pattern, for the rest.
 			for (; 0 < i; i--) {
 				const auto ii = i-1;
 				if ((static_cast<std::size_t>(1) << ii) <= r - l + 1) {
@@ -143,24 +136,22 @@ public:
 
 void solveWithSparseTable() {
 	UT N = 0;
-	std::cin >> N;
+	UT Q = 0;
+	std::cin >> N >> Q;
 
-	std::vector<int> in(N);
+	std::vector<UT> in(N);
 	for (UT i = 0; i < N; i++)
 		std::cin >> in[i];
 
-
-	auto f = std::min<int>;
-	SparseTable<int, decltype(f), true> st(f, N);
+	auto f = [](UT a, UT b) { return std::min(a, b); };
+	SparseTable<UT, decltype(f), true> st(N+1);
 
 	st.precompute(in.begin(), in.end());
 
-	UT Q = 0;
-	std::cin >> Q;
 	for (UT i = 0; i < Q; i++) {
 		UT l = 0; UT r = 0;
 		std::cin >> l >> r;
-		std::cout << st.query(l, r) << std::endl;
+		std::cout << st.query(l-1, r-1) << std::endl;
 	}
 }
 

@@ -6,8 +6,6 @@
 
 // This is for training on implementing the range minimum query for static data.
 // I'll do this using multiple techniques.
-
-
 using UT = std::uint64_t;
 using ST = std::int64_t;
 
@@ -139,28 +137,24 @@ public:
 	}
 };
 
-
-
 void solveWithSparseTable() {
 	UT N = 0;
-	std::cin >> N;
+	UT Q = 0;
+	std::cin >> N >> Q;
 
-	std::vector<int> in(N);
+	std::vector<ST> in(N);
 	for (UT i = 0; i < N; i++)
 		std::cin >> in[i];
 
-
-	auto f = std::min<int>;
-	SparseTable<int, decltype(f), true> st(f, N);
+	auto f = [](ST a, ST b) { return a + b; };
+	SparseTable<ST, decltype(f), false> st(N+1);
 
 	st.precompute(in.begin(), in.end());
 
-	UT Q = 0;
-	std::cin >> Q;
 	for (UT i = 0; i < Q; i++) {
 		UT l = 0; UT r = 0;
 		std::cin >> l >> r;
-		std::cout << st.query(l, r) << std::endl;
+		std::cout << st.query(l-1, r-1) << std::endl;
 	}
 }
 
