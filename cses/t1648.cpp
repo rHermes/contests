@@ -26,8 +26,7 @@ private:
 
 
 	void recompute() {
-		blocks_.resize(orig_.size() / BlockSize + 1);
-		std::fill(blocks_.begin(), blocks_.end(), InitValue);
+		blocks_.assign(orig_.size() / BlockSize + 1, InitValue);
 
 		for (std::size_t i = 0; i < orig_.size(); i++) {
 			blocks_[i / BlockSize] = func_(blocks_[i / BlockSize], orig_[i]);
@@ -128,12 +127,103 @@ void solveWithSqrtDecomp() {
 	}
 }
 
+template<
+	typename T,
+	typename F,
+	typename INV_F,
+	T InitElement>
+class BIT {
+	static_assert(std::is_invocable_r_v<T, F, T, T>, "F needs to be a operator on the domain");
+	static_assert(std::is_invocable_r_v<T, INV_F, T, T>, "INV_F needs to be an operator on the domain");
+	private:
+		F f_{};
+		INV_F fi_{};
+
+		std::vector<T> bit_;
+
+	public:
+		explicit BIT(std::size_t n) : bit_(n, InitElement) {}
+
+		explicit BIT(const std::vector<T>& a) : BIT(a.size()) {
+			for (std::size_t i = 0; i < a.size(); i++) {
+				bit_[i] = f_(bit_[i], a[i]);
+				std::size_t r = i | (i + 1);
+				if (r < a.size())
+					bit_[r] = f_(bit_[r], bit_[i]);
+			}
+		}
+
+		void add(const std::size_t idx, const UT delta) {
+			const auto N = bit_.size();
+
+			// while we are less than N it's ok.
+			for (std::size_t cur = idx; cur < N; cur = cur | (cur+1)) {
+				bit_[cur] = f_(bit_[cur], delta);
+			}
+		}
+
+		[[nodiscard]] T query(std::size_t r) const {
+			T ret = InitElement;
+			while (true) {
+				ret = f_(ret, bit_[r]);
+
+				r = r & (r+1);
+				if (r == 0)
+					break;
+
+				r--;
+			}
+
+			return ret;
+		}
+
+		[[nodiscard]] T query(const std::size_t l, const std::size_t r) const {
+			if (r < l)
+				throw std::runtime_error("r < l is not allowed for query");
+
+			if (l == 0)
+				return query(r);
+			else
+				return fi_(query(r), query(l-1));
+		}
+};
+
+
+void solveWithBIT() {
+	UT N = 0;
+	UT Q = 0;
+	std::cin >> N >> Q;
+
+	auto f = [](UT a, UT b) { return a + b; };
+	auto f_inv = [](UT a, UT b) { return a - b; };
+	BIT<UT, decltype(f), decltype(f_inv), 0> bit(N);
+
+	std::vector<UT> vals(N);
+	for (UT i = 0; i < N; i++) {
+		std::cin >> vals[i];
+		bit.add(i, vals[i]);
+	}
+
+	for (UT i = 0; i < Q; i++) {
+		UT mode = 0;
+		UT l = 0; 
+		UT r = 0;
+		std::cin >> mode >> l >> r;
+		if (mode == 1) {
+			bit.add(l-1, r - vals[l-1]);
+			vals[l-1] = r;
+		} else {
+			std::cout << bit.query(l-1, r-1) << std::endl;
+		}
+	}
+}
+
 int main() {
 	std::cin.tie(0);
 	std::cin.sync_with_stdio(false);
 
-	/* solveWithSparseTable(); */
-	solveWithSqrtDecomp();
+	/* solveWithSqrtDecomp(); */
+	solveWithBIT();
 
 	return 0;
 }

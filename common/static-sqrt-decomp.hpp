@@ -24,8 +24,7 @@ private:
 
 
 	void recompute() {
-		blocks_.resize(orig_.size() / BlockSize + 1);
-		std::fill(blocks_.begin(), blocks_.end(), InitValue);
+		blocks_.assign(orig_.size() / BlockSize + 1, InitValue);
 
 		for (std::size_t i = 0; i < orig_.size(); i++) {
 			blocks_[i / BlockSize] = func_(blocks_[i / BlockSize], orig_[i]);
