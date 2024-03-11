@@ -8,6 +8,7 @@
  * };
  */
 #include <vector>
+#include <unordered_map>
 
 class MountainArray {
 	public:
@@ -15,59 +16,76 @@ class MountainArray {
 		int length() { return 42; };
 };
 
+class Cacher {
+	MountainArray& ma_;
+	std::unordered_map<int, int> cache_;
+	std::size_t hits_{0};
+
+	public:
+	Cacher(MountainArray& mm) : ma_{mm} {}
+
+	/* ~Cacher() { */
+	/* 	const auto up = cache_.size(); */
+	/* 	std::cout << "I was asked a total of: " << (up + hits_) << " where " << */
+	/* 		hits_ << " was cache hits and " << up << " was cache misses." << std::endl; */
+	/* } */
+
+	[[nodiscard]] int get(const int i) {
+		if (auto it = cache_.find(i); it != cache_.end()) {
+			hits_++;
+			return it->second;
+		}
+
+		const auto& [it, _] = cache_.emplace(i, ma_.get(i));
+		return it->second;
+	}
+};
+
 class Solution {
 	public:
-		int findInMountainArray(int target, MountainArray &mountainArr) {
+		int findInMountainArray(int target, MountainArray& mountainArr) {
 			const int N = mountainArr.length();
-			std::vector<int> cache(static_cast<std::size_t>(N), -1);
-			int asked = 0;
+			Cacher cache(mountainArr);
 
-			auto getCached = [&](int i) {
-				const auto ii = static_cast<unsigned>(i);
-				if (cache[ii] != -1)
-					return cache[ii];
+			/*
+			 * The idea for this is rather simple. We use a binary search to figure
+			 * out where the peak is. The maximum size of the list is 1000, which gives
+			 * us log2(10000) = ca 13. For each point we have 2 make two queries, so worst
+			 * case we spend 26 queries finding the peak.
+			 *
+			 * Then we do a regular binary search on each side of the mountain, starting
+			 * with the left side and returning as soon as we can. Each search is
+			 * log2(10000) in the worst case, and we might have to make two of them, so
+			 * we get: 2*log2(10000) = 26 queries for this also. This means that in the
+			 * worst case we are going to be asking about 54 questions.
+			 *
+			 * We would not be able to improve upon the worst case scenario here, but
+			 * we can improve the average case slightly, by introducing caching.
+			 *
+			 * The final optimization that I have yet to apply, is that if we find the
+			 * target while we are searching the array during the peak finding. We should
+			 * mark this and skip one of the two binary searches we perform afterwards.
+			 */
 
-				asked++;
-				cache[ii] = mountainArr.get(i);
-				return cache[ii];
-			};
-
-			// The length is at most 1000, if we knew the i, then we could find the
-			// answer in max 2*log2(1000) = ca 20.
-			// 
-			// This leaves us about 80 guesses to find the center.
-			// We do a binary search, but at each point, we have to do 3 guesses.
-			// so for 3*log2(1000) = 30 ish. This should work. Let's see.
-
-			// Furthermore, we can just cache the answers we already have, so that
-			// we don't ask twice.
 			int L = 0;
-			int R = N-1;
+			int R = N - 2;
 
-			while (L+1<R) {
-				int C = (R+L) / 2;
+			while (L + 1 < R) {
+				int C = (R + L) / 2;
 
-				int cc = getCached(C);
-				int cl = getCached(C-1);
-				int cr = getCached(C+1);
+				int cc = cache.get(C);
+				int cr = cache.get(C + 1);
 
-				if (cl < cc && cc > cr) {
-					// We know we have the middle now.
-					L = C;
-					break;
-				}
-				else if (cl < cc) {
-					// the slop is going to the right, so we must update left.
+				if (cc < cr) {
 					L = C;
 				} else {
 					R = C;
 				}
-
-				// Now just need to know if it slops left or right.
 			}
 
-			const int top = L;
-			const int topHeight = getCached(top);
+			// std::cout << "We found the center at: " << L << std::endl;
+			const int top = R;
+			const int topHeight = cache.get(top);
 			if (target == topHeight) {
 				return top;
 			} else if (topHeight < target) {
@@ -75,7 +93,7 @@ class Solution {
 			}
 
 			// We search on the left side.
-			const int leftHeight = getCached(0);
+			const int leftHeight = cache.get(0);
 			if (leftHeight == target)
 				return 0;
 
@@ -83,9 +101,9 @@ class Solution {
 				// We search.
 				L = 0;
 				R = top;
-				while (L+1 < R) {
-					const int C = (R+L)/2;
-					int cc = getCached(C);
+				while (L + 1 < R) {
+					const int C = (R + L) / 2;
+					int cc = cache.get(C);
 
 					if (cc == target) {
 						return C;
@@ -96,23 +114,24 @@ class Solution {
 					}
 				}
 
-				if (getCached(L) == target) {
+				if (cache.get(L) == target) {
 					return L;
 				}
 			}
 
 			// We search on the right side
-			const int rightHeight = getCached(N-1);
-			if (rightHeight == target)
-				return N-1;
+			const int rightHeight = cache.get(N - 1);
+			if (rightHeight == target) {
+				return N - 1;
+			}
 
 			if (rightHeight < target) {
 				L = top;
-				R = N-1;
+				R = N - 1;
 
-				while (L+1<R) {
-					const int C = (R+L) / 2;
-					int cc = getCached(C);
+				while (L + 1 < R) {
+					const int C = (R + L) / 2;
+					int cc = cache.get(C);
 
 					if (cc == target) {
 						return C;
@@ -123,7 +142,7 @@ class Solution {
 					}
 				}
 
-				if (getCached(R) == target) {
+				if (cache.get(R) == target) {
 					return R;
 				}
 			}
