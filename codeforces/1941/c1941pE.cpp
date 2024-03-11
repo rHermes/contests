@@ -78,7 +78,7 @@ public:
 		return q_.front().first;
 	}
 
-	constexpr void push(T val) {
+	constexpr void add(T val) {
 		if (capacity_ <= added_)
 			pop();
 
@@ -100,7 +100,6 @@ void solve() {
 	std::cin >> N >> M >> K >> D;
 
 	std::vector<UT> row(M);
-	/* std::vector<UT> dp(M); */
 
 	RollingMinSum<UT> ans(K);
 	for (UT i = 0; i < N; i++) {
@@ -109,35 +108,24 @@ void solve() {
 			row[j]++;
 		}
 
-		// We have scanned in the row now.
-		// Ok, so I want to reduce the amount of cases, to make this easier on my brain.
-
-		// We always have supports at 0 and M-1
 		if (M-1 <= D+1) {
 			// We won't need any struts.
 			ans.add(row[0] + row[M-1]);
 			continue;
 		}
 
-
-		// M-1-D-1
-		for (UT i = M-1-D-1; i < M-1; i++) {
-			row[i] += row[M-1];
-		}
-
-		UT upperLimit = M-1-D-1;
 		RollingMin<UT> mm(D+1);
-		for (UT i = M-1; upperLimit <= i; i--)
-			mm.push(row[i]);
-
-		// But we also have a lower limit:
-		for (UT i = upperLimit; 0 < i; i--) {
-			UT ii = i-1;
-			row[ii] += mm.min();
-			mm.push(row[ii]);
+		for (UT i = 1; i <= D+1; i++) {
+			row[i] += row[0];
+			mm.add(row[i]);
 		}
 
-		ans.add(row[0]);
+		for (UT i = D+2; i < M; i++) {
+			row[i] += mm.min();
+			mm.add(row[i]);
+		}
+
+		ans.add(row[M-1]);
 	}
 
 	std::cout << ans.ans() << std::endl;
