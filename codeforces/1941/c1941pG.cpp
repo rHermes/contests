@@ -18,59 +18,65 @@ void solve() {
 	UT M = 0;
 	std::cin >> N >> M;
 
-	// node -> lines
-	std::map<UT,std::unordered_set<UT>> nodes;
-	// all nodes in a line.
-	std::map<UT,std::unordered_set<UT>> lines;
-
+	// There can be a maximum of N nodes and M unique colors
+	std::vector<std::vector<UT>> edges(N+M);
+	std::unordered_map<UT,UT> compression;
 	for (UT i = 0; i < M; i++) {
 		UT u = 0;
 		UT v = 0;
 		UT c = 0;
 
 		std::cin >> u >> v >> c;
-		nodes[u].emplace(c);
-		nodes[v].emplace(c);
-		auto& line = lines[c];
-		line.emplace(u);
-		line.emplace(v);
+		u--;
+		v--;
+		
+		// we compress the edge color.
+		auto inst = compression.emplace(c, N + compression.size());
+		auto idx =  inst.first->second;
+		
+		// This could potentially create a lot of duplication, but we are willing to live with that.
+		edges[u].emplace_back(idx);
+		edges[v].emplace_back(idx);
+
+		edges[idx].emplace_back(u);
+		edges[idx].emplace_back(v);
 	}
+
 
 	UT srcNode = 0;
 	UT dstNode = 0;
 	std::cin >> srcNode >> dstNode;
+	srcNode--;
+	dstNode--;
 	
-	std::set<UT> linesSeen;
-	std::set<UT> nodesSeen;
-	std::deque<std::pair<UT,UT>> Q;
-	Q.emplace_back(srcNode, 0);
+	std::unordered_map<UT,UT> depth;
+	depth[srcNode] = 0;
 
+	std::deque<UT> Q;
+	Q.emplace_back(srcNode);
 	while (!Q.empty()) {
-		const auto [cur, numLines] = Q.front();
+		const auto cur = Q.front();
 		Q.pop_front();
 
 		if (cur == dstNode) {
-			std::cout << numLines << std::endl;
+			std::cout << depth[cur] << std::endl;
 			return;
 		}
+	
+		// We deduplicate here, to avoid more lookups in the inner loop.
+		// We don't bother to erase, as we will never see this node again.
+		auto& nexts = edges[cur];
+		std::sort(nexts.begin(), nexts.end());
+		const auto end = std::unique(nexts.begin(), nexts.end());
 
-		if (auto inst = nodesSeen.emplace(cur); !inst.second)
-			continue;
-
-		for (const auto& line : nodes[cur]) {
-			if (auto inst = linesSeen.emplace(line); !inst.second)
+		for (auto it = nexts.begin(); it != end; ++it) {
+			if (depth.count(*it))
 				continue;
 
-			// we just add any node here, it will be too slow, but we will skip the lines once we get there.
-			for (const auto& next : lines[line]) {
-				if (nodesSeen.count(next))
-					continue;
-
-				Q.emplace_back(next, numLines+1);
-			}
+			Q.emplace_back(*it);
+			// If we are visiting a color node, we increase the depth.
+			depth[*it] = depth[cur] + (N <= *it);
 		}
-
-
 	}
 
 	std::cout << "This is not meant to happen!" << std::endl;
@@ -86,6 +92,5 @@ int main() {
 
 	for (UT t = 0; t < T; t++) {
 		solve();
-		/* break; */
 	}
 }
