@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+/* #include <memory_resource> */
 #include <vector>
 #include <cinttypes>
 #include <unordered_set>
@@ -12,38 +13,15 @@
 using UT = std::uint64_t;
 using ST = std::int64_t;
 
-void solve() {
-	std::string line;
-	std::cin >> line;
-	/* std::cout << "[" << line << "]" << std::endl; */
-	
-	if (line.size() == 1) {
-		std::cout << 0 << std::endl;
-		return;
+bool canWork(const std::string& line, const std::size_t N) {
+	// THis returns if there are any ways to make this work inside the array.
+	if (line.size() < N) {
+		return false;
 	}
+	const UT ITS = N/2;
 
-	std::set<std::pair<std::size_t,std::size_t>> seen;
-	std::deque<std::pair<std::size_t, std::size_t>> Q;
-
-
-	if (line.size() % 2 == 0) {
-		Q.emplace_back(0, line.size()-1);
-	} else {
-		Q.emplace_back(1, line.size()-1);
-		Q.emplace_back(0, line.size()-2);
-	}
-
-	while (!Q.empty()) {
-		auto [l, r] = Q.front();
-		Q.pop_front();
-
-		if (auto it = seen.emplace(l, r); !it.second)
-			continue;
-
-
-		// ok, we include r
+	for (UT l = 0; l < line.size()-N+1; l++) {
 		bool good = true;
-		const UT ITS = (r-l+1)/2;
 		/* std::cout << "Considering: [" << l << ", " << r << "] with ITS=" << ITS << ": " << line.substr(l, r-l+1) << std::endl; */
 		for (UT i = 0; i < ITS; i++) {
 			/* std::cout << "Comparing: " << line[l+i] << " and " << line[l+ITS+i] << std::endl; */
@@ -54,18 +32,38 @@ void solve() {
 		}
 
 		if (good) {
-			std::cout << r-l+1 << std::endl;
-			return;
+			return true;
 		}
+	}
+	return false;
+}
 
-		if (l+1 < r) {
-			Q.emplace_back(l+2, r);
-			Q.emplace_back(l+1, r-1);
-			Q.emplace_back(l, r-2);
+void solve() {
+	std::string line;
+	std::cin >> line;
+	/* std::cout << "[" << line << "]" << std::endl; */
+	
+	if (line.size() == 1) {
+		std::cout << 0 << std::endl;
+		return;
+	}
+	
+	UT i = line.size();
+	if (line.size() % 2 != 0) {
+		i--;
+	}
+
+	for (; 0 < i; i -= 2) {
+		if (canWork(line, i)) {
+			std::cout << i << std::endl;
+			return;
 		}
 	}
 
 	std::cout << 0 << std::endl;
+	return;
+
+
 }
 
 int main() {
