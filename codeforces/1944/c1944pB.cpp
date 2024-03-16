@@ -23,113 +23,50 @@ void solve() {
 	for (UT i = 0; i < N; i++)
 		std::cin >> B[i];
 
-	// ok, so we have to pick two sets of size 2*k.
-	// This really just means we can pick any combination
-	// we want of the items in both.
-	
-	/* std::sort(A.begin(), A.end()); */
-	/* std::sort(B.begin(), B.end()); */
 
-	std::unordered_map<UT,UT> mapA;
-	for (const auto p : A)
-		mapA[p] += 1;
+	std::vector<UT> outA; outA.reserve(2*K);
+	std::vector<UT> outB; outB.reserve(2*K);
+	std::vector<UT> singleA; 
 
-	std::unordered_map<UT,UT> mapB;
-	for (const auto& p : B)
-		mapB[p] += 1;
-
-	/* std::cout << "WEW" << std::endl; */
-	/* for (const auto& p : mapA) */
-	/* 	std::cout << p.first << " " << p.second << std::endl; */
-	/* std::cout << "WOW" << std::endl; */
-	
-
-	std::vector<UT> outA;
-	std::vector<UT> outB;
-	
-	{
-		auto it = mapA.cbegin();
-		while (outA.size() < 2*K) {
-			if (it->second == 2 && (outA.size()+2 <= 2*K)) {
-				outA.push_back(it->first);
-				outA.push_back(it->first);
-			} else if (it->second == 1) {
-				outA.push_back(it->first);
-				outB.push_back(it->first);
-			}
-
-			it++;
+	std::sort(A.begin(), A.end());
+	for (UT i = 0; i < N && outA.size() < 2*K; i++) {
+		if (i < N-1 && A[i] == A[i+1]) {
+			outA.emplace_back(A[i]);
+			outA.emplace_back(A[i]);
+			i++;
+		} else {
+			singleA.push_back(A[i]);
 		}
 	}
-	
-	{
-		auto it = mapB.cbegin();
-		while (outB.size() < 2*K) {
-			if (it->second == 2) {
-				outB.push_back(it->first);
-				outB.push_back(it->first);
-			}
-			it++;
+
+	while (outA.size() < 2*K) {
+		outA.push_back(singleA.back());
+		outB.push_back(singleA.back());
+		singleA.pop_back();
+	}
+
+
+	std::sort(B.begin(), B.end());
+	for (UT i = 1; i < N && outB.size() < 2*K; i++) {
+		if (B[i] == B[i-1]) {
+			outB.emplace_back(B[i]);
+			outB.emplace_back(B[i]);
+			i++;
 		}
 	}
-	
-	/* UT i = 0; */
-	/* while ( outA.size() < 2*K ) { */
-	/* 	if (outA.size()+2 <= 2*K) { */
-	/* 		if (i < N-1) { */
-	/* 			if (A[i] == A[i+1]) { */
-	/* 				outA.push_back(A[i]); */
-	/* 				outA.push_back(A[i]); */
-	/* 				i += 2; */
-	/* 			} else { */
-	/* 				outA.push_back(A[i]); */
-	/* 				outB.push_back(A[i]); */
-	/* 				i += 1; */
-	/* 			} */
-	/* 		} else { */
-	/* 			throw std::runtime_error("We are not supposed to be here!"); */
-	/* 		} */
-	/* 	} else { */
-	/* 		if (i < N-1) { */
-	/* 			if (A[i] != A[i+1]) { */
-	/* 				outA.push_back(A[i]); */
-	/* 				outB.push_back(A[i]); */
-	/* 				i += 1; */
-	/* 			} else { */
-	/* 				i += 2; */
-	/* 			} */
-	/* 		} else { */
-	/* 			outA.push_back(A[i]); */
-	/* 			outB.push_back(A[i]); */
-	/* 			i += 1; */
-	/* 		} */
-	/* 	} */
-	/* } */
-
-	/* i = 0; */
-	/* while (outB.size() < 2*K) { */
-	/* 	// We only add doubles here. */
-	/* 	if (B[i] == B[i+1]) { */
-	/* 		outB.push_back(B[i]); */
-	/* 		outB.push_back(B[i]); */
-	/* 		i += 2; */
-	/* 	} else { */
-	/* 		i += 1; */
-	/* 	} */
-	/* } */
 
 	for (const auto& p : outA) {
 		std::cout << p << " ";
 	}
-	std::cout << std::endl;
+	std::cout << '\n';
 	for (const auto& p : outB) {
 		std::cout << p << " ";
 	}
-	std::cout << std::endl;
+	std::cout << '\n';
 }
 
 int main() {
-	/* std::cin.tie(nullptr); */
+	std::cin.tie(nullptr);
 	std::cin.sync_with_stdio(false);
 
 	UT T = 0;
