@@ -13,57 +13,37 @@
 using UT = std::uint64_t;
 using ST = std::int64_t;
 
-bool canWork(const std::string& line, const std::size_t N) {
-	// THis returns if there are any ways to make this work inside the array.
-	if (line.size() < N) {
-		return false;
-	}
-	const UT ITS = N/2;
-
-	for (UT l = 0; l < line.size()-N+1; l++) {
-		bool good = true;
-		/* std::cout << "Considering: [" << l << ", " << r << "] with ITS=" << ITS << ": " << line.substr(l, r-l+1) << std::endl; */
-		for (UT i = 0; i < ITS; i++) {
-			/* std::cout << "Comparing: " << line[l+i] << " and " << line[l+ITS+i] << std::endl; */
-			if (line[l+i] != line[l+ITS+i] && (line[l+i] != '?') && (line[l+ITS+i] != '?')) {
-				good = false;
-				break;
-			}
-		}
-
-		if (good) {
-			return true;
-		}
-	}
-	return false;
-}
 
 void solve() {
 	std::string line;
 	std::cin >> line;
-	/* std::cout << "[" << line << "]" << std::endl; */
-	
-	if (line.size() == 1) {
+
+	const UT N = line.size();
+	if (N == 1) {
 		std::cout << 0 << std::endl;
 		return;
 	}
-	
-	UT i = line.size();
-	if (line.size() % 2 != 0) {
-		i--;
-	}
 
-	for (; 0 < i; i -= 2) {
-		if (canWork(line, i)) {
-			std::cout << i << std::endl;
-			return;
+	// We try as big a length as we can. The clue here, is that we don't need to
+	// start from the beginning for each time we fail. Each length is just a linear
+	// search through the task, because if we fail at a position, it would have failed
+	// all others behind it also. So we just start again.
+	for (UT len = N/2; 0 < len; len--) {
+		UT currentMatch = 0;
+		for (UT i = 0; i + len < N; i++) {
+			if (line[i] == line[i+len] || line[i] == '?' || line[i+len] == '?') {
+				currentMatch++;
+				if (currentMatch == len) {
+					std::cout << 2 * len << std::endl;
+					return;
+				}
+			} else {
+				currentMatch = 0;
+			}
 		}
 	}
 
 	std::cout << 0 << std::endl;
-	return;
-
-
 }
 
 int main() {
@@ -75,6 +55,5 @@ int main() {
 
 	for (UT t = 0; t < T; t++) {
 		solve();
-		/* break; */
 	}
 }
