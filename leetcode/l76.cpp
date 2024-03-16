@@ -8,5 +8,8 @@ public:
 		// ok, this is my strategy. I will use two pointers.
 		// when I find all needed strings, I will stop, and then
 		// continnue going forward until I have all the needed elements.
+		
+		// maybe we can do some two pointer stuff here?
+		//
 	}
 };

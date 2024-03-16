@@ -17,5 +17,6 @@ for f in glob(["*/*.cpp", "*.cpp"], allow_empty=True):
     cc_binary(
         name = target,
         srcs = [f],
-        compiler_flags = ["-Wall", "-Wextra", "-Wconversion", "-std=c++20", "-O2"],
+        # compiler_flags = ["-Wall", "-Wextra", "-Wconversion", "-std=c++20", "-O2"],
+        compiler_flags = ["-Wall", "-Wextra", "-Wconversion", "-std=c++17", "-O2"],
     )
