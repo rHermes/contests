@@ -1,9 +1,13 @@
 // https://leetcode.com/problems/count-ways-to-build-rooms-in-an-ant-colony/
 // https://codeforces.com/blog/entry/75627
+//
+#include <vector>
+#include <cinttypes>
+#include <iostream>
 
 class Solution {
 public:
-    int waysToBuildRooms(vector<int>& prevRoom) {
+    int waysToBuildRooms(std::vector<int>& prevRoom) {
         using UT = std::uint64_t;
         const UT N = prevRoom.size();
         constexpr UT MODN = 1000000007;
@@ -16,7 +20,7 @@ public:
         
         std::vector<std::vector<std::size_t>> G(N);
         for (UT i = 1; i < N; i++) {
-            G[prevRoom[i]].push_back(i);
+            G[static_cast<std::size_t>(prevRoom[i])].push_back(i);
         }
 
         // We will also need an algorithm to calculate
@@ -26,3 +30,5 @@ public:
         return 0;
     }
 };
+
+int main() { return 0; }
