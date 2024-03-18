@@ -1,11 +1,7 @@
 #include <iostream>
-#include <map>
-#include <set>
 #include <vector>
-#include <cinttypes>
-#include <unordered_set>
-#include <unordered_map>
 #include <algorithm>
+#include <cstdint>
 
 using UT = std::uint64_t;
 using ST = std::int64_t;
