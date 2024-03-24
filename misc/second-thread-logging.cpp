@@ -47,12 +47,12 @@ class SpanBuffer {
 
 	std::span<std::byte, N> buf_;
 
-	[[nodiscard]]  constexpr std::size_t write_space_left() const {
-		return buf_.size_bytes() - static_cast<std::size_t>(tail_);
+	[[nodiscard]]  constexpr bool can_write(const std::ptrdiff_t sz, const std::ptrdiff_t bufSz) const {
+		return (shadowTail_ < cachedHead_ && sz < (cachedHead_ - shadowTail_)) || sz <= (bufSz - shadowTail_);
 	}
 
-	[[nodiscard]]  constexpr std::size_t read_space_left() const {
-		return static_cast<std::size_t>(tail_ - head_);
+	[[nodiscard]]  constexpr bool can_read(const std::ptrdiff_t sz) const {
+		return sz <= (cachedTail_ - shadowHead_);
 	}
 
 public:
@@ -76,10 +76,10 @@ public:
 
 	bool read(std::span<std::byte> dst) {
 		const auto sz = static_cast<std::ptrdiff_t>(dst.size_bytes());
-		if (cachedTail_ < shadowHead_ || (cachedTail_ - shadowHead_) < sz) {
-			cachedTail_ = tail_.load(std::memory_order::acquire);
 
-			if (cachedTail_ < shadowHead_ || (cachedTail_ - shadowHead_) < sz)
+		if (!can_read(sz)) {
+			cachedTail_ = tail_.load(std::memory_order::acquire);
+			if (!can_read(sz))
 				return false;
 		}
 
@@ -92,11 +92,12 @@ public:
 	bool write(std::span<const std::byte> src) {
 		const auto sz = static_cast<std::ptrdiff_t>(src.size_bytes());
 		const auto bufSz = static_cast<std::ptrdiff_t>(buf_.size_bytes());
+		// ok, so let's write a test here. It's going to be painful, but let's
+		// do it.
 
-		if (shadowTail_ < cachedHead_ || (bufSz - shadowTail_) < sz) {
+		if (!can_write(sz, bufSz)) {
 			cachedHead_ = head_.load(std::memory_order::acquire);
-
-			if (shadowTail_ < cachedHead_ || (bufSz - shadowTail_) < sz)
+			if (!can_write(sz, bufSz))
 				return false;
 		}
 
@@ -110,12 +111,22 @@ public:
 	void start_read() {
 		// ok, so we are initializing a read here.
 		shadowHead_ = head_.load(std::memory_order::relaxed);
-		cachedTail_ = tail_.load(std::memory_order::acquire);
+
+		// ok, if the cached tail is behind us, then we know we can
+		// look to 0.
+		if (cachedTail_ < shadowHead_) {
+			head_.store(0, std::memory_order::relaxed);
+			shadowHead_ = 0;
+		}
 	}
 
 	void finish_read() {
 		// So, now we have either updated the head, or we haven't but we
 		// store it anyway.
+		// we check one more time.
+		if (cachedTail_ < shadowHead_) {
+			shadowHead_ = 0;
+		}
 		head_.store(shadowHead_, std::memory_order::release);
 	}
 
@@ -123,21 +134,17 @@ public:
 	
 	void start_write() {
 		shadowTail_ = tail_.load(std::memory_order::relaxed);
-		/* cachedHead_ = head_.load(std::memory_order::acquire); */
-
-		// ok, so this is the special case. if we are start the write on
-		// the same point as the reader, we can reset. We know that the
-		// reader cannot have progressed past us.
-
-		// this allows us to update the reader also.
 
 		if (cachedHead_ == shadowTail_ && shadowTail_ != 0) {
 			// First we store the tail behind.
+			tail_.store(0, std::memory_order::relaxed);
 			shadowTail_ = 0;
-			cachedHead_ = 0;
-			tail_.store(0, std::memory_order::release);
-			head_.store(0, std::memory_order::release);
 		}
+
+		// Ok, so this is where things get interesting. if our cached head is
+		// where we are, then it means they cached up to us. this means they 
+		// will not be able to progress before it's their turn. We will therefor
+		// wait.
 	}
 
 	void finish_write() {
@@ -210,7 +217,6 @@ public:
 template <typename BufferType, typename T, typename = void>
 struct Serializer;
 
-
 template<typename BufferType, typename T>
 struct Serializer<BufferType, T, std::enable_if_t<std::is_scalar_v<T>>> {
 	bool to_bytes(BufferType& buffer, const T& val) {
@@ -222,9 +228,9 @@ struct Serializer<BufferType, T, std::enable_if_t<std::is_scalar_v<T>>> {
 	}
 };
 
-template<typename BufferType>
-struct Serializer<BufferType, std::string> {
-	bool to_bytes(BufferType& buffer, const std::string& val) {
+template<typename BufferType, typename T>
+struct Serializer<BufferType, T, std::enable_if_t<std::is_convertible_v<T, std::string_view>>> {
+	bool to_bytes(BufferType& buffer, std::string_view val) {
 		bool good = true;
 		good = good && write_to_buffer(buffer, val.size());
 		good = good && buffer.write(std::as_bytes(std::span(val.begin(), val.end())));
@@ -234,7 +240,7 @@ struct Serializer<BufferType, std::string> {
 	// TODO(rHermes): Decode what I want to do here. Should the value here be
 	// accessable?
 	bool from_bytes(BufferType& buffer, std::string& val) {
-		std::string::size_type sz;
+		std::string_view::size_type sz;
 		if (!read_from_buffer(buffer, sz))
 			return false;
 
@@ -276,6 +282,8 @@ class Logger {
 	// How could I mock this out. I would need something that holds that lock inside the buffer, if we
 	// are passing in a Writer. So we need to create both a reader and a buffer on the same thing.
 	
+	std::atomic_unsigned_lock_free available_{0};
+	
 public:
 	using loggingFunction = std::add_pointer_t<bool(Buffer&)>;
 
@@ -284,7 +292,7 @@ public:
 
 	
 	template <typename ... Ts>
-	bool log(loggingFunction f,  Ts&& ... ts) {
+	bool try_log(loggingFunction f,  Ts&& ... ts) {
 		buffer_.start_write();
 
 		bool good = write_to_buffer(buffer_, f);
@@ -298,7 +306,7 @@ public:
 		return good;
 	}
 
-	bool read_log()  {
+	bool try_read_log()  {
 		buffer_.start_read();
 		loggingFunction f;
 		auto good = read_from_buffer(buffer_, f) && f(buffer_);
@@ -306,11 +314,48 @@ public:
 			buffer_.cancel_read();
 		else
 			buffer_.finish_read();
-
 		return good;
+	}
+
+	template <typename ... Ts>
+	void log(loggingFunction f,  Ts&& ... ts) {
+		// TODO(rHermes): Implement a max number of messages, that we can deduct based
+		// on the capacity of the buffer and make sure the amount is not that. For now
+		// we do a dummy of 100
+		/* available_.wait(100, std::memory_order_acquire); */
+		/* available_.wait(1, std::memory_order::acquire); */
+		/* available_.wait(10); */
+		available_.wait(1);
+
+		/* std::cout << "we can log: " << available_.load() << std::endl; */
+
+		bool good = try_log(f, ts...);
+		if (!good)
+				throw std::runtime_error("We were unable to write to the log, this should never happen");
+
+		available_.fetch_add(1, std::memory_order::release);
+		available_.notify_one();
+	}
+	
+	// This can only be used with the log function pair, otherwise
+	// this thread will never be woken up again.
+	void read_log() {
+		available_.wait(0, std::memory_order::acquire);
+
+		bool good = try_read_log();
+		if (!good)
+				throw std::runtime_error("We were unable to read from read_log, this should never happen");
+
+		available_.fetch_sub(1, std::memory_order::release);
+		available_.notify_one();
 	}
 };
 
+template <typename ... Ts, typename Buffer>
+bool nullLogger(Buffer& buffer) {
+	((read_from_buffer<Ts>(buffer)), ...);
+	return true;
+}
 
 template <typename Buffer>
 bool fooLogger(Buffer& buffer) {
@@ -326,7 +371,8 @@ bool fooLogger(Buffer& buffer) {
 /* #include <cassert> */
 
 int main() {
-	std::array<std::byte, 2048> backing;
+	/* std::array<std::byte, 2097152> backing; */
+	std::array<std::byte, 4096*2> backing;
 	SpanBuffer buf(backing, false);
 
 	/* Logger<QueueBuffer> logger; */
@@ -339,25 +385,46 @@ int main() {
 		ready.arrive_and_wait();
 		std::string str("I hope this works!");
 		std::int64_t i = 0;
+		std::int64_t fails = 0;
 		while (i < TIMES) {
-			auto good = logger.log(fooLogger, i, str);
-			if (good)
-				i++;
+			logger.log(nullLogger<std::int64_t, std::string>, i, str);
+			i++;
+			/* auto good = logger.try_log(nullLogger<std::int64_t, std::string>, i, str); */
+			/* if (good) */
+			/* 	i++; */
+			/* else */
+			/* 	fails++; */
 		}
+
+		/* logger.log(fooLogger, fails, "The writer failed this many times."); */
+		/* logger.try_log(fooLogger, fails, "The writer failed this many times."); */
 	});
 
 	std::thread reader([&logger, &ready]() {
 		ready.arrive_and_wait();
 		std::int64_t i = 0;
+		std::int64_t fails = 0;
 		while (i < TIMES) {
-			auto good = logger.read_log();
+			/*
+			auto good = logger.try_read_log();
 			if (good)
 				i++;
+			else
+				fails++;
+			*/
+			logger.read_log();
+			i++;
 		}
+
+		logger.read_log();
+		std::cout << "The reader failed this many times: " << fails << std::endl;
 	});
 
 	writer.join();
 	reader.join();
+
+	/* logger.read_log(); */
+	/* logger.read_log(); */
 
 	/* /1* assert(logger.log(fooLogger<QueueBuffer>, 23, std::string("I hope this works!"))); *1/ */
 	/* /1* assert(logger.read_log()); *1/ */
