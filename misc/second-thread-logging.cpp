@@ -9,11 +9,11 @@
 #include <latch>
 
 #ifdef __cpp_lib_hardware_interference_size
-static constexpr auto constructiveInterference =  std::hardware_constructive_interference_size;
+/* static constexpr auto constructiveInterference =  std::hardware_constructive_interference_size; */
 static constexpr auto destructiveInterference = std::hardware_destructive_interference_size;
 #else
 // 64 bytes on x86-64 │ L1_CACHE_BYTES │ L1_CACHE_SHIFT │ __cacheline_aligned │ ...
-static constexpr std::size_t constructiveInterference =  64;
+/* static constexpr std::size_t constructiveInterference =  64; */
 static constexpr std::size_t destructiveInterference = 64;
 #endif
 
@@ -38,130 +38,6 @@ auto singular_writable_bytes(T& t)
 
 // This is a rather dumb container, but it will work for most
 // of our tests.
-template<std::size_t N = std::dynamic_extent>
-class SpanBuffer {
-
-	alignas(destructiveInterference) std::atomic<std::ptrdiff_t> head_{0};
-	alignas(destructiveInterference) std::ptrdiff_t cachedHead_{0};
-
-	alignas(destructiveInterference) std::atomic<std::ptrdiff_t> tail_{0};
-	alignas(destructiveInterference) std::ptrdiff_t cachedTail_{0};
-
-
-	alignas(destructiveInterference) std::ptrdiff_t shadowHead_{0};
-	alignas(destructiveInterference) std::ptrdiff_t shadowTail_{0};
-
-	std::span<std::byte, N> buf_;
-
-	[[nodiscard]]  constexpr bool can_write(const std::ptrdiff_t sz, const std::ptrdiff_t bufSz) const {
-		if (shadowTail_ < cachedHead_)
-			return sz < (cachedHead_ - shadowTail_);
-		else
-			return sz <= (bufSz - shadowTail_);
-	}
-
-	[[nodiscard]]  constexpr bool can_read(const std::ptrdiff_t sz) const {
-		return sz <= (cachedTail_ - shadowHead_);
-	}
-
-public:
-	
-	SpanBuffer(std::span<std::byte, N> data, bool filled) : buf_{data} {
-		if (filled)
-			tail_ = static_cast<std::ptrdiff_t>(data.size_bytes());
-	}
-
-	SpanBuffer(SpanBuffer&& other) 
-	: head_{other.head_.load()}
-	, cachedHead_{other.cachedHead_}
-	, tail_{other.tail_.load()}
-	, cachedTail_{other.cachedTail_}
-	, shadowHead_{other.shadowHead_}
-	, shadowTail_{other.shadowTail_}
-	, buf_{std::move(other.buf_)}
-	{
-
-	}
-
-	bool read(std::span<std::byte> dst) {
-		const auto sz = static_cast<std::ptrdiff_t>(dst.size_bytes());
-
-		if (!can_read(sz)) {
-			cachedTail_ = tail_.load(std::memory_order::acquire);
-			if (!can_read(sz))
-				return false;
-		}
-
-		std::memcpy(dst.data(), buf_.data() + shadowHead_, dst.size_bytes());
-		shadowHead_ += dst.size_bytes();
-
-		return true;
-	}
-
-	bool write(std::span<const std::byte> src) {
-		const auto sz = static_cast<std::ptrdiff_t>(src.size_bytes());
-		const auto bufSz = static_cast<std::ptrdiff_t>(buf_.size_bytes());
-		// ok, so let's write a test here. It's going to be painful, but let's
-		// do it.
-
-		if (!can_write(sz, bufSz)) {
-			cachedHead_ = head_.load(std::memory_order::acquire);
-			if (!can_write(sz, bufSz))
-				return false;
-		}
-
-		std::memcpy(buf_.data() + shadowTail_, src.data(), src.size_bytes());
-		shadowTail_ += src.size_bytes();
-
-		return true;
-	}
-	
-	// It's a noop for us for now.
-	void start_read() {
-		// ok, so we are initializing a read here.
-		shadowHead_ = head_.load(std::memory_order::relaxed);
-
-		if (cachedTail_ < shadowHead_) {
-			shadowHead_ = 0;
-			head_.store(0, std::memory_order::relaxed);
-		}
-	}
-
-	void finish_read() {
-		head_.store(shadowHead_, std::memory_order::release);
-	}
-
-	void cancel_read() {}
-	
-	void start_write() {
-		shadowTail_ = tail_.load(std::memory_order::relaxed);
-
-		if (cachedHead_ == shadowTail_ && shadowTail_ != 0) {
-			// First we store the tail behind.
-			shadowTail_ = 0;
-			tail_.store(0, std::memory_order::relaxed);
-		}
-
-		// Ok, so this is where things get interesting. if our cached head is
-		// where we are, then it means they cached up to us. this means they 
-		// will not be able to progress before it's their turn. We will therefor
-		// wait.
-	}
-
-	void finish_write() {
-		// Now let's update the tail_
-		tail_.store(shadowTail_, std::memory_order::release);
-	}
-
-	void cancel_write() {}
-};
-
-// additional deduction guide
-template<std::size_t N>
-SpanBuffer(std::array<std::byte,N> data, bool filled) -> SpanBuffer<N>;
-
-// This is a rather dumb container, but it will work for most
-// of our tests.
 template<std::ptrdiff_t N>
 class RingBuffer {
 
@@ -176,17 +52,6 @@ class RingBuffer {
 	alignas(destructiveInterference) std::ptrdiff_t shadowTail_{0};
 
 	alignas(destructiveInterference) std::array<std::byte, N+1> buf_;
-
-	[[nodiscard]]  constexpr bool can_write(const std::ptrdiff_t sz) const {
-		if (shadowTail_ < cachedHead_)
-			return sz < (cachedHead_ - shadowTail_);
-		else
-			return sz <= (N - shadowTail_);
-	}
-
-	[[nodiscard]]  constexpr bool can_read(const std::ptrdiff_t sz) const {
-		return sz <= (cachedTail_ - shadowHead_);
-	}
 
 public:
 	RingBuffer() = default;
@@ -451,12 +316,7 @@ public:
 		// TODO(rHermes): Implement a max number of messages, that we can deduct based
 		// on the capacity of the buffer and make sure the amount is not that. For now
 		// we do a dummy of 100
-		/* available_.wait(100, std::memory_order_acquire); */
-		/* available_.wait(1, std::memory_order::acquire); */
-		/* available_.wait(10); */
-		available_.wait(10);
-
-		/* std::cout << "we can log: " << available_.load() << std::endl; */
+		available_.wait(10, std::memory_order_acquire);
 
 		bool good = try_log(f, ts...);
 		if (!good)
