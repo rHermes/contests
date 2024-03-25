@@ -1,15 +1,21 @@
 #include <array>
-#include <cinttypes>
 #include <cstring>
 #include <deque>
 #include <iostream>
-#include <queue>
 #include <span>
-#include <format>
 #include <mutex>
 #include <atomic>
 #include <thread>
 #include <latch>
+
+#ifdef __cpp_lib_hardware_interference_size
+static constexpr auto constructiveInterference =  std::hardware_constructive_interference_size;
+static constexpr auto destructiveInterference = std::hardware_destructive_interference_size;
+#else
+// 64 bytes on x86-64 │ L1_CACHE_BYTES │ L1_CACHE_SHIFT │ __cacheline_aligned │ ...
+static constexpr std::size_t constructiveInterference =  64;
+static constexpr std::size_t destructiveInterference = 64;
+#endif
 
 template<typename T>
 std::span<T, 1> singular_span(T& t)
@@ -35,20 +41,23 @@ auto singular_writable_bytes(T& t)
 template<std::size_t N = std::dynamic_extent>
 class SpanBuffer {
 
-	std::atomic<std::ptrdiff_t> head_{0};
-	std::ptrdiff_t cachedHead_{0};
+	alignas(destructiveInterference) std::atomic<std::ptrdiff_t> head_{0};
+	alignas(destructiveInterference) std::ptrdiff_t cachedHead_{0};
 
-	std::atomic<std::ptrdiff_t> tail_{0};
-	std::ptrdiff_t cachedTail_{0};
+	alignas(destructiveInterference) std::atomic<std::ptrdiff_t> tail_{0};
+	alignas(destructiveInterference) std::ptrdiff_t cachedTail_{0};
 
 
-	std::ptrdiff_t shadowHead_{0};
-	std::ptrdiff_t shadowTail_{0};
+	alignas(destructiveInterference) std::ptrdiff_t shadowHead_{0};
+	alignas(destructiveInterference) std::ptrdiff_t shadowTail_{0};
 
 	std::span<std::byte, N> buf_;
 
 	[[nodiscard]]  constexpr bool can_write(const std::ptrdiff_t sz, const std::ptrdiff_t bufSz) const {
-		return (shadowTail_ < cachedHead_ && sz < (cachedHead_ - shadowTail_)) || sz <= (bufSz - shadowTail_);
+		if (shadowTail_ < cachedHead_)
+			return sz < (cachedHead_ - shadowTail_);
+		else
+			return sz <= (bufSz - shadowTail_);
 	}
 
 	[[nodiscard]]  constexpr bool can_read(const std::ptrdiff_t sz) const {
@@ -112,21 +121,13 @@ public:
 		// ok, so we are initializing a read here.
 		shadowHead_ = head_.load(std::memory_order::relaxed);
 
-		// ok, if the cached tail is behind us, then we know we can
-		// look to 0.
 		if (cachedTail_ < shadowHead_) {
-			head_.store(0, std::memory_order::relaxed);
 			shadowHead_ = 0;
+			head_.store(0, std::memory_order::relaxed);
 		}
 	}
 
 	void finish_read() {
-		// So, now we have either updated the head, or we haven't but we
-		// store it anyway.
-		// we check one more time.
-		if (cachedTail_ < shadowHead_) {
-			shadowHead_ = 0;
-		}
 		head_.store(shadowHead_, std::memory_order::release);
 	}
 
@@ -137,8 +138,8 @@ public:
 
 		if (cachedHead_ == shadowTail_ && shadowTail_ != 0) {
 			// First we store the tail behind.
-			tail_.store(0, std::memory_order::relaxed);
 			shadowTail_ = 0;
+			tail_.store(0, std::memory_order::relaxed);
 		}
 
 		// Ok, so this is where things get interesting. if our cached head is
@@ -158,6 +159,133 @@ public:
 // additional deduction guide
 template<std::size_t N>
 SpanBuffer(std::array<std::byte,N> data, bool filled) -> SpanBuffer<N>;
+
+// This is a rather dumb container, but it will work for most
+// of our tests.
+template<std::ptrdiff_t N>
+class RingBuffer {
+
+	alignas(destructiveInterference) std::atomic<std::ptrdiff_t> head_{0};
+	alignas(destructiveInterference) std::ptrdiff_t cachedHead_{0};
+
+	alignas(destructiveInterference) std::atomic<std::ptrdiff_t> tail_{0};
+	alignas(destructiveInterference) std::ptrdiff_t cachedTail_{0};
+
+
+	alignas(destructiveInterference) std::ptrdiff_t shadowHead_{0};
+	alignas(destructiveInterference) std::ptrdiff_t shadowTail_{0};
+
+	alignas(destructiveInterference) std::array<std::byte, N+1> buf_;
+
+	[[nodiscard]]  constexpr bool can_write(const std::ptrdiff_t sz) const {
+		if (shadowTail_ < cachedHead_)
+			return sz < (cachedHead_ - shadowTail_);
+		else
+			return sz <= (N - shadowTail_);
+	}
+
+	[[nodiscard]]  constexpr bool can_read(const std::ptrdiff_t sz) const {
+		return sz <= (cachedTail_ - shadowHead_);
+	}
+
+public:
+	RingBuffer() = default;
+	
+	// We don't want copying
+	RingBuffer(const RingBuffer&) = delete;
+	RingBuffer& operator=(const RingBuffer&) = delete;
+
+	// We don't want moving either.
+	RingBuffer(RingBuffer&&) = delete;
+	RingBuffer& operator=(RingBuffer&&) = delete;
+
+	bool read(std::span<std::byte> dst) {
+		while (!dst.empty()) {
+			const auto sz = static_cast<std::ptrdiff_t>(dst.size_bytes());
+			if (shadowHead_ == N+1)
+				shadowHead_ = 0;
+
+
+			if (shadowHead_ == cachedTail_) {
+				cachedTail_ = tail_.load(std::memory_order::acquire);
+				if (shadowHead_ == cachedTail_)
+					return false;
+			}
+
+			if (shadowHead_ < cachedTail_) {
+				const auto spaceLeft = cachedTail_ - shadowHead_;
+				const auto readSize = std::min(sz, spaceLeft);
+				
+				std::memcpy(dst.data(), buf_.data() + shadowHead_, static_cast<std::size_t>(readSize));
+				shadowHead_ += readSize;
+
+				dst = dst.subspan(static_cast<std::size_t>(readSize));
+			} else {
+				const auto spaceLeft = N+1 - shadowHead_;
+				const auto readSize = std::min(sz, spaceLeft);
+
+				std::memcpy(dst.data(), buf_.data() + shadowHead_, static_cast<std::size_t>(readSize));
+				shadowHead_ += readSize;
+
+				dst = dst.subspan(static_cast<std::size_t>(readSize));
+			}
+		}
+
+		return true;
+	}
+
+	bool write(std::span<const std::byte> src) {
+		/* std::cout << "we entered with: " << cachedHead_ << " and tail=" << shadowTail_ << std::endl; */
+		// as we might have to do multiple jumps, we calculate to begin with.
+		while (!src.empty()) {
+			const auto sz = static_cast<std::ptrdiff_t>(src.size_bytes());
+
+			if (shadowTail_ == N+1) {
+				if (cachedHead_ == 0) {
+					cachedHead_ = head_.load(std::memory_order::acquire);
+					if (cachedHead_ == 0)
+						return false;
+				}
+				shadowTail_ = 0;
+			} else if (shadowTail_+1 == cachedHead_) {
+				cachedHead_ = head_.load(std::memory_order::acquire);
+				if (shadowTail_+1 == cachedHead_)
+						return false;
+			}
+
+			if (cachedHead_ <= shadowTail_) {
+				const auto spaceLeft = N+1 - shadowTail_;
+				const auto writeSize = std::min(sz, spaceLeft);
+				
+				std::memcpy(buf_.data() + shadowTail_, src.data(), static_cast<std::size_t>(writeSize));
+				shadowTail_ += writeSize;
+
+				src = src.subspan(static_cast<std::size_t>(writeSize));
+			} else {
+				// In this regard, the tail is behind the head
+				const auto spaceLeft = cachedHead_ - shadowTail_ - 1;
+				const auto writeSize = std::min(sz, spaceLeft);
+
+				std::memcpy(buf_.data() + shadowTail_, src.data(), static_cast<std::size_t>(writeSize));
+				shadowTail_ += writeSize;
+
+				src = src.subspan(static_cast<std::size_t>(writeSize));
+			}
+		}
+	
+		/* std::cout << "we managed to write!" << std::endl; */
+		return true;
+	}
+	
+	// It's a noop for us for now.
+	void start_read() { shadowHead_ = head_.load(std::memory_order::relaxed); }
+	void finish_read() { head_.store(shadowHead_, std::memory_order::release); }
+	void cancel_read() {}
+	
+	void start_write() { shadowTail_ = tail_.load(std::memory_order::relaxed); }
+	void finish_write() { tail_.store(shadowTail_, std::memory_order::release); }
+	void cancel_write() {}
+};
 
 
 
@@ -314,6 +442,7 @@ public:
 			buffer_.cancel_read();
 		else
 			buffer_.finish_read();
+
 		return good;
 	}
 
@@ -325,7 +454,7 @@ public:
 		/* available_.wait(100, std::memory_order_acquire); */
 		/* available_.wait(1, std::memory_order::acquire); */
 		/* available_.wait(10); */
-		available_.wait(1);
+		available_.wait(10);
 
 		/* std::cout << "we can log: " << available_.load() << std::endl; */
 
@@ -372,11 +501,12 @@ bool fooLogger(Buffer& buffer) {
 
 int main() {
 	/* std::array<std::byte, 2097152> backing; */
-	std::array<std::byte, 4096*2> backing;
-	SpanBuffer buf(backing, false);
+	/* std::array<std::byte, 4096*2> backing; */
+	/* SpanBuffer buf(backing, false); */
 
 	/* Logger<QueueBuffer> logger; */
-	Logger logger(std::move(buf));
+	/* Logger logger(std::move(buf)); */
+	Logger<RingBuffer<4096>> logger;
 	std::latch ready(2);
 
 	constexpr std::int64_t TIMES = 10000;
@@ -385,51 +515,27 @@ int main() {
 		ready.arrive_and_wait();
 		std::string str("I hope this works!");
 		std::int64_t i = 0;
-		std::int64_t fails = 0;
 		while (i < TIMES) {
 			logger.log(nullLogger<std::int64_t, std::string>, i, str);
 			i++;
-			/* auto good = logger.try_log(nullLogger<std::int64_t, std::string>, i, str); */
-			/* if (good) */
-			/* 	i++; */
-			/* else */
-			/* 	fails++; */
 		}
 
-		/* logger.log(fooLogger, fails, "The writer failed this many times."); */
-		/* logger.try_log(fooLogger, fails, "The writer failed this many times."); */
+		logger.log(fooLogger, i, "The writer failed this many times.");
 	});
 
 	std::thread reader([&logger, &ready]() {
 		ready.arrive_and_wait();
 		std::int64_t i = 0;
-		std::int64_t fails = 0;
 		while (i < TIMES) {
-			/*
-			auto good = logger.try_read_log();
-			if (good)
-				i++;
-			else
-				fails++;
-			*/
 			logger.read_log();
 			i++;
 		}
 
 		logger.read_log();
-		std::cout << "The reader failed this many times: " << fails << std::endl;
 	});
 
 	writer.join();
 	reader.join();
-
-	/* logger.read_log(); */
-	/* logger.read_log(); */
-
-	/* /1* assert(logger.log(fooLogger<QueueBuffer>, 23, std::string("I hope this works!"))); *1/ */
-	/* /1* assert(logger.read_log()); *1/ */
-	/* logger.log(fooLogger, 23, std::string("I hope this works!")); */
-	/* logger.read_log(); */
 
 	return 0;
 }
