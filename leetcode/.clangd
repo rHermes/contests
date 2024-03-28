@@ -3,5 +3,5 @@ If:
   PathMatch: .*\.cpp
 
 CompileFlags:
-  Add: [ -Wall, -Wextra, -Wconversion, -std=c++20 ]
+  Add: [ -Wall, -Wextra, -std=c++20 ]
 ---
