@@ -24,9 +24,11 @@ public:
     // std::cout << selector << std::endl;
     // We know there will be an answer here.
     std::size_t j = 0;
-    for (; j < 6; j++)
-      if (selector[j])
+    for (; j < 6; j++) {
+      if (selector[j]){
         break;
+			}
+		}
 
     std::size_t topRow = 0;
     std::size_t common = 0;
