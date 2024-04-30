@@ -1,12 +1,7 @@
 #include <iostream>
-#include <map>
 #include <set>
 #include <vector>
-#include <cinttypes>
-#include <unordered_set>
-#include <unordered_map>
-#include <algorithm>
-#include <queue>
+#include <cstdint>
 #include <utility>
 
 using UT = std::uint64_t;
@@ -17,8 +12,6 @@ struct Node {
 	UT T{0};
 	UT Y{0};
 	UT X{0};
-
-	auto operator<=>(const Node&) const = default;
 };
 
 void advanceIt(std::vector<std::vector<bool>>& grid, UT steps) {

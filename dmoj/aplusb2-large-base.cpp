@@ -116,7 +116,7 @@ class BigInt {
 				if (std::numeric_limits<DT>::max() < qt) {
 					printf("Wtf this shouldn't happen\n");
 				}
-				leftover = dividend % rhs;
+				leftover = static_cast<DT>(dividend % rhs);
 				Q.digits_.push_back(static_cast<DT>(qt));
 			}
 

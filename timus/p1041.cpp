@@ -20,8 +20,6 @@
  */
 #include <iostream>
 #include <cstdint>
-#include <numeric>
-#include <stdexcept>
 #include <vector>
 #include <algorithm>
 
@@ -100,22 +98,11 @@ int main() {
 	// We sort the vectors to get a good starting point.
 	std::sort(vecs.begin(), vecs.end());
 
-	/* for (const auto& v : vecs) { */
-	/* 	std::cout << "IDX: " << v.index << ", COST: " << v.cost << ", PIV: " << v.firstNonZero; */
-	/* 	std::cout << " ["; */
-	/* 	for (const auto& x : v.elements) { */
-	/* 		std::cout << x << ", "; */
-	/* 	} */
-	/* 	std::cout << "]"; */
-	/* 	std::cout << std::endl; */
-	/* } */
-
-
 	for (std::int32_t row = 0; row < N; row++) {
 		// We always begin with asserting that we can even complete the test.
 		// If we don't have N linearly independent vectors in the whole set,
 		// we can never complete the task, and we exit early.
-		if (vecs[row].firstNonZero != row) {
+		if (vecs[row].firstNonZero != static_cast<std::uint32_t>(row)) {
 			std::cout << "0" << std::endl;
 			return 0;
 		}

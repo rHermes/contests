@@ -71,7 +71,7 @@ class SmolInt {
 
 				if (digits_[idx] < ss) {
 					carry_in = true;
-					digits_[idx] = digits_[idx] + 10 - ss;
+					digits_[idx] = static_cast<std::uint8_t>(digits_[idx] + 10 - ss);
 				} else {
 					carry_in = false;
 					digits_[idx] = digits_[idx] - ss;
