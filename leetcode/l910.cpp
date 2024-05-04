@@ -45,7 +45,7 @@ public:
   }
 };
 
-static const auto __optimize__ = []() {
+static const auto optimize = []() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
   std::cout.tie(nullptr);
