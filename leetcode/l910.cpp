@@ -51,3 +51,5 @@ static const auto __optimize__ = []() {
   std::cout.tie(nullptr);
   return 0;
 }();
+
+int main() { return 0; }
