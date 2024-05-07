@@ -12,7 +12,8 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-struct pcg32_random_r {
+struct pcg32_random_r
+{
   std::uint64_t state;
   std::uint64_t inc;
 
@@ -21,42 +22,46 @@ struct pcg32_random_r {
   constexpr static result_type min() { return 0; }
   constexpr static result_type max() { return std::numeric_limits<result_type>::max(); }
 
-  result_type operator()() {
+  result_type operator()()
+  {
     std::uint64_t oldstate = state;
     // Advance internal state
     state = oldstate * 6364136223846793005ULL + (inc | 1);
     // Calculate output function (XSH RR), uses old state for max ILP
     std::uint32_t xorshifted = ((oldstate >> 18u) ^ oldstate) >> 27u;
-    std::uint32_t rot = oldstate >> 59u;
+    std::uint32_t rot        = oldstate >> 59u;
     return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
   }
 };
 
-class RandomizedCollection {
+class RandomizedCollection
+{
 public:
-  pcg32_random_r gen{123, 321};
+  pcg32_random_r gen{ 123, 321 };
 
   std::unordered_map<int, std::unordered_set<int>> val2idx;
   std::vector<int> idx2val;
 
-  bool insert(int val) {
-    auto &ids = val2idx[val];
+  bool insert(int val)
+  {
+    auto& ids = val2idx[val];
     ids.emplace(idx2val.size());
     idx2val.push_back(val);
 
     return ids.size() < 2;
   }
 
-  bool remove(int val) {
+  bool remove(int val)
+  {
     const auto it = val2idx.find(val);
     if (it == val2idx.end())
       return false;
 
-    auto &valFwds = it->second;
+    auto& valFwds = it->second;
 
     // Figure out which index we are removing.
     const auto indexToRemapIt = valFwds.begin();
-    const auto indexToRemap = *indexToRemapIt;
+    const auto indexToRemap   = *indexToRemapIt;
     valFwds.erase(indexToRemapIt);
 
     const int backIdx = idx2val.size() - 1;
@@ -80,4 +85,8 @@ public:
   int getRandom() { return idx2val[gen() % idx2val.size()]; }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

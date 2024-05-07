@@ -1,9 +1,11 @@
-#include <string>
 #include <algorithm>
+#include <string>
 
-class Solution {
+class Solution
+{
 public:
-	std::string reversePrefix(std::string word, char ch) {
+  std::string reversePrefix(std::string word, char ch)
+  {
     const auto pos = word.find(ch);
     if (pos != word.npos) {
       reverse(word.begin(), word.begin() + pos + 1);
@@ -13,4 +15,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

@@ -9,9 +9,11 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class Solution {
+class Solution
+{
 public:
-  static int numRescueBoats(std::vector<int> &people, int limit) {
+  static int numRescueBoats(std::vector<int>& people, int limit)
+  {
     // The clue here is that we can always match up the heaviest
     // and lightests person.
     //
@@ -29,11 +31,15 @@ public:
     int ans = 0;
     for (; lo <= hi; ans++) {
       if (people[lo] + people[hi--] <= limit)
-        lo++;
+	lo++;
     }
 
     return ans;
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

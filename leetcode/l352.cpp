@@ -1,10 +1,12 @@
-#include <vector>
 #include <cstdint>
+#include <vector>
 
-class SummaryRanges {
+class SummaryRanges
+{
   std::vector<std::pair<int, int>> ranges_;
 
-  void merge() {
+  void merge()
+  {
     if (ranges_.size() < 2)
       return;
 
@@ -12,13 +14,13 @@ class SummaryRanges {
     for (auto i = ranges_.size() - 1; 0 < i; i--) {
       auto ii = i - 1;
 
-      auto &[al, ar] = ranges_[ii];
-      auto &[bl, br] = ranges_[i];
+      auto& [al, ar] = ranges_[ii];
+      auto& [bl, br] = ranges_[i];
 
       if (ar + 1 == bl) {
-        ar = br;
+	ar = br;
 
-        ranges_.erase(ranges_.begin() + static_cast<std::ptrdiff_t>(i));
+	ranges_.erase(ranges_.begin() + static_cast<std::ptrdiff_t>(i));
       }
     }
   }
@@ -26,7 +28,8 @@ class SummaryRanges {
 public:
   SummaryRanges() {}
 
-  void addNum(int value) {
+  void addNum(int value)
+  {
     // ok, let's search for this.
     if (ranges_.empty())
       ranges_.emplace_back(value, value);
@@ -36,18 +39,18 @@ public:
     std::size_t R = ranges_.size();
 
     while (L + 1 < R) {
-      const auto C = (L + R) / 2;
-      const auto &[l, r] = ranges_[C];
+      const auto C       = (L + R) / 2;
+      const auto& [l, r] = ranges_[C];
 
       if (value < l) {
-        R = C;
+	R = C;
       } else {
-        L = C;
+	L = C;
       }
     }
 
     // we now know where will insert the ranges.
-    const auto &[l, r] = ranges_[L];
+    const auto& [l, r] = ranges_[L];
     // let's see if we are inside the data range.
     if (l <= value && value <= r) {
       return;
@@ -55,18 +58,19 @@ public:
 
     // ok, let's see where we should insert.
     if (value < l) {
-      ranges_.insert(ranges_.begin() + static_cast<std::ptrdiff_t>(L), {value, value});
+      ranges_.insert(ranges_.begin() + static_cast<std::ptrdiff_t>(L), { value, value });
     } else {
-      ranges_.insert(ranges_.begin() + static_cast<std::ptrdiff_t>(R), {value, value});
+      ranges_.insert(ranges_.begin() + static_cast<std::ptrdiff_t>(R), { value, value });
     }
 
     merge();
   }
 
-  std::vector<std::vector<int>> getIntervals() {
+  std::vector<std::vector<int>> getIntervals()
+  {
     std::vector<std::vector<int>> ans;
-    for (const auto &[l, r] : ranges_)
-      ans.push_back({l, r});
+    for (const auto& [l, r] : ranges_)
+      ans.push_back({ l, r });
 
     return ans;
   }
@@ -79,4 +83,8 @@ public:
  * vector<vector<int>> param_2 = obj->getIntervals();
  */
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

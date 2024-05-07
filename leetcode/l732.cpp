@@ -8,14 +8,16 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class MyCalendarThree {
+class MyCalendarThree
+{
 public:
-  std::map<int, int> mp = {{-1, 0}, {1000000001, 0}};
-  int maxans = 0;
+  std::map<int, int> mp = { { -1, 0 }, { 1000000001, 0 } };
+  int maxans            = 0;
 
-  int book(int start, int end) {
+  int book(int start, int end)
+  {
     const auto [it_start, ins_start] = mp.emplace(start, 0);
-    const auto [it_end, ins_end] = mp.emplace(end, 0);
+    const auto [it_end, ins_end]     = mp.emplace(end, 0);
     if (ins_start) {
       it_start->second = std::prev(it_start)->second;
     }
@@ -33,4 +35,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

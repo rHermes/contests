@@ -11,10 +11,13 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class Solution {
+class Solution
+{
 public:
-  static int jobScheduling(const std::vector<int> &startTime, const std::vector<int> &endTime,
-                           const std::vector<int> &profit) {
+  static int jobScheduling(const std::vector<int>& startTime,
+                           const std::vector<int>& endTime,
+                           const std::vector<int>& profit)
+  {
 
     std::vector<int> indexes(startTime.size());
     for (int i = 0; i < static_cast<int>(indexes.size()); i++)
@@ -30,12 +33,12 @@ public:
 
     for (const auto idx : indexes) {
       // No because of the way we are processing them.
-      auto cit = best.lower_bound(endTime[idx]);
-      auto kit = best.lower_bound(startTime[idx]);
+      auto cit         = best.lower_bound(endTime[idx]);
+      auto kit         = best.lower_bound(startTime[idx]);
       const auto score = profit[idx];
 
       if (kit->second < cit->second + score) {
-        best[startTime[idx]] = cit->second + score;
+	best[startTime[idx]] = cit->second + score;
       }
     }
 
@@ -43,4 +46,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

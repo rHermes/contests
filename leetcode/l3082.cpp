@@ -3,10 +3,12 @@
 
 inline constexpr int MODN = 1000000007;
 
-class Solution {
+class Solution
+{
 public:
   std::map<std::pair<int, int>, int> contribs;
-  int getAnswer(const std::vector<int> &nums, const int k, const int curSum, const int curPos) {
+  int getAnswer(const std::vector<int>& nums, const int k, const int curSum, const int curPos)
+  {
     if (curPos == static_cast<int>(nums.size()))
       return curSum == k;
 
@@ -27,7 +29,11 @@ public:
     return answer;
   }
 
-  int sumOfPower(std::vector<int> &nums, int k) { return getAnswer(nums, k, 0, 0); }
+  int sumOfPower(std::vector<int>& nums, int k) { return getAnswer(nums, k, 0, 0); }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

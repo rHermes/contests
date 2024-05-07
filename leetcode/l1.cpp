@@ -2,14 +2,16 @@
 #include <unordered_map>
 #include <vector>
 
-class Solution {
+class Solution
+{
 public:
-  std::vector<int> twoSum(std::vector<int> &nums, int target) {
+  std::vector<int> twoSum(std::vector<int>& nums, int target)
+  {
     std::unordered_map<int, int> seen;
     for (int i = 0; i < static_cast<int>(nums.size()); i++) {
       const auto n = nums[i];
       if (seen.count(target - n))
-        return {i, seen[target - n]};
+	return { i, seen[target - n] };
 
       seen.emplace(n, i);
     }
@@ -18,4 +20,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

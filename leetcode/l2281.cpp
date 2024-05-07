@@ -2,9 +2,11 @@
 #include <iostream>
 #include <vector>
 
-class Solution {
+class Solution
+{
 public:
-  static int totalStrength(const std::vector<int> &strength) {
+  static int totalStrength(const std::vector<int>& strength)
+  {
     constexpr std::int64_t MOD = 1000000007;
 
     // Let's create a utopia people.
@@ -16,11 +18,11 @@ public:
     for (int i = 0; i < N; i++) {
       const auto str = strength[i];
       while (!stk.empty() && str <= stk.back().second) {
-        stk.pop_back();
+	stk.pop_back();
       }
 
       if (!stk.empty()) {
-        left[i] = stk.back().first;
+	left[i] = stk.back().first;
       }
 
       stk.emplace_back(i, str);
@@ -31,11 +33,11 @@ public:
     for (int i = N - 1; 0 <= i; i--) {
       const auto str = strength[i];
       while (!stk.empty() && str < stk.back().second) {
-        stk.pop_back();
+	stk.pop_back();
       }
 
       if (!stk.empty()) {
-        right[i] = stk.back().first;
+	right[i] = stk.back().first;
       }
 
       stk.emplace_back(i, str);
@@ -64,7 +66,7 @@ public:
 
       // Every subsequence involving us has this.
       const std::int64_t totSum = (positiveParts - negativeParts + MOD) % MOD;
-      ans = ans + (totSum * strength[i]) % MOD;
+      ans                       = ans + (totSum * strength[i]) % MOD;
       ans %= MOD;
     }
 
@@ -79,4 +81,8 @@ static const auto optimize = []() {
   return 0;
 }();
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

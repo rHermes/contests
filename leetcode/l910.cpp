@@ -2,9 +2,11 @@
 #include <iostream>
 #include <vector>
 
-class Solution {
+class Solution
+{
 public:
-  static int smallestRangeII(std::vector<int> &nums, int k) {
+  static int smallestRangeII(std::vector<int>& nums, int k)
+  {
     if (nums.size() <= 1)
       return 0;
 
@@ -32,7 +34,7 @@ public:
     // Now, we can compare that two our current
 
     for (std::size_t i = 1; i < nums.size(); i++) {
-      const int prevUp = nums[i - 1] + k;
+      const int prevUp   = nums[i - 1] + k;
       const int thisDown = nums[i] - k;
 
       const int maxNow = std::max(prevUp, maxRight);
@@ -52,4 +54,8 @@ static const auto optimize = []() {
   return 0;
 }();
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

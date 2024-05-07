@@ -2,64 +2,70 @@
 #include <vector>
 
 static auto _ = []() {
-	std::ios::sync_with_stdio(false);
-	std::cin.tie(nullptr);
-	std::cout.tie(nullptr);
-	return nullptr;
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  std::cout.tie(nullptr);
+  return nullptr;
 }();
 
-class Solution {
+class Solution
+{
 public:
-	static int numIslands(std::vector<std::vector<char>>& grid) {
-		const std::size_t M = grid.size();
-		const std::size_t N = grid[0].size();
+  static int numIslands(std::vector<std::vector<char>>& grid)
+  {
+    const std::size_t M = grid.size();
+    const std::size_t N = grid[0].size();
 
-		int ans = 0;
-	
-		// we reuse the queues to minimize queues.
-		std::vector<std::pair<std::size_t, std::size_t>> Q;
+    int ans = 0;
 
-		for (std::size_t origY = 0; origY < M; origY++) {
-			for (std::size_t origX = 0; origX < N; origX++) {
-				if (grid[origY][origX] == '0')
-					continue;
+    // we reuse the queues to minimize queues.
+    std::vector<std::pair<std::size_t, std::size_t>> Q;
 
-				grid[origY][origX] = '0';
+    for (std::size_t origY = 0; origY < M; origY++) {
+      for (std::size_t origX = 0; origX < N; origX++) {
+	if (grid[origY][origX] == '0')
+	  continue;
 
-				ans++;
+	grid[origY][origX] = '0';
 
-				Q.clear();
-				Q.emplace_back(origY, origX);
+	ans++;
 
-				while (!Q.empty()) {
-					const auto [y, x] = Q.back();
-					Q.pop_back();
+	Q.clear();
+	Q.emplace_back(origY, origX);
 
-					if (0 < y && grid[y - 1][x] == '1') {
-						grid[y - 1][x] = '0';
-						Q.emplace_back(y - 1, x);
-					}
+	while (!Q.empty()) {
+	  const auto [y, x] = Q.back();
+	  Q.pop_back();
 
-					if (y < M - 1 && grid[y + 1][x] == '1') {
-						grid[y + 1][x] = '0';
-						Q.emplace_back(y + 1, x);
-					}
+	  if (0 < y && grid[y - 1][x] == '1') {
+	    grid[y - 1][x] = '0';
+	    Q.emplace_back(y - 1, x);
+	  }
 
-					if (0 < x && grid[y][x - 1] == '1') {
-						grid[y][x - 1] = '0';
-						Q.emplace_back(y, x - 1);
-					}
+	  if (y < M - 1 && grid[y + 1][x] == '1') {
+	    grid[y + 1][x] = '0';
+	    Q.emplace_back(y + 1, x);
+	  }
 
-					if (x < N - 1 && grid[y][x + 1] == '1') {
-						grid[y][x + 1] = '0';
-						Q.emplace_back(y, x + 1);
-					}
-				}
-			}
-		}
+	  if (0 < x && grid[y][x - 1] == '1') {
+	    grid[y][x - 1] = '0';
+	    Q.emplace_back(y, x - 1);
+	  }
 
-		return ans;
+	  if (x < N - 1 && grid[y][x + 1] == '1') {
+	    grid[y][x + 1] = '0';
+	    Q.emplace_back(y, x + 1);
+	  }
 	}
+      }
+    }
+
+    return ans;
+  }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

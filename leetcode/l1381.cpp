@@ -2,19 +2,22 @@
 #include <iostream>
 #include <vector>
 
-class CustomStack {
+class CustomStack
+{
   std::size_t cap_;
   std::vector<int> data_;
 
 public:
   CustomStack(int maxSize) : cap_(static_cast<std::size_t>(maxSize)) { data_.reserve(cap_); }
 
-  void push(int x) {
+  void push(int x)
+  {
     if (data_.size() < cap_)
       data_.emplace_back(x);
   }
 
-  int pop() {
+  int pop()
+  {
     if (data_.empty())
       return -1;
 
@@ -23,7 +26,8 @@ public:
     return a;
   }
 
-  void increment(int k, int val) {
+  void increment(int k, int val)
+  {
     auto level = std::min(static_cast<std::size_t>(k), data_.size());
     for (std::size_t i = 0; i < level; i++)
       data_[i] += val;
@@ -45,4 +49,8 @@ static const auto optimize = []() {
   return 0;
 }();
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

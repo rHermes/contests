@@ -2,12 +2,13 @@
 /**
  * Definition for singly-linked list.
  */
-struct ListNode {
+struct ListNode
+{
   int val;
-  ListNode *next;
+  ListNode* next;
   ListNode() : val(0), next(nullptr) {}
   ListNode(int x) : val(x), next(nullptr) {}
-  ListNode(int x, ListNode *next) : val(x), next(next) {}
+  ListNode(int x, ListNode* next) : val(x), next(next) {}
 };
 
 inline const auto optimize = []() {
@@ -17,38 +18,41 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class Solution {
+class Solution
+{
 private:
-  static ListNode *reverse(ListNode *head) {
-    ListNode *prev = nullptr;
+  static ListNode* reverse(ListNode* head)
+  {
+    ListNode* prev = nullptr;
 
     while (head) {
-      auto next = head->next;
+      auto next  = head->next;
       head->next = prev;
-      prev = head;
-      head = next;
+      prev       = head;
+      head       = next;
     }
 
     return prev;
   }
 
 public:
-  static ListNode *doubleIt(ListNode *head) {
+  static ListNode* doubleIt(ListNode* head)
+  {
     head = reverse(head);
 
-    ListNode *prev = nullptr;
+    ListNode* prev = nullptr;
 
     int carry = 0;
     while (head) {
       auto next = head->next;
-      int sum = carry + 2 * head->val;
+      int sum   = carry + 2 * head->val;
 
       head->val = sum % 10;
-      carry = sum / 10;
+      carry     = sum / 10;
 
       head->next = prev;
-      prev = head;
-      head = next;
+      prev       = head;
+      head       = next;
     }
 
     head = prev;
@@ -61,4 +65,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

@@ -1,16 +1,19 @@
 #include <array>
-#include <string>
 #include <cstdint>
+#include <string>
 
-class Solution {
+class Solution
+{
 public:
-  int largestVariance(const std::string &s) {
+  int largestVariance(const std::string& s)
+  {
 
     // Ok, we are creating a info struct.
-    struct Info {
-      std::int16_t major{0};
-      std::int16_t minor{0};
-      bool flag{false};
+    struct Info
+    {
+      std::int16_t major{ 0 };
+      std::int16_t minor{ 0 };
+      bool flag{ false };
     };
 
     // Making a wrapped array.
@@ -21,38 +24,38 @@ public:
       const int c = letter - 'a';
 
       // Update all infos where c is a minor.
-      for (int i = 0; auto &info : DP) {
-        if (c == i++)
-          continue;
+      for (int i = 0; auto& info : DP) {
+	if (c == i++)
+	  continue;
 
-        // ok, so we are using the C as the major now.
-        auto &[major, minor, flag] = info[c];
+	// ok, so we are using the C as the major now.
+	auto& [major, minor, flag] = info[c];
 
-        // Flag here indicate that we come from a negative state.
-        if (flag) {
-          minor--;
-          flag = false;
-        }
+	// Flag here indicate that we come from a negative state.
+	if (flag) {
+	  minor--;
+	  flag = false;
+	}
 
-        minor++;
-        if (major < minor) {
-          major = 0;
-          minor = 1;
-          flag = true;
-        } else {
-          ans = std::max(ans, major - minor);
-        }
+	minor++;
+	if (major < minor) {
+	  major = 0;
+	  minor = 1;
+	  flag  = true;
+	} else {
+	  ans = std::max(ans, major - minor);
+	}
       }
 
       // Update C info, where c is the major
-      for (int i = 0; auto &[major, minor, flag] : DP[c]) {
-        if (c == i++)
-          continue;
+      for (int i = 0; auto& [major, minor, flag] : DP[c]) {
+	if (c == i++)
+	  continue;
 
-        major++;
-        if (minor != 0) {
-          ans = std::max(ans, major - minor);
-        }
+	major++;
+	if (minor != 0) {
+	  ans = std::max(ans, major - minor);
+	}
       }
     }
 
@@ -60,4 +63,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

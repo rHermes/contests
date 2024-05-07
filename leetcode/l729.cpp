@@ -8,16 +8,18 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class MyCalendar {
+class MyCalendar
+{
 public:
   std::map<int, int> periods;
 
-  bool book(int start, int end) {
+  bool book(int start, int end)
+  {
     auto it = periods.upper_bound(start);
     if (it != periods.begin()) {
       auto p = std::prev(it);
       if (start < p->second)
-        return false;
+	return false;
     }
 
     if (it != periods.end() && it->first < end)
@@ -28,4 +30,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

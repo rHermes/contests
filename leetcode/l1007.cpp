@@ -2,9 +2,11 @@
 #include <cstddef>
 #include <vector>
 
-class Solution {
+class Solution
+{
 public:
-  int minDominoRotations(std::vector<int> &tops, std::vector<int> &bottoms) {
+  int minDominoRotations(std::vector<int>& tops, std::vector<int>& bottoms)
+  {
     std::size_t N = tops.size();
 
     std::bitset<6> selector;
@@ -18,17 +20,17 @@ public:
       selector &= mask;
 
       if (selector.count() == 0)
-        return -1;
+	return -1;
     }
 
     // std::cout << selector << std::endl;
     // We know there will be an answer here.
     std::size_t j = 0;
     for (; j < 6; j++) {
-      if (selector[j]){
-        break;
-			}
-		}
+      if (selector[j]) {
+	break;
+      }
+    }
 
     std::size_t topRow = 0;
     std::size_t common = 0;
@@ -40,4 +42,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

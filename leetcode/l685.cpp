@@ -1,10 +1,12 @@
-#include <vector>
-#include <cstdint>
 #include <array>
+#include <cstdint>
+#include <vector>
 
-class Solution {
+class Solution
+{
 public:
-	std::vector<int> findRedundantDirectedConnection(std::vector<std::vector<int>> &edges) {
+  std::vector<int> findRedundantDirectedConnection(std::vector<std::vector<int>>& edges)
+  {
     // we can implement this with a dsu also. The main goal now, is that
     // all edges should be part of the same DSU.
 
@@ -15,14 +17,14 @@ public:
     auto parent = [&par](std::size_t x) {
       auto root = x;
       while (par[root] != root)
-        root = par[root];
+	root = par[root];
 
       // ok, now we are in the top level node.
       // we iterate up again, to shorten it.
       while (x != root) {
-        auto temp = x;
-        x = par[x];
-        par[temp] = root;
+	auto temp = x;
+	x         = par[x];
+	par[temp] = root;
       }
 
       return x;
@@ -33,14 +35,14 @@ public:
       b = parent(b);
 
       if (a == b)
-        return false;
+	return false;
 
       if (rank[a] < rank[b]) {
-        par[a] = b;
+	par[a] = b;
       } else {
-        par[b] = a;
-        if (rank[a] == rank[b])
-          rank[a]++;
+	par[b] = a;
+	if (rank[a] == rank[b])
+	  rank[a]++;
       }
       return true;
     };
@@ -54,14 +56,14 @@ public:
 
       // at this point, we are just investigating
       if (par[dst] == N) {
-        par[dst] = src;
+	par[dst] = src;
       } else {
-        // ok we have a possible candidate here.
-        candidates[0] = {static_cast<int>(par[dst] + 1), static_cast<int>(dst + 1)};
-        candidates[1] = edges[i];
-        // now we mark this edge, as it should not
-        // be added.
-        edges[i][1] = static_cast<int>(N+1);
+	// ok we have a possible candidate here.
+	candidates[0] = { static_cast<int>(par[dst] + 1), static_cast<int>(dst + 1) };
+	candidates[1] = edges[i];
+	// now we mark this edge, as it should not
+	// be added.
+	edges[i][1] = static_cast<int>(N + 1);
       }
     }
 
@@ -77,13 +79,13 @@ public:
       const auto dst = static_cast<std::size_t>(edges[i][1] - 1);
 
       if (dst == N)
-        continue;
+	continue;
 
       if (!merge(src, dst)) {
-        if (candidates[0].empty())
-          return edges[i];
-        else
-          return candidates[0];
+	if (candidates[0].empty())
+	  return edges[i];
+	else
+	  return candidates[0];
       }
     }
 
@@ -93,4 +95,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

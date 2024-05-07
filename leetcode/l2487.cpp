@@ -2,12 +2,13 @@
 /**
  * Definition for singly-linked list.
  */
-struct ListNode {
+struct ListNode
+{
   int val;
-  ListNode *next;
+  ListNode* next;
   ListNode() : val(0), next(nullptr) {}
   ListNode(int x) : val(x), next(nullptr) {}
-  ListNode(int x, ListNode *next) : val(x), next(next) {}
+  ListNode(int x, ListNode* next) : val(x), next(next) {}
 };
 inline const auto optimize = []() {
   std::ios::sync_with_stdio(false);
@@ -16,9 +17,11 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class Solution {
+class Solution
+{
 public:
-  static ListNode *removeNodes(ListNode *head) {
+  static ListNode* removeNodes(ListNode* head)
+  {
     if (!head)
       return nullptr;
 
@@ -36,4 +39,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

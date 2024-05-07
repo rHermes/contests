@@ -12,25 +12,28 @@
  */
 #include <cstddef>
 
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {}
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
-right(right) {}
+struct TreeNode
+{
+  int val;
+  TreeNode* left;
+  TreeNode* right;
+  TreeNode() : val(0), left(nullptr), right(nullptr) {}
+  TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+  TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
-class Solution {
+class Solution
+{
 
-  struct NodeStat {
-    std::size_t numNodes{0};
-    std::size_t sumNodes{0};
-    std::size_t numMatches{0};
+  struct NodeStat
+  {
+    std::size_t numNodes{ 0 };
+    std::size_t sumNodes{ 0 };
+    std::size_t numMatches{ 0 };
   };
 
-  [[nodiscard]] NodeStat topDown(TreeNode *root) {
+  [[nodiscard]] NodeStat topDown(TreeNode* root)
+  {
     NodeStat ret;
     ret.numNodes = 1;
     ret.sumNodes += static_cast<std::size_t>(root->val);
@@ -57,11 +60,16 @@ class Solution {
   }
 
 public:
-  int averageOfSubtree(TreeNode *root) {
+  int averageOfSubtree(TreeNode* root)
+  {
     const auto ans = topDown(root);
 
     return static_cast<int>(ans.numMatches);
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

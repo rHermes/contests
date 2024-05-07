@@ -10,4 +10,4 @@ AlignConsecutiveShortCaseStatements:
 ColumnLimit: 120
 FixNamespaceComments: true
 PackConstructorInitializers: CurrentLine
-
+UseTab: ForIndentation

@@ -8,15 +8,17 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class Solution {
+class Solution
+{
 public:
-  static int subarraySum(const std::vector<int> &nums, int k) {
+  static int subarraySum(const std::vector<int>& nums, int k)
+  {
     // yeah, I got it. So we store the PSAs. Because what we are really
     // asking at this point is: Is there a psa[x] I can subtract from my
     // psa[y] that will be k.
-    int ans = 0;
+    int ans   = 0;
     int accum = 0;
-    std::unordered_map<int, int> seen{{0, 1}};
+    std::unordered_map<int, int> seen{ { 0, 1 } };
 
     for (const auto n : nums) {
       accum += n;
@@ -25,7 +27,7 @@ public:
       // with useless values, that we haven't seen. In cases with a lot
       // of misses, this can save significant time.
       if (auto it = seen.find(accum - k); it != seen.end()) {
-        ans += it->second;
+	ans += it->second;
       }
 
       seen[accum]++;
@@ -35,4 +37,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

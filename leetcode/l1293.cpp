@@ -8,9 +8,11 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class Solution {
+class Solution
+{
 public:
-  static int shortestPath(const std::vector<std::vector<int>> &grid, int k) {
+  static int shortestPath(const std::vector<std::vector<int>>& grid, int k)
+  {
     const int ROWS = grid.size();
     const int COLS = grid[0].size();
 
@@ -21,13 +23,13 @@ public:
 
     const auto addIt = [&](const int y, const int x, const int l) {
       if (l <= left[y * COLS + x])
-        return;
+	return;
 
       if (grid[y][x]) {
-        if (l && left[y * COLS + x] < l - 1)
-          next.emplace_back(y, x, l - 1);
+	if (l && left[y * COLS + x] < l - 1)
+	  next.emplace_back(y, x, l - 1);
       } else {
-        next.emplace_back(y, x, l);
+	next.emplace_back(y, x, l);
       }
     };
 
@@ -37,26 +39,26 @@ public:
     while (!Q.empty()) {
       next.clear();
 
-      for (const auto &[y, x, l] : Q) {
-        if (l <= left[y * COLS + x])
-          continue;
+      for (const auto& [y, x, l] : Q) {
+	if (l <= left[y * COLS + x])
+	  continue;
 
-        left[y * COLS + x] = l;
+	left[y * COLS + x] = l;
 
-        if (y == ROWS - 1 && x == COLS - 1)
-          return steps;
+	if (y == ROWS - 1 && x == COLS - 1)
+	  return steps;
 
-        if (0 < y)
-          addIt(y - 1, x, l);
+	if (0 < y)
+	  addIt(y - 1, x, l);
 
-        if (y < ROWS - 1)
-          addIt(y + 1, x, l);
+	if (y < ROWS - 1)
+	  addIt(y + 1, x, l);
 
-        if (0 < x)
-          addIt(y, x - 1, l);
+	if (0 < x)
+	  addIt(y, x - 1, l);
 
-        if (x < COLS - 1)
-          addIt(y, x + 1, l);
+	if (x < COLS - 1)
+	  addIt(y, x + 1, l);
       }
 
       std::swap(Q, next);
@@ -67,4 +69,8 @@ public:
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

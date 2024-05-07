@@ -57,3 +57,9 @@ public:
     return static_cast<double>(sum) / num;
   }
 };
+
+int
+main()
+{
+  return 0;
+}

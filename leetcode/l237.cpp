@@ -4,16 +4,19 @@
 #include <iostream>
 #include <utility>
 
-struct ListNode {
+struct ListNode
+{
   int val;
-  ListNode *next;
+  ListNode* next;
   ListNode(int x) : val(x), next(NULL) {}
 };
 
-class Solution {
+class Solution
+{
 public:
-  static void deleteNode(ListNode *node) {
-    node->val = node->next->val;
+  static void deleteNode(ListNode* node)
+  {
+    node->val  = node->next->val;
     node->next = std::exchange(node->next->next, nullptr);
   }
 };
@@ -25,4 +28,8 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}
