@@ -22,14 +22,14 @@ public:
       const auto LLcut = (LL == 0) ? 0 : cuts[LL - 1];
 
       for (std::size_t RR = LL + 2; RR < N; RR++) {
-	auto ans = std::numeric_limits<std::int32_t>::max();
+        auto ans = std::numeric_limits<std::int32_t>::max();
 
-	for (std::size_t PL = LL + 1; PL < RR; PL++) {
-	  ans = std::min(ans, dp[LL * N + PL] + dp[PL * N + RR]);
-	}
+        for (std::size_t PL = LL + 1; PL < RR; PL++) {
+          ans = std::min(ans, dp[LL * N + PL] + dp[PL * N + RR]);
+        }
 
-	const auto RRcut = (RR == N - 1) ? n : cuts[RR - 1];
-	dp[LL * N + RR]  = ans + (RRcut - LLcut);
+        const auto RRcut = (RR == N - 1) ? n : cuts[RR - 1];
+        dp[LL * N + RR]  = ans + (RRcut - LLcut);
       }
     }
 

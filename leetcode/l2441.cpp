@@ -13,19 +13,19 @@ public:
     int ans = -1;
     for (const auto& num : nums) {
       if (0 <= num) {
-	pos[num] = true;
+        pos[num] = true;
 
-	// we check if the positive is there
-	if (neg[num] && ans < num) {
-	  ans = num;
-	}
+        // we check if the positive is there
+        if (neg[num] && ans < num) {
+          ans = num;
+        }
       } else {
-	const auto flip = -num;
-	neg[flip]       = true;
+        const auto flip = -num;
+        neg[flip]       = true;
 
-	if (pos[flip] && ans < (flip)) {
-	  ans = flip;
-	}
+        if (pos[flip] && ans < (flip)) {
+          ans = flip;
+        }
       }
     }
 

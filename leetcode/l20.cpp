@@ -18,19 +18,19 @@ public:
 
     for (const char c : s) {
       if (c == ')') {
-	if (lol.empty() || lol.top() != '(')
-	  return false;
-	lol.pop();
+        if (lol.empty() || lol.top() != '(')
+          return false;
+        lol.pop();
       } else if (c == '}') {
-	if (lol.empty() || lol.top() != '{')
-	  return false;
-	lol.pop();
+        if (lol.empty() || lol.top() != '{')
+          return false;
+        lol.pop();
       } else if (c == ']') {
-	if (lol.empty() || lol.top() != '[')
-	  return false;
-	lol.pop();
+        if (lol.empty() || lol.top() != '[')
+          return false;
+        lol.pop();
       } else {
-	lol.push(c);
+        lol.push(c);
       }
     }
 

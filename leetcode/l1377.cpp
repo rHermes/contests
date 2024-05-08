@@ -33,22 +33,22 @@ public:
     while (0 < t && !current.empty()) {
       // We process them 1 step at a time.
       for (const auto p : current) {
-	// The root has no parents
-	const auto posNext   = G[p].size() - (p != 0);
-	const auto nextProbs = 1.0 / static_cast<double>(posNext) * prob[p];
+        // The root has no parents
+        const auto posNext   = G[p].size() - (p != 0);
+        const auto nextProbs = 1.0 / static_cast<double>(posNext) * prob[p];
 
-	for (const auto child : G[p]) {
-	  if (visited[child])
-	    continue;
+        for (const auto child : G[p]) {
+          if (visited[child])
+            continue;
 
-	  visited[child] = true;
-	  prob[child]    = nextProbs;
-	  next.push_back(child);
-	}
+          visited[child] = true;
+          prob[child]    = nextProbs;
+          next.push_back(child);
+        }
 
-	// we have jumped past this.
-	if (0 < posNext)
-	  prob[p] = 0;
+        // we have jumped past this.
+        if (0 < posNext)
+          prob[p] = 0;
       }
 
       // swap the current and the next

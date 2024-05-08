@@ -18,9 +18,9 @@ public:
     if (R < SH || C < SW) {
       // we need to check if every square is good.
       for (const auto& row : grid)
-	for (const auto& c : row)
-	  if (c == 0)
-	    return false;
+        for (const auto& c : row)
+          if (c == 0)
+            return false;
 
       return true;
     }
@@ -28,7 +28,7 @@ public:
     std::vector<std::vector<std::int32_t>> psa(R + 1, std::vector<std::int32_t>(C + 1));
     for (std::size_t r = 1; r <= R; r++) {
       for (std::size_t c = 1; c <= C; c++) {
-	psa[r][c] = psa[r - 1][c] + psa[r][c - 1] - psa[r - 1][c - 1] + grid[r - 1][c - 1];
+        psa[r][c] = psa[r - 1][c] + psa[r][c - 1] - psa[r - 1][c - 1] + grid[r - 1][c - 1];
       }
     }
 
@@ -53,39 +53,39 @@ public:
       // We check if we can do a small skip, by testing the range of the
       // stencil
       if (!taken(r, 1, r + SH - 1, C)) {
-	// std::cout << "BIG SKIP" << std::endl;
-	for (std::size_t rm = minR - 1; rm < r - 1 + SH; rm++) {
-	  for (std::size_t cm = 0; cm < C; cm++) {
-	    grid[rm][cm] = 1;
-	  }
-	}
+        // std::cout << "BIG SKIP" << std::endl;
+        for (std::size_t rm = minR - 1; rm < r - 1 + SH; rm++) {
+          for (std::size_t cm = 0; cm < C; cm++) {
+            grid[rm][cm] = 1;
+          }
+        }
 
-	minR = std::max(minR, r + SH - 1);
-	continue;
+        minR = std::max(minR, r + SH - 1);
+        continue;
       }
 
       for (std::size_t c = 1; c <= C - SW + 1; c++) {
-	auto hit = taken(r, c, r + SH - 1, c + SW - 1);
-	if (hit) {
-	  continue;
-	}
+        auto hit = taken(r, c, r + SH - 1, c + SW - 1);
+        if (hit) {
+          continue;
+        }
 
-	minC = std::max(minC, c);
+        minC = std::max(minC, c);
 
-	for (std::size_t rm = minR - 1; rm < r - 1 + SH; rm++) {
-	  for (std::size_t cm = minC - 1; cm < c - 1 + SW; cm++) {
-	    grid[rm][cm] = 1;
-	  }
-	}
-	minC = c - 1 + SW;
+        for (std::size_t rm = minR - 1; rm < r - 1 + SH; rm++) {
+          for (std::size_t cm = minC - 1; cm < c - 1 + SW; cm++) {
+            grid[rm][cm] = 1;
+          }
+        }
+        minC = c - 1 + SW;
       }
     }
 
     // verify that we painted all rows.
     for (const auto& row : grid)
       for (const auto& c : row)
-	if (c == 0)
-	  return false;
+        if (c == 0)
+          return false;
 
     return true;
   }

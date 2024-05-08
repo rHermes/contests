@@ -23,7 +23,7 @@ public:
     std::queue<int> Q;
     for (std::size_t i = 0; i < static_cast<size_t>(n); i++) {
       if (connections[i] == 1) {
-	Q.push(i);
+        Q.push(i);
       }
     }
 
@@ -33,17 +33,17 @@ public:
 
       auto left = Q.size();
       while (0 < left) {
-	const auto node = Q.front();
-	Q.pop();
-	left--;
+        const auto node = Q.front();
+        Q.pop();
+        left--;
 
-	ans.push_back(node);
-	const auto next = G[node];
-	G[next] ^= node;
+        ans.push_back(node);
+        const auto next = G[node];
+        G[next] ^= node;
 
-	if (--connections[next] == 1) {
-	  Q.push(next);
-	}
+        if (--connections[next] == 1) {
+          Q.push(next);
+        }
       }
     }
 

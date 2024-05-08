@@ -18,9 +18,9 @@ public:
 
     while (L + 1 < R) {
       if (height[L] < height[R])
-	L++;
+        L++;
       else
-	R--;
+        R--;
 
       ans = std::max(ans, static_cast<int>(R - L) * std::min(height[L], height[R]));
     }

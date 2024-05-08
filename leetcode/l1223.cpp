@@ -23,24 +23,24 @@ public:
       std::array<T, 6> prevSums{};
       T totalSum = 0;
       for (int num = 0; num < 6; num++) {
-	for (int col = 0; col < COLS; col++) {
-	  prevSums[num] += prev[num * COLS + col];
-	}
-	totalSum += prevSums[num];
-	prevSums[num] %= MODN;
+        for (int col = 0; col < COLS; col++) {
+          prevSums[num] += prev[num * COLS + col];
+        }
+        totalSum += prevSums[num];
+        prevSums[num] %= MODN;
       }
 
       // ok, now then, we must go for each number.
       for (int nextNum = 0; nextNum < 6; nextNum++) {
-	// ok, so how many ways can we come into this with
-	// 0 consecutive i.
-	next[nextNum * COLS] = (totalSum - prevSums[nextNum]) % MODN;
+        // ok, so how many ways can we come into this with
+        // 0 consecutive i.
+        next[nextNum * COLS] = (totalSum - prevSums[nextNum]) % MODN;
 
-	// ok, we have now shown how many ways we can get here from the
-	// others. now we just need to see how many we can get here.
-	for (int col = 1; col < rollMax[nextNum]; col++) {
-	  next[nextNum * COLS + col] = prev[nextNum * COLS + col - 1];
-	}
+        // ok, we have now shown how many ways we can get here from the
+        // others. now we just need to see how many we can get here.
+        for (int col = 1; col < rollMax[nextNum]; col++) {
+          next[nextNum * COLS + col] = prev[nextNum * COLS + col - 1];
+        }
       }
 
       prev = std::move(next);

@@ -19,12 +19,12 @@ public:
     const auto getParent = [&parents](int c) {
       auto root = c;
       while (parents[root] != root)
-	root = parents[root];
+        root = parents[root];
 
       while (parents[c] != root) {
-	auto par   = parents[c];
-	parents[c] = root;
-	c          = par;
+        auto par   = parents[c];
+        parents[c] = root;
+        c          = par;
       }
 
       return root;
@@ -35,15 +35,15 @@ public:
       b = getParent(b);
 
       if (a == b)
-	return false;
+        return false;
 
       if (ranks[a] < ranks[b]) {
-	parents[a] = b;
+        parents[a] = b;
       } else {
-	if (ranks[a] == ranks[b])
-	  ranks[a]++;
+        if (ranks[a] == ranks[b])
+          ranks[a]++;
 
-	parents[b] = a;
+        parents[b] = a;
       }
       return true;
     };
@@ -53,9 +53,9 @@ public:
       const auto bId = pr[1];
 
       if (mergeSets(aId, bId)) {
-	// This was a new connection, so we test.
-	if (getParent(source) == getParent(destination))
-	  return true;
+        // This was a new connection, so we test.
+        if (getParent(source) == getParent(destination))
+          return true;
       }
     }
 

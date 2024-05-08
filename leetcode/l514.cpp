@@ -31,12 +31,12 @@ public:
 
     for (std::size_t i = 1; i < key.size(); i++) {
       for (const auto target : POS[key[i] - 'a']) {
-	int cost = std::numeric_limits<int>::max();
-	for (const auto src : POS[key[i - 1] - 'a']) {
-	  cost = std::min(cost, dist(src, target) + dp[activeRow + src]);
-	}
+        int cost = std::numeric_limits<int>::max();
+        for (const auto src : POS[key[i - 1] - 'a']) {
+          cost = std::min(cost, dist(src, target) + dp[activeRow + src]);
+        }
 
-	dp[otherRow + target] = cost;
+        dp[otherRow + target] = cost;
       }
 
       std::swap(activeRow, otherRow);

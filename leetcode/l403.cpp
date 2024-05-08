@@ -35,18 +35,18 @@ public:
       // if they are true, and we add a bit of suspense.
       std::size_t sum = 0;
       for (std::size_t j = ii; j < diffs.size(); j++) {
-	sum += diffs[j];
+        sum += diffs[j];
 
-	if (2000 < sum)
-	  break;
+        if (2000 < sum)
+          break;
 
-	const auto value = dp[j + 1][sum];
-	if (!value)
-	  continue;
+        const auto value = dp[j + 1][sum];
+        if (!value)
+          continue;
 
-	dp[ii][sum - 1] = true;
-	dp[ii][sum]     = true;
-	dp[ii][sum + 1] = true;
+        dp[ii][sum - 1] = true;
+        dp[ii][sum]     = true;
+        dp[ii][sum + 1] = true;
       }
     }
     return dp[0][0];

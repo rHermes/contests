@@ -19,7 +19,7 @@ public:
       const auto hi  = std::min(best.size(), static_cast<std::size_t>(c + k + 1));
 
       for (std::size_t i = low; i < hi; i++) {
-	best[i] = std::max(best[i], cur);
+        best[i] = std::max(best[i], cur);
       }
     }
     return *std::max_element(best.cbegin(), best.cend());

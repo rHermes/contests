@@ -25,19 +25,19 @@ public:
       auto found = needed[static_cast<std::size_t>(s[r] - 'A')]++;
       r++;
       if (found < 0)
-	count--;
+        count--;
 
       while (count == 0) {
-	auto found = needed[static_cast<std::size_t>(s[l] - 'A')]--;
-	l++;
-	if (found == 0) {
-	  count++;
+        auto found = needed[static_cast<std::size_t>(s[l] - 'A')]--;
+        l++;
+        if (found == 0) {
+          count++;
 
-	  if ((r - l + 1) < minLen) {
-	    startIndex = l - 1;
-	    minLen     = r - l + 1;
-	  }
-	}
+          if ((r - l + 1) < minLen) {
+            startIndex = l - 1;
+            minLen     = r - l + 1;
+          }
+        }
       }
     }
 

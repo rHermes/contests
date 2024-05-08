@@ -37,10 +37,10 @@ public:
       auto& row = grid[i];
 
       for (std::size_t col = 0; col < N; col++) {
-	if (col == prevMin.ai)
-	  curMin.push(col, row[col] + prevMin.b);
-	else
-	  curMin.push(col, row[col] + prevMin.a);
+        if (col == prevMin.ai)
+          curMin.push(col, row[col] + prevMin.b);
+        else
+          curMin.push(col, row[col] + prevMin.a);
       }
 
       prevMin = std::move(curMin);

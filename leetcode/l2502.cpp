@@ -18,9 +18,9 @@ class Allocator
       auto& [al, ar] = freeBlocks_[ii];
       auto& [bl, br] = freeBlocks_[i];
       if (ar == bl) {
-	ar = br;
+        ar = br;
 
-	freeBlocks_.erase(freeBlocks_.begin() + static_cast<std::ptrdiff_t>(i));
+        freeBlocks_.erase(freeBlocks_.begin() + static_cast<std::ptrdiff_t>(i));
       }
     }
   }
@@ -36,11 +36,11 @@ public:
       auto& [l, r] = *it;
 
       if (sz <= (r - l)) {
-	takenBlocks_[mID].emplace_back(l, l + sz);
-	auto old = l;
-	l += sz;
+        takenBlocks_[mID].emplace_back(l, l + sz);
+        auto old = l;
+        l += sz;
 
-	return static_cast<int>(old);
+        return static_cast<int>(old);
       }
     }
 

@@ -17,8 +17,8 @@ public:
     constexpr auto toNum = [](const std::string& t) {
       std::uint32_t idx = 0;
       for (const auto c : t) {
-	idx *= 10;
-	idx += c - '0';
+        idx *= 10;
+        idx += c - '0';
       }
 
       return idx;
@@ -27,8 +27,8 @@ public:
     constexpr auto toNumA = [](AR t) {
       std::uint32_t idx = 0;
       for (const auto c : t) {
-	idx *= 10;
-	idx += c;
+        idx *= 10;
+        idx += c;
       }
 
       return idx;
@@ -38,8 +38,8 @@ public:
       AR a{};
 
       for (std::size_t i = 0; i < 4; i++) {
-	a[3 - i] = c % 10;
-	c /= 10;
+        a[3 - i] = c % 10;
+        c /= 10;
       };
 
       return a;
@@ -51,8 +51,8 @@ public:
     const auto distTarget = [aTarget](AR other) {
       uint8_t dist = 0;
       for (std::size_t i = 0; i < 4; i++) {
-	auto [a, b] = std::minmax(aTarget[i], other[i]);
-	dist += std::min(b - a, a + (10 - b));
+        auto [a, b] = std::minmax(aTarget[i], other[i]);
+        dist += std::min(b - a, a + (10 - b));
       }
       return dist;
     };
@@ -74,53 +74,53 @@ public:
       Q.pop();
 
       if (seen[cur])
-	continue;
+        continue;
 
       seen[cur] = true;
 
       if (cur == nTarget)
-	return steps;
+        return steps;
 
       auto curA = fromNum(cur);
 
       for (std::size_t i = 0; i < 4; i++) {
-	// we go forward or downwards.
-	if (curA[i] == 0) {
-	  curA[i] = 9;
+        // we go forward or downwards.
+        if (curA[i] == 0) {
+          curA[i] = 9;
 
-	  const auto lel = toNumA(curA);
-	  if (!seen[lel]) {
-	    Q.emplace(steps + distTarget(curA) + 1, steps + 1, lel);
-	  }
+          const auto lel = toNumA(curA);
+          if (!seen[lel]) {
+            Q.emplace(steps + distTarget(curA) + 1, steps + 1, lel);
+          }
 
-	  curA[i] = 0;
-	} else {
-	  curA[i]--;
-	  const auto lel = toNumA(curA);
-	  if (!seen[lel]) {
-	    Q.emplace(steps + distTarget(curA) + 1, steps + 1, lel);
-	  }
-	  curA[i]++;
-	}
+          curA[i] = 0;
+        } else {
+          curA[i]--;
+          const auto lel = toNumA(curA);
+          if (!seen[lel]) {
+            Q.emplace(steps + distTarget(curA) + 1, steps + 1, lel);
+          }
+          curA[i]++;
+        }
 
-	// we go forward or downwards.
-	if (curA[i] == 9) {
-	  curA[i] = 0;
+        // we go forward or downwards.
+        if (curA[i] == 9) {
+          curA[i] = 0;
 
-	  const auto lel = toNumA(curA);
-	  if (!seen[lel]) {
-	    Q.emplace(steps + distTarget(curA) + 1, steps + 1, lel);
-	  }
+          const auto lel = toNumA(curA);
+          if (!seen[lel]) {
+            Q.emplace(steps + distTarget(curA) + 1, steps + 1, lel);
+          }
 
-	  curA[i] = 9;
-	} else {
-	  curA[i]++;
-	  const auto lel = toNumA(curA);
-	  if (!seen[lel]) {
-	    Q.emplace(steps + distTarget(curA) + 1, steps + 1, lel);
-	  }
-	  curA[i]--;
-	}
+          curA[i] = 9;
+        } else {
+          curA[i]++;
+          const auto lel = toNumA(curA);
+          if (!seen[lel]) {
+            Q.emplace(steps + distTarget(curA) + 1, steps + 1, lel);
+          }
+          curA[i]--;
+        }
       }
     }
 

@@ -28,13 +28,13 @@ public:
     // we increase all keys between these two
     for (auto it = it_start; it != it_end; it++) {
       if (2 != it->second)
-	continue;
+        continue;
 
       if (ins_start)
-	mp.erase(it_start);
+        mp.erase(it_start);
 
       if (ins_end)
-	mp.erase(it_end);
+        mp.erase(it_end);
       return false;
     }
 

@@ -39,14 +39,14 @@ public:
     for (std::size_t i = 0; i < indexes.size(); i++) {
       const auto idx = indexes[i];
       if (out.count(keyName[idx]))
-	continue;
+        continue;
 
       auto [it, itOK]        = db.emplace(keyName[idx], std::forward_as_tuple<int, int, int>(-100, -100, -100));
       const auto [ign, b, c] = it->second;
       const auto d           = parseTime(keyTime[idx]);
 
       if ((d - b) <= 60) {
-	out.emplace(it->first);
+        out.emplace(it->first);
       }
 
       it->second = std::tie(b, c, d);

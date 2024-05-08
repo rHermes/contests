@@ -31,7 +31,7 @@ public:
     int ans = 0;
     for (; lo <= hi; ans++) {
       if (people[lo] + people[hi--] <= limit)
-	lo++;
+        lo++;
     }
 
     return ans;

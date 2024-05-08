@@ -21,7 +21,7 @@ public:
     for (std::size_t r = 0; r < s.size(); r++) {
       const unsigned char c = s[r];
       while (seen[c]) {
-	seen[s[l++]] = false;
+        seen[s[l++]] = false;
       }
       seen[c] = true;
 

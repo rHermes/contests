@@ -36,13 +36,13 @@ longestValidParentheses(std::string s)
       // if there is only one value left, it is the sentinel value, meaning the last
       // spot we saw a ')'
       if (stk.size() == 1) {
-	stk.top() = ii;
+        stk.top() = ii;
       } else {
-	// we remove the current brace, and we now know that everything until the
-	// next value in line is valid. This is why we don't have the usual + 1 here,
-	// because we don't count the brace we are executing against.
-	stk.pop();
-	ans = std::max(ans, ii - stk.top());
+        // we remove the current brace, and we now know that everything until the
+        // next value in line is valid. This is why we don't have the usual + 1 here,
+        // because we don't count the brace we are executing against.
+        stk.pop();
+        ans = std::max(ans, ii - stk.top());
       }
     }
   }

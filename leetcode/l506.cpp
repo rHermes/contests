@@ -25,19 +25,19 @@ public:
     ans.reserve(score.size());
     for (std::size_t i = 0; i < score.size(); i++) {
       switch (i) {
-	case 0:
-	  ans[pos[i]] = "Gold Medal";
-	  break;
-	case 1:
-	  ans[pos[i]] = "Silver Medal";
-	  break;
-	case 2:
-	  ans[pos[i]] = "Bronze Medal";
-	  break;
+        case 0:
+          ans[pos[i]] = "Gold Medal";
+          break;
+        case 1:
+          ans[pos[i]] = "Silver Medal";
+          break;
+        case 2:
+          ans[pos[i]] = "Bronze Medal";
+          break;
 
-	default:
-	  ans[pos[i]] = std::to_string(i + 1);
-	  break;
+        default:
+          ans[pos[i]] = std::to_string(i + 1);
+          break;
       }
     }
 

@@ -19,7 +19,7 @@ public:
     if (it != periods.begin()) {
       auto p = std::prev(it);
       if (start < p->second)
-	return false;
+        return false;
     }
 
     if (it != periods.end() && it->first < end)

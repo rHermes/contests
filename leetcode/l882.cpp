@@ -36,16 +36,16 @@ public:
       Q.pop();
 
       if (curLeft < distLeft[curNode])
-	continue;
+        continue;
 
       answer++;
 
       for (const auto& [nextNode, cost] : G[curNode]) {
-	const auto realCost = cost + 1;
-	if (distLeft[nextNode] < (curLeft - realCost)) {
-	  distLeft[nextNode] = curLeft - realCost;
-	  Q.emplace(curLeft - realCost, nextNode);
-	}
+        const auto realCost = cost + 1;
+        if (distLeft[nextNode] < (curLeft - realCost)) {
+          distLeft[nextNode] = curLeft - realCost;
+          Q.emplace(curLeft - realCost, nextNode);
+        }
       }
     }
 

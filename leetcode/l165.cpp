@@ -14,11 +14,11 @@ public:
     const auto parse = [](auto& it, const auto& end) {
       int num = 0;
       while (it != end) {
-	const auto c = *(it++);
-	if (c == '.') {
-	  break;
-	}
-	num = num * 10 + (c - '0');
+        const auto c = *(it++);
+        if (c == '.') {
+          break;
+        }
+        num = num * 10 + (c - '0');
       }
 
       return num;
@@ -29,10 +29,10 @@ public:
       int num2 = parse(it2, end2);
 
       if (num1 < num2)
-	return -1;
+        return -1;
 
       if (num2 < num1)
-	return 1;
+        return 1;
     }
 
     return 0;

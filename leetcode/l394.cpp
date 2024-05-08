@@ -20,9 +20,9 @@ class Solution
       // first we are going to find if there are any numbers here.
       auto idx = left.find_first_of("123456789]");
       if (idx == left.npos) {
-	out += left;
-	consumed += left.size();
-	break;
+        out += left;
+        consumed += left.size();
+        break;
       }
 
       out += left.substr(0, idx);
@@ -30,8 +30,8 @@ class Solution
       consumed += idx;
 
       if (left.front() == ']') {
-	consumed++;
-	break;
+        consumed++;
+        break;
       }
 
       // We start on the first character.
@@ -48,7 +48,7 @@ class Solution
 
       const auto endSize = out.size();
       for (int i = 1; i < times; i++) {
-	out.append(out.begin() + currentSize, out.begin() + endSize);
+        out.append(out.begin() + currentSize, out.begin() + endSize);
       }
     }
 

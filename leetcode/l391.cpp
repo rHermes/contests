@@ -81,12 +81,12 @@ update(std::vector<Node>& nodes,
 
     if (l <= tm) {
       if (!update(nodes, idx * 2, tl, tm, l, std::min(r, tm), expected, newVal))
-	return false;
+        return false;
     }
 
     if ((tm + 1) <= r) {
       if (!update(nodes, idx * 2 + 1, tm + 1, tr, std::max(l, tm + 1), r, expected, newVal))
-	return false;
+        return false;
     }
 
     auto& left  = nodes[idx * 2];
@@ -157,7 +157,7 @@ public:
       const std::size_t tr = static_cast<std::size_t>(r.tx - minx - 1);
 
       if (!update(tree, 1, 0, WIDTH - 1, tl, tr, curY, nextY))
-	return false;
+        return false;
     }
 
     // Now we just need to see if the root is even.

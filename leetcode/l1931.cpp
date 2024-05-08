@@ -19,16 +19,16 @@ public:
       Q.pop_back();
 
       if (idx == static_cast<std::size_t>(m)) {
-	valid.push_back(bs);
-	continue;
+        valid.push_back(bs);
+        continue;
       }
 
       for (std::size_t i = 0; i < 3; i++) {
-	if (!bs[3 * (idx - 1) + i]) {
-	  bs[3 * idx + i] = true;
-	  Q.emplace_back(idx + 1, bs);
-	  bs[3 * idx + i] = false;
-	}
+        if (!bs[3 * (idx - 1) + i]) {
+          bs[3 * idx + i] = true;
+          Q.emplace_back(idx + 1, bs);
+          bs[3 * idx + i] = false;
+        }
       }
     }
 
@@ -39,15 +39,15 @@ public:
       // now we go through
 
       for (std::size_t prevMaskIdx = 0; prevMaskIdx < valid.size(); prevMaskIdx++) {
-	const auto prevMask = valid[prevMaskIdx];
+        const auto prevMask = valid[prevMaskIdx];
 
-	for (std::size_t curMaskIdx = 0; curMaskIdx < valid.size(); curMaskIdx++) {
-	  const auto curMask = valid[curMaskIdx];
-	  if ((prevMask & curMask).any())
-	    continue;
+        for (std::size_t curMaskIdx = 0; curMaskIdx < valid.size(); curMaskIdx++) {
+          const auto curMask = valid[curMaskIdx];
+          if ((prevMask & curMask).any())
+            continue;
 
-	  cur[curMaskIdx] = (cur[curMaskIdx] + prev[prevMaskIdx]) % MODM;
-	}
+          cur[curMaskIdx] = (cur[curMaskIdx] + prev[prevMaskIdx]) % MODM;
+        }
       }
 
       prev = cur;

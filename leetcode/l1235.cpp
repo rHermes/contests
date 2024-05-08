@@ -38,7 +38,7 @@ public:
       const auto score = profit[idx];
 
       if (kit->second < cit->second + score) {
-	best[startTime[idx]] = cit->second + score;
+        best[startTime[idx]] = cit->second + score;
       }
     }
 

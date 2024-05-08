@@ -20,7 +20,7 @@ public:
       selector &= mask;
 
       if (selector.count() == 0)
-	return -1;
+        return -1;
     }
 
     // std::cout << selector << std::endl;
@@ -28,7 +28,7 @@ public:
     std::size_t j = 0;
     for (; j < 6; j++) {
       if (selector[j]) {
-	break;
+        break;
       }
     }
 

@@ -11,7 +11,7 @@ public:
     for (int i = 0; i < static_cast<int>(nums.size()); i++) {
       const auto n = nums[i];
       if (seen.count(target - n))
-	return { i, seen[target - n] };
+        return { i, seen[target - n] };
 
       seen.emplace(n, i);
     }

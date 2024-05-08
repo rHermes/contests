@@ -20,10 +20,10 @@ public:
     std::size_t r = 0;
     for (; r < nums.size(); r++) {
       if (cnt[nums[r]]++ == 0)
-	k--;
+        k--;
 
       if (k < 0)
-	break;
+        break;
 
       answer += r + 1;
     }
@@ -41,8 +41,8 @@ public:
     r++;
     for (; r < nums.size(); r++) {
       if (cnt[nums[r]]++ == 0) {
-	while (--cnt[nums[l++]] != 0)
-	  ;
+        while (--cnt[nums[l++]] != 0)
+          ;
       }
 
       answer += r - l + 1;

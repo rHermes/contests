@@ -18,7 +18,7 @@ public:
     while (it != psa.cend()) {
       buckets++;
       if (k < buckets)
-	return false;
+        return false;
 
       it = std::upper_bound(it, psa.cend(), *(it - 1) + target);
     }
@@ -48,9 +48,9 @@ public:
       const auto mid = (lowerBound + upperBound) / 2;
 
       if (canBeDone(psa, static_cast<std::size_t>(k), mid)) {
-	upperBound = mid;
+        upperBound = mid;
       } else {
-	lowerBound = mid;
+        lowerBound = mid;
       }
     }
 

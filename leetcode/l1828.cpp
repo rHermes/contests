@@ -67,7 +67,7 @@ public:
       pts_.emplace_back(x, y);
 
       if (pts_.size() < MaxData_)
-	return true;
+        return true;
 
       // Ok, now we need to split.
       // We can actually always split, because our area is even.
@@ -84,16 +84,16 @@ public:
     } else {
       // std::cout << "We are going into the lower barracks here!" << std::endl;
       if (nw->insert(x, y))
-	return true;
+        return true;
 
       if (ne->insert(x, y))
-	return true;
+        return true;
 
       if (se->insert(x, y))
-	return true;
+        return true;
 
       if (sw->insert(x, y))
-	return true;
+        return true;
 
       throw std::runtime_error("We should never reach this!");
     }
@@ -113,11 +113,12 @@ public:
     for (const auto& [sx, sy] : pts_) {
       bool lol = (std::pow(sx - x, 2) + std::pow(sy - y, 2)) <= r * r;
       /*
-               std::cout << "comparing circle (" << x << ", " << y << ", " << r << ") with (" << sx << ", " << sy << ")"
+               std::cout << "comparing circle (" << x << ", " << y << ", " << r << ") with (" << sx << ", " << sy
+         << ")"
          << " gives: " << lol << std::endl;
                */
       if (lol)
-	out.emplace_back(sx, sy);
+        out.emplace_back(sx, sy);
     }
 
     // Then we need to check below us also.
@@ -145,9 +146,9 @@ public:
       auto [it, found] =
         comp.emplace(std::piecewise_construct, std::forward_as_tuple(pt[0], pt[1]), std::forward_as_tuple(1));
       if (found) {
-	std::ignore = root.insert(pt[0], pt[1]);
+        std::ignore = root.insert(pt[0], pt[1]);
       } else {
-	it->second++;
+        it->second++;
       }
     }
 
@@ -163,7 +164,7 @@ public:
 
       int hits = 0;
       for (const auto& p : temp) {
-	hits += comp[p];
+        hits += comp[p];
       }
 
       ans.push_back(hits);

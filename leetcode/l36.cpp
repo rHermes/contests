@@ -13,25 +13,25 @@ public:
 
     for (int y = 0; y < 9; y++) {
       for (int x = 0; x < 9; x++) {
-	if (board[y][x] == '.')
-	  continue;
+        if (board[y][x] == '.')
+          continue;
 
-	const int c = board[y][x] - '1';
+        const int c = board[y][x] - '1';
 
-	if (rows[y * 9 + c])
-	  return false;
-	rows[y * 9 + c] = true;
+        if (rows[y * 9 + c])
+          return false;
+        rows[y * 9 + c] = true;
 
-	if (cols[x * 9 + c])
-	  return false;
-	cols[x * 9 + c] = true;
+        if (cols[x * 9 + c])
+          return false;
+        cols[x * 9 + c] = true;
 
-	const int groupY = y / 3;
-	const int groupX = x / 3;
+        const int groupY = y / 3;
+        const int groupX = x / 3;
 
-	if (groups[(groupY * 3 + groupX) * 9 + c])
-	  return false;
-	groups[(groupY * 3 + groupX) * 9 + c] = true;
+        if (groups[(groupY * 3 + groupX) * 9 + c])
+          return false;
+        groups[(groupY * 3 + groupX) * 9 + c] = true;
       }
     }
 

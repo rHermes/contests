@@ -22,7 +22,7 @@ public:
     std::vector<std::bitset<16>> sack(people.size());
     for (std::size_t i = 0; i < people.size(); i++) {
       for (const auto& s : people[i])
-	sack[i] |= skills[s];
+        sack[i] |= skills[s];
     }
 
     // The DP is a mapping between a current skills coverage,
@@ -38,14 +38,14 @@ public:
       best.set();
 
       for (std::size_t j = 0; j < sack.size(); j++) {
-	auto smallerSkillMask = skillsMask & ~sack[j];
-	if (smallerSkillMask == skillsMask)
-	  continue;
+        auto smallerSkillMask = skillsMask & ~sack[j];
+        if (smallerSkillMask == skillsMask)
+          continue;
 
-	auto peopleMask = dp[smallerSkillMask.to_ulong()];
-	peopleMask.set(j);
-	if (peopleMask.count() < best.count())
-	  best = peopleMask;
+        auto peopleMask = dp[smallerSkillMask.to_ulong()];
+        peopleMask.set(j);
+        if (peopleMask.count() < best.count())
+          best = peopleMask;
       }
 
       dp[i] = best;
@@ -55,7 +55,7 @@ public:
     std::vector<int> ans;
     for (std::size_t i = 0; i < people.size(); i++) {
       if (dp.back()[i])
-	ans.push_back(static_cast<int>(i));
+        ans.push_back(static_cast<int>(i));
     }
     return ans;
   }

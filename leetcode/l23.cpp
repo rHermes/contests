@@ -29,13 +29,13 @@ class Solution
 
     while (a && b) {
       if (a->val < b->val) {
-	prev->next = a;
-	prev       = a;
-	a          = a->next;
+        prev->next = a;
+        prev       = a;
+        a          = a->next;
       } else {
-	prev->next = b;
-	prev       = b;
-	b          = b->next;
+        prev->next = b;
+        prev       = b;
+        b          = b->next;
       }
     }
 

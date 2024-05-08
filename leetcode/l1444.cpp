@@ -47,10 +47,10 @@ private:
       const auto leftAbove = totalLeft - PSA[ny * PCOLS + x];
 
       if (leftAbove <= 0)
-	continue;
+        continue;
 
       if (leftAbove == totalLeft)
-	break;
+        break;
 
       ans = (ans + solve(ny, x, k - 1)) % MODN;
     }
@@ -59,10 +59,10 @@ private:
       const auto leftLeft = totalLeft - PSA[y * PCOLS + nx];
 
       if (leftLeft <= 0)
-	continue;
+        continue;
 
       if (leftLeft == totalLeft)
-	break;
+        break;
 
       ans = (ans + solve(y, nx, k - 1)) % MODN;
     }
@@ -95,8 +95,8 @@ public:
     // a lot better with the task.
     for (int row = ROWS - 1; 0 <= row; row--) {
       for (int col = COLS - 1; 0 <= col; col--) {
-	PSA[row * PCOLS + col] = (pizza[row][col] == 'A') + PSA[(row + 1) * PCOLS + col] + PSA[row * PCOLS + col + 1] -
-	                         PSA[(row + 1) * PCOLS + col + 1];
+        PSA[row * PCOLS + col] = (pizza[row][col] == 'A') + PSA[(row + 1) * PCOLS + col] + PSA[row * PCOLS + col + 1] -
+                                 PSA[(row + 1) * PCOLS + col + 1];
       }
     }
 

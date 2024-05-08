@@ -20,31 +20,31 @@ public:
 
     const auto pushElem = [&](int x) {
       if (s1.empty()) {
-	s1.emplace(x, x);
+        s1.emplace(x, x);
       } else {
-	s1.emplace(x, std::max(x, s1.top().second));
+        s1.emplace(x, std::max(x, s1.top().second));
       }
     };
 
     const auto getMax = [&] {
       if (s1.empty()) {
-	return s2.top().second;
+        return s2.top().second;
       } else if (s2.empty()) {
-	return s1.top().second;
+        return s1.top().second;
       } else {
-	return std::max(s1.top().second, s2.top().second);
+        return std::max(s1.top().second, s2.top().second);
       }
     };
 
     const auto popElem = [&] {
       if (s2.empty()) {
-	while (!s1.empty()) {
-	  const auto elem = s1.top().first;
-	  s1.pop();
+        while (!s1.empty()) {
+          const auto elem = s1.top().first;
+          s1.pop();
 
-	  const auto maxi = s2.empty() ? elem : std::max(elem, s2.top().second);
-	  s2.emplace(elem, maxi);
-	}
+          const auto maxi = s2.empty() ? elem : std::max(elem, s2.top().second);
+          s2.emplace(elem, maxi);
+        }
       }
 
       s2.pop();

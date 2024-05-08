@@ -16,7 +16,7 @@ public:
     for (std::uint8_t p = 2; p <= nums; p++) {
       cur /= base;
       if (cur == 0)
-	return true;
+        return true;
       cur -= 1;
     }
 
@@ -29,11 +29,11 @@ public:
 
     for (std::uint8_t p = 2; p <= nums; p++) {
       if (cur % base != 0)
-	return false;
+        return false;
 
       cur /= base;
       if (cur == 0)
-	return false;
+        return false;
       cur -= 1;
     }
 
@@ -52,9 +52,9 @@ public:
       const auto C = std::midpoint(L, R);
 
       if (bigger(N, nums, C))
-	R = C;
+        R = C;
       else
-	L = C;
+        L = C;
     }
 
     // ok, we now have to check if it's perfect.
@@ -72,7 +72,7 @@ public:
     for (std::uint8_t nums = 60; 2 < nums; nums--) {
       auto good = possible(N, nums);
       if (good)
-	return std::to_string(*good);
+        return std::to_string(*good);
     }
 
     // Worst case we just default to N-1.

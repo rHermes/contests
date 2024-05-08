@@ -18,9 +18,9 @@ class SummaryRanges
       auto& [bl, br] = ranges_[i];
 
       if (ar + 1 == bl) {
-	ar = br;
+        ar = br;
 
-	ranges_.erase(ranges_.begin() + static_cast<std::ptrdiff_t>(i));
+        ranges_.erase(ranges_.begin() + static_cast<std::ptrdiff_t>(i));
       }
     }
   }
@@ -43,9 +43,9 @@ public:
       const auto& [l, r] = ranges_[C];
 
       if (value < l) {
-	R = C;
+        R = C;
       } else {
-	L = C;
+        L = C;
       }
     }
 

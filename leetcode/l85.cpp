@@ -20,24 +20,24 @@ private:
     // larger elements behind it, with 0 being the restart value.
     for (unsigned i = 0; i < cols; i++) {
       while ((st.top() != sentinel) && (height[i] <= height[st.top()])) {
-	const auto curH = height[st.top()];
-	st.pop();
+        const auto curH = height[st.top()];
+        st.pop();
 
-	// Because we always push i-1 on the top of the stack at the
-	// end of each round, we know that when we enter here, i-1 is
-	// taller than all other elements that are currently in the stack.
-	// This means that when we are building a rectangle, we are going
-	// from the previous instant in the stacks position to i-1 with it's
-	// value, since the first element before it that is smaller than it,
-	// is the next value in the stack.
-	//
-	// This means we record the height at the top of the stack. Then we
-	// pop of the top. The top of the stack is now the position of the first
-	// element smaller than the current height. normally you have dst - src + 1,
-	// but that is only if we include both sides. We are not including the src,
-	// as it's smaller than the current height, so it only becomes dst - src,
-	// which in our case is (i-1) - st.top()
-	ans = std::max(ans, static_cast<unsigned>(curH) * (i - st.top() - 1));
+        // Because we always push i-1 on the top of the stack at the
+        // end of each round, we know that when we enter here, i-1 is
+        // taller than all other elements that are currently in the stack.
+        // This means that when we are building a rectangle, we are going
+        // from the previous instant in the stacks position to i-1 with it's
+        // value, since the first element before it that is smaller than it,
+        // is the next value in the stack.
+        //
+        // This means we record the height at the top of the stack. Then we
+        // pop of the top. The top of the stack is now the position of the first
+        // element smaller than the current height. normally you have dst - src + 1,
+        // but that is only if we include both sides. We are not including the src,
+        // as it's smaller than the current height, so it only becomes dst - src,
+        // which in our case is (i-1) - st.top()
+        ans = std::max(ans, static_cast<unsigned>(curH) * (i - st.top() - 1));
       }
 
       st.push(i);
@@ -73,11 +73,11 @@ public:
     for (std::size_t row = 0; row < rows; row++) {
       // first we update the height.
       for (std::size_t i = 0; i < cols; i++) {
-	if (matrix[row][i] == '1') {
-	  height[i]++;
-	} else {
-	  height[i] = 0;
-	}
+        if (matrix[row][i] == '1') {
+          height[i]++;
+        } else {
+          height[i] = 0;
+        }
       }
 
       ans = std::max(ans, maxHist(height, st));

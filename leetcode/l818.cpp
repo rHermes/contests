@@ -17,25 +17,25 @@ public:
 
     if (pos < target) {
       if (speed < 0) {
-	answer++;
-	speed = 1;
+        answer++;
+        speed = 1;
       }
 
       while (pos < target) {
-	answer++;
-	pos += speed;
-	speed *= 2;
+        answer++;
+        pos += speed;
+        speed *= 2;
       }
     } else {
       if (0 < speed) {
-	answer++;
-	speed = -1;
+        answer++;
+        speed = -1;
       }
 
       while (target < pos) {
-	answer++;
-	pos += speed;
-	speed *= 2;
+        answer++;
+        pos += speed;
+        speed *= 2;
       }
     }
     return answer;
@@ -59,19 +59,19 @@ public:
       Q.pop();
 
       if (auto it = hey.emplace(pos, speed); !it.second) {
-	continue;
+        continue;
       }
 
       if (pos == target)
-	return depth;
+        return depth;
 
       Q.emplace(H(pos + speed, speed * 2, target) + depth + 1, depth + 1, pos + speed, speed * 2);
 
       // We only need to consider these changes if we are close to the point of impact.
       if ((0 < speed) && (target < (pos + speed)))
-	Q.emplace(H(pos, -1, target) + depth + 1, depth + 1, pos, -1);
+        Q.emplace(H(pos, -1, target) + depth + 1, depth + 1, pos, -1);
       else if ((speed < 0) && ((pos + speed) < target))
-	Q.emplace(H(pos, 1, target) + depth + 1, depth + 1, pos, 1);
+        Q.emplace(H(pos, 1, target) + depth + 1, depth + 1, pos, 1);
     }
 
     return -1;

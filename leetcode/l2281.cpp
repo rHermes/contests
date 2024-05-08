@@ -18,11 +18,11 @@ public:
     for (int i = 0; i < N; i++) {
       const auto str = strength[i];
       while (!stk.empty() && str <= stk.back().second) {
-	stk.pop_back();
+        stk.pop_back();
       }
 
       if (!stk.empty()) {
-	left[i] = stk.back().first;
+        left[i] = stk.back().first;
       }
 
       stk.emplace_back(i, str);
@@ -33,11 +33,11 @@ public:
     for (int i = N - 1; 0 <= i; i--) {
       const auto str = strength[i];
       while (!stk.empty() && str < stk.back().second) {
-	stk.pop_back();
+        stk.pop_back();
       }
 
       if (!stk.empty()) {
-	right[i] = stk.back().first;
+        right[i] = stk.back().first;
       }
 
       stk.emplace_back(i, str);

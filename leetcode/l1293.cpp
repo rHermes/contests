@@ -23,13 +23,13 @@ public:
 
     const auto addIt = [&](const int y, const int x, const int l) {
       if (l <= left[y * COLS + x])
-	return;
+        return;
 
       if (grid[y][x]) {
-	if (l && left[y * COLS + x] < l - 1)
-	  next.emplace_back(y, x, l - 1);
+        if (l && left[y * COLS + x] < l - 1)
+          next.emplace_back(y, x, l - 1);
       } else {
-	next.emplace_back(y, x, l);
+        next.emplace_back(y, x, l);
       }
     };
 
@@ -40,25 +40,25 @@ public:
       next.clear();
 
       for (const auto& [y, x, l] : Q) {
-	if (l <= left[y * COLS + x])
-	  continue;
+        if (l <= left[y * COLS + x])
+          continue;
 
-	left[y * COLS + x] = l;
+        left[y * COLS + x] = l;
 
-	if (y == ROWS - 1 && x == COLS - 1)
-	  return steps;
+        if (y == ROWS - 1 && x == COLS - 1)
+          return steps;
 
-	if (0 < y)
-	  addIt(y - 1, x, l);
+        if (0 < y)
+          addIt(y - 1, x, l);
 
-	if (y < ROWS - 1)
-	  addIt(y + 1, x, l);
+        if (y < ROWS - 1)
+          addIt(y + 1, x, l);
 
-	if (0 < x)
-	  addIt(y, x - 1, l);
+        if (0 < x)
+          addIt(y, x - 1, l);
 
-	if (x < COLS - 1)
-	  addIt(y, x + 1, l);
+        if (x < COLS - 1)
+          addIt(y, x + 1, l);
       }
 
       std::swap(Q, next);

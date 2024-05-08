@@ -23,40 +23,40 @@ public:
 
     for (std::size_t origY = 0; origY < M; origY++) {
       for (std::size_t origX = 0; origX < N; origX++) {
-	if (grid[origY][origX] == '0')
-	  continue;
+        if (grid[origY][origX] == '0')
+          continue;
 
-	grid[origY][origX] = '0';
+        grid[origY][origX] = '0';
 
-	ans++;
+        ans++;
 
-	Q.clear();
-	Q.emplace_back(origY, origX);
+        Q.clear();
+        Q.emplace_back(origY, origX);
 
-	while (!Q.empty()) {
-	  const auto [y, x] = Q.back();
-	  Q.pop_back();
+        while (!Q.empty()) {
+          const auto [y, x] = Q.back();
+          Q.pop_back();
 
-	  if (0 < y && grid[y - 1][x] == '1') {
-	    grid[y - 1][x] = '0';
-	    Q.emplace_back(y - 1, x);
-	  }
+          if (0 < y && grid[y - 1][x] == '1') {
+            grid[y - 1][x] = '0';
+            Q.emplace_back(y - 1, x);
+          }
 
-	  if (y < M - 1 && grid[y + 1][x] == '1') {
-	    grid[y + 1][x] = '0';
-	    Q.emplace_back(y + 1, x);
-	  }
+          if (y < M - 1 && grid[y + 1][x] == '1') {
+            grid[y + 1][x] = '0';
+            Q.emplace_back(y + 1, x);
+          }
 
-	  if (0 < x && grid[y][x - 1] == '1') {
-	    grid[y][x - 1] = '0';
-	    Q.emplace_back(y, x - 1);
-	  }
+          if (0 < x && grid[y][x - 1] == '1') {
+            grid[y][x - 1] = '0';
+            Q.emplace_back(y, x - 1);
+          }
 
-	  if (x < N - 1 && grid[y][x + 1] == '1') {
-	    grid[y][x + 1] = '0';
-	    Q.emplace_back(y, x + 1);
-	  }
-	}
+          if (x < N - 1 && grid[y][x + 1] == '1') {
+            grid[y][x + 1] = '0';
+            Q.emplace_back(y, x + 1);
+          }
+        }
       }
     }
 

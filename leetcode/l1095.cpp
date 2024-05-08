@@ -82,9 +82,9 @@ public:
       int cr = cache.get(C + 1);
 
       if (cc < cr) {
-	L = C;
+        L = C;
       } else {
-	R = C;
+        R = C;
       }
     }
 
@@ -107,20 +107,20 @@ public:
       L = 0;
       R = top;
       while (L + 1 < R) {
-	const int C = (R + L) / 2;
-	int cc      = cache.get(C);
+        const int C = (R + L) / 2;
+        int cc      = cache.get(C);
 
-	if (cc == target) {
-	  return C;
-	} else if (target < cc) {
-	  R = C;
-	} else {
-	  L = C;
-	}
+        if (cc == target) {
+          return C;
+        } else if (target < cc) {
+          R = C;
+        } else {
+          L = C;
+        }
       }
 
       if (cache.get(L) == target) {
-	return L;
+        return L;
       }
     }
 
@@ -135,20 +135,20 @@ public:
       R = N - 1;
 
       while (L + 1 < R) {
-	const int C = (R + L) / 2;
-	int cc      = cache.get(C);
+        const int C = (R + L) / 2;
+        int cc      = cache.get(C);
 
-	if (cc == target) {
-	  return C;
-	} else if (cc < target) {
-	  R = C;
-	} else {
-	  L = C;
-	}
+        if (cc == target) {
+          return C;
+        } else if (cc < target) {
+          R = C;
+        } else {
+          L = C;
+        }
       }
 
       if (cache.get(R) == target) {
-	return R;
+        return R;
       }
     }
 

@@ -30,18 +30,18 @@ public:
 
       // I am sure this could be done smartly, but let's just do it stupidly.
       for (std::size_t i = 0; i < reduced.size(); i++) {
-	if (current[0] <= reduced[i])
-	  continue;
+        if (current[0] <= reduced[i])
+          continue;
 
-	for (std::size_t j = 0; j < N; j++) {
-	  const int sum = reduced[i] + mat[row][j];
-	  if (current[0] <= sum)
-	    break;
+        for (std::size_t j = 0; j < N; j++) {
+          const int sum = reduced[i] + mat[row][j];
+          if (current[0] <= sum)
+            break;
 
-	  std::ranges::pop_heap(current);
-	  current[k - 1] = sum;
-	  std::ranges::push_heap(current);
-	}
+          std::ranges::pop_heap(current);
+          current[k - 1] = sum;
+          std::ranges::push_heap(current);
+        }
       }
 
       reduced = current;

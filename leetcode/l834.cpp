@@ -26,7 +26,7 @@ private:
     int sum = 0;
     for (const auto next : G[cur]) {
       if (next == prev)
-	continue;
+        continue;
 
       dfsPathSum(cur, next);
 
@@ -46,7 +46,7 @@ private:
 
     for (const auto next : G[cur]) {
       if (next == prev)
-	continue;
+        continue;
 
       dfsReroot(cur, next);
     }
