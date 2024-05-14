@@ -18,5 +18,5 @@ for f in glob(["*/*.cpp", "*.cpp"], allow_empty=True):
         name = target,
         srcs = [f],
         # compiler_flags = ["-Wall", "-Wextra", "-Wconversion", "-std=c++2a", "-O2"],
-        compiler_flags = ["-Wall", "-Wextra", "-std=c++2a", "-O2"],
+        compiler_flags = ["-Wall", "-Wextra", "-pedantic", "-std=c++2a", "-O2"],
     )
