@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <limits>
 #include <vector>
 
 inline const auto optimize = []() {
@@ -13,35 +12,19 @@ inline const auto optimize = []() {
 class Solution
 {
 public:
-  static std::vector<std::vector<int>> kClosest(const std::vector<std::vector<int>>& points, int k)
+  static std::vector<std::vector<int>> kClosest(std::vector<std::vector<int>>& points, int k)
   {
+    // The reason we are comparing it like this, rather than partial_sort
+    // is that this c++ implementation for partial_sort is slower than
+    // the total sort.
+    std::ranges::sort(
+      points, [](const auto& a, const auto& b) { return (a[0] * a[0] + a[1] * a[1]) < (b[0] * b[0] + b[1] * b[1]); });
 
-    std::vector<std::tuple<int, int, int>> K(k, std::tuple{ std::numeric_limits<int>::max(), 0, 0 });
+		// We resize to just the points we want.
+    points.resize(k);
 
-    for (const auto& pt : points) {
-      const auto x = pt[0];
-      const auto y = pt[1];
-
-      const auto dst = x * x + y * y;
-
-      if (dst < std::get<0>(K[0])) {
-        std::ranges::pop_heap(K);
-        K.back() = { dst, x, y };
-        std::ranges::push_heap(K);
-      }
-    }
-
-    std::vector<std::vector<int>> out(k);
-    for (int i = 0; i < k; i++) {
-      const auto [_, x, y] = K[i];
-      out[i] = { x, y };
-    }
-    return out;
+    return std::move(points);
   }
 };
 
-int
-main()
-{
-  return 0;
-}
+int main() { return 0; }
