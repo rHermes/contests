@@ -4,6 +4,7 @@ If:
 
 CompileFlags:
   # Add: [ -Wall, -Wextra, -Wconversion, -std=c++23, -stdlib=libc++]
-  Add: [ -Wall, -Wextra, -Wconversion, -std=c++2a]
+  # Add: [ -Wall, -Wextra, -Wconversion, -std=c++2a]
+  Add: [ -Wall, -Wextra, -std=c++2a]
   # Add: [ -Wall, -Wextra, -std=c++2a]
 ---
