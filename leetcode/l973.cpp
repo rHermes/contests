@@ -20,11 +20,15 @@ public:
     std::ranges::sort(
       points, [](const auto& a, const auto& b) { return (a[0] * a[0] + a[1] * a[1]) < (b[0] * b[0] + b[1] * b[1]); });
 
-		// We resize to just the points we want.
+    // We resize to just the points we want.
     points.resize(k);
 
     return std::move(points);
   }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}

@@ -18,7 +18,7 @@ public:
     std::size_t l = 0;
     std::size_t r = 0;
 
-    std::size_t minLen     = std::numeric_limits<std::size_t>::max();
+    std::size_t minLen = std::numeric_limits<std::size_t>::max();
     std::size_t startIndex = 0;
 
     while (r < s.size()) {
@@ -35,7 +35,7 @@ public:
 
           if ((r - l + 1) < minLen) {
             startIndex = l - 1;
-            minLen     = r - l + 1;
+            minLen = r - l + 1;
           }
         }
       }

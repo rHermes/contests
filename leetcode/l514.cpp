@@ -23,7 +23,7 @@ public:
 
     std::array<int, 200> dp;
     int activeRow = 0;
-    int otherRow  = 100;
+    int otherRow = 100;
 
     for (const auto idx : POS[key[0] - 'a']) {
       dp[activeRow + idx] = dist(0, idx);

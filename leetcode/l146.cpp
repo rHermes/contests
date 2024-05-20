@@ -40,7 +40,7 @@ public:
       oldestNode--;
 
       dict.erase(oldestNode->first);
-      oldestNode->first  = key;
+      oldestNode->first = key;
       oldestNode->second = value;
 
       nodes.splice(nodes.begin(), nodes, oldestNode);

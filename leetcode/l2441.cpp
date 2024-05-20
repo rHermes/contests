@@ -21,7 +21,7 @@ public:
         }
       } else {
         const auto flip = -num;
-        neg[flip]       = true;
+        neg[flip] = true;
 
         if (pos[flip] && ans < (flip)) {
           ans = flip;

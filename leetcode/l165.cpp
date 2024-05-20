@@ -5,10 +5,10 @@ class Solution
 public:
   [[gnu::hot, gnu::const]] static int compareVersion(const std::string& version1, const std::string& version2)
   {
-    auto it1        = version1.cbegin();
+    auto it1 = version1.cbegin();
     const auto end1 = version1.cend();
 
-    auto it2        = version2.cbegin();
+    auto it2 = version2.cbegin();
     const auto end2 = version2.cend();
 
     const auto parse = [](auto& it, const auto& end) {

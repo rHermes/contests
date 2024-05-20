@@ -36,7 +36,7 @@ class Solution
 
       // We start on the first character.
       const auto bracketPos = left.find('[');
-      int times             = 0;
+      int times = 0;
       std::from_chars(left.data(), left.data() + bracketPos, times);
       consumed += bracketPos + 1;
       left.remove_prefix(bracketPos + 1);

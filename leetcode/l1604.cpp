@@ -27,7 +27,7 @@ public:
 
     // Workers, we are just going to keep the last 3 for each.
     constexpr auto parseTime = [](const std::string& a) {
-      int hours   = (a[0] - '0') * 10 + (a[1] - '0');
+      int hours = (a[0] - '0') * 10 + (a[1] - '0');
       int minutes = (a[3] - '0') * 10 + (a[4] - '0');
 
       return hours * 60 + minutes;
@@ -41,9 +41,9 @@ public:
       if (out.count(keyName[idx]))
         continue;
 
-      auto [it, itOK]        = db.emplace(keyName[idx], std::forward_as_tuple<int, int, int>(-100, -100, -100));
+      auto [it, itOK] = db.emplace(keyName[idx], std::forward_as_tuple<int, int, int>(-100, -100, -100));
       const auto [ign, b, c] = it->second;
-      const auto d           = parseTime(keyTime[idx]);
+      const auto d = parseTime(keyTime[idx]);
 
       if ((d - b) <= 60) {
         out.emplace(it->first);

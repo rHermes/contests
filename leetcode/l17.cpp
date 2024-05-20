@@ -20,8 +20,8 @@ public:
   {
     if (digits.empty())
       return {};
-	
-		// We estimate the size, to minimize the number of reallocations.
+
+    // We estimate the size, to minimize the number of reallocations.
     std::size_t len = 1;
     for (const auto d : digits) {
       len *= keys[d - '2'].size();

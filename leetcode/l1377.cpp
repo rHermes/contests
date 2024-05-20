@@ -34,7 +34,7 @@ public:
       // We process them 1 step at a time.
       for (const auto p : current) {
         // The root has no parents
-        const auto posNext   = G[p].size() - (p != 0);
+        const auto posNext = G[p].size() - (p != 0);
         const auto nextProbs = 1.0 / static_cast<double>(posNext) * prob[p];
 
         for (const auto child : G[p]) {
@@ -42,7 +42,7 @@ public:
             continue;
 
           visited[child] = true;
-          prob[child]    = nextProbs;
+          prob[child] = nextProbs;
           next.push_back(child);
         }
 

@@ -37,7 +37,7 @@ public:
 
     // We create the following lambda, to
     const auto orig = n;
-    using T         = std::int64_t;
+    using T = std::int64_t;
     T nn;
     std::from_chars(n.data(), n.data() + n.size(), nn);
 
@@ -53,11 +53,11 @@ public:
       if (std::abs(ansN - nn) == std::abs(mm - nn)) {
         if (mm < ansN) {
           ansN = mm;
-          ans  = std::forward<U>(str);
+          ans = std::forward<U>(str);
         }
       } else if (std::abs(mm - nn) < std::abs(ansN - nn)) {
         ansN = mm;
-        ans  = std::forward<U>(str);
+        ans = std::forward<U>(str);
       }
     };
 
@@ -94,7 +94,7 @@ public:
     // if we are in a non zero, then that's is good.
     if (N % 2 != 0) {
       const auto center = N / 2;
-      const char gg     = n[center];
+      const char gg = n[center];
       for (char c = '0'; c <= '9'; c++) {
         if (c == gg)
           continue;
@@ -106,7 +106,7 @@ public:
     } else {
       // We will move the center two.
       const auto center = N / 2 - 1;
-      const char gg     = n[center];
+      const char gg = n[center];
       for (char c = '0'; c <= '9'; c++) {
         if (c == gg)
           continue;
@@ -115,7 +115,7 @@ public:
 
         newPos(n);
       }
-      n[center]     = gg;
+      n[center] = gg;
       n[center + 1] = gg;
     }
 

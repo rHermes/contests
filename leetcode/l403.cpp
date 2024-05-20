@@ -45,7 +45,7 @@ public:
           continue;
 
         dp[ii][sum - 1] = true;
-        dp[ii][sum]     = true;
+        dp[ii][sum] = true;
         dp[ii][sum + 1] = true;
       }
     }

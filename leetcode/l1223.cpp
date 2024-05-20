@@ -7,7 +7,7 @@ class Solution
 public:
   int dieSimulator(int n, std::vector<int>& rollMax)
   {
-    using T          = std::int64_t;
+    using T = std::int64_t;
     constexpr T COLS = 15;
     constexpr T MODN = 1000000007;
 

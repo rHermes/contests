@@ -40,14 +40,14 @@ trap(std::vector<int>& height)
   }
 
   // ok, now we merge the peaks.
-  auto& peaks     = biggestPeaks;
+  auto& peaks = biggestPeaks;
   auto peakHeight = maxHeight;
 
   int ans = 0;
   // we assert that the prevBiggestPeaks must always be atleast 2, since we have
   // a beinning and a start.
   for (std::size_t i = 0; i < peaks.size() - 1; i++) {
-    auto cur  = peaks[i];
+    auto cur = peaks[i];
     auto next = peaks[i + 1];
     /* std::cout << "We have peaks: " << cur << " and " << next << std::endl; */
 

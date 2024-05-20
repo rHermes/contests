@@ -66,7 +66,7 @@ public:
 
       // Every subsequence involving us has this.
       const std::int64_t totSum = (positiveParts - negativeParts + MOD) % MOD;
-      ans                       = ans + (totSum * strength[i]) % MOD;
+      ans = ans + (totSum * strength[i]) % MOD;
       ans %= MOD;
     }
 

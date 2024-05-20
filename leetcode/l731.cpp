@@ -16,7 +16,7 @@ public:
   bool book(int start, int end)
   {
     const auto [it_start, ins_start] = mp.emplace(start, 0);
-    const auto [it_end, ins_end]     = mp.emplace(end, 0);
+    const auto [it_end, ins_end] = mp.emplace(end, 0);
     if (ins_start) {
       it_start->second = std::prev(it_start)->second;
     }

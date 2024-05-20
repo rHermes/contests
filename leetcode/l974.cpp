@@ -10,7 +10,7 @@ public:
 
     std::unordered_map<int, int> found{ { 0, 1 } };
 
-    int ans   = 0;
+    int ans = 0;
     int accum = 0;
     for (const auto c : nums) {
       accum = (accum + (c % k) + k) % k;

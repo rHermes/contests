@@ -41,13 +41,13 @@ pushDown(std::vector<Node>& nodes, const std::size_t idx)
 {
   auto& root = nodes[idx];
   if (root.dirty) {
-    auto& left  = nodes[idx * 2];
+    auto& left = nodes[idx * 2];
     auto& right = nodes[idx * 2 + 1];
 
     left.dirty = right.dirty = true;
     left.even = right.even = true;
     left.y = right.y = root.y;
-    root.dirty       = false;
+    root.dirty = false;
   }
 }
 
@@ -73,7 +73,7 @@ update(std::vector<Node>& nodes,
       return false;
 
     root.dirty = true;
-    root.y     = newVal;
+    root.y = newVal;
     return true;
   } else {
     pushDown(nodes, idx);
@@ -89,11 +89,11 @@ update(std::vector<Node>& nodes,
         return false;
     }
 
-    auto& left  = nodes[idx * 2];
+    auto& left = nodes[idx * 2];
     auto& right = nodes[idx * 2 + 1];
     if (left.even && right.even && (left.y == right.y)) {
       root.even = true;
-      root.y    = left.y;
+      root.y = left.y;
     } else {
       root.even = false;
     }
@@ -151,8 +151,8 @@ public:
     std::vector<Node> tree(4 * WIDTH);
     // Now we are going to go through and add each rectangle.
     for (const auto& r : rects) {
-      const int curY       = r.ly - miny;
-      const int nextY      = r.ty - miny;
+      const int curY = r.ly - miny;
+      const int nextY = r.ty - miny;
       const std::size_t tl = static_cast<std::size_t>(r.lx - minx);
       const std::size_t tr = static_cast<std::size_t>(r.tx - minx - 1);
 

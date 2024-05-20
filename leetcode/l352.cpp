@@ -39,7 +39,7 @@ public:
     std::size_t R = ranges_.size();
 
     while (L + 1 < R) {
-      const auto C       = (L + R) / 2;
+      const auto C = (L + R) / 2;
       const auto& [l, r] = ranges_[C];
 
       if (value < l) {

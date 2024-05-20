@@ -34,7 +34,7 @@ public:
     // Now, we can compare that two our current
 
     for (std::size_t i = 1; i < nums.size(); i++) {
-      const int prevUp   = nums[i - 1] + k;
+      const int prevUp = nums[i - 1] + k;
       const int thisDown = nums[i] - k;
 
       const int maxNow = std::max(prevUp, maxRight);

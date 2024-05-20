@@ -22,9 +22,9 @@ public:
         root = parents[root];
 
       while (parents[c] != root) {
-        auto par   = parents[c];
+        auto par = parents[c];
         parents[c] = root;
-        c          = par;
+        c = par;
       }
 
       return root;

@@ -16,7 +16,7 @@ class Solution
 public:
   static void deleteNode(ListNode* node)
   {
-    node->val  = node->next->val;
+    node->val = node->next->val;
     node->next = std::exchange(node->next->next, nullptr);
   }
 };

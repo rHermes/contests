@@ -74,8 +74,8 @@ private:
 public:
   int ways(const std::vector<std::string>& pizza, int k)
   {
-    ROWS  = pizza.size();
-    COLS  = pizza[0].size();
+    ROWS = pizza.size();
+    COLS = pizza[0].size();
     PCOLS = COLS + 1;
     PROWS = ROWS + 1;
 

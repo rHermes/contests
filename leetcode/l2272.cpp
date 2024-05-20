@@ -41,7 +41,7 @@ public:
         if (major < minor) {
           major = 0;
           minor = 1;
-          flag  = true;
+          flag = true;
         } else {
           ans = std::max(ans, major - minor);
         }

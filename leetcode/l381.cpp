@@ -29,7 +29,7 @@ struct pcg32_random_r
     state = oldstate * 6364136223846793005ULL + (inc | 1);
     // Calculate output function (XSH RR), uses old state for max ILP
     std::uint32_t xorshifted = ((oldstate >> 18u) ^ oldstate) >> 27u;
-    std::uint32_t rot        = oldstate >> 59u;
+    std::uint32_t rot = oldstate >> 59u;
     return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
   }
 };
@@ -61,7 +61,7 @@ public:
 
     // Figure out which index we are removing.
     const auto indexToRemapIt = valFwds.begin();
-    const auto indexToRemap   = *indexToRemapIt;
+    const auto indexToRemap = *indexToRemapIt;
     valFwds.erase(indexToRemapIt);
 
     const int backIdx = idx2val.size() - 1;

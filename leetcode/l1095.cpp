@@ -89,7 +89,7 @@ public:
     }
 
     // std::cout << "We found the center at: " << L << std::endl;
-    const int top       = R;
+    const int top = R;
     const int topHeight = cache.get(top);
     if (target == topHeight) {
       return top;
@@ -108,7 +108,7 @@ public:
       R = top;
       while (L + 1 < R) {
         const int C = (R + L) / 2;
-        int cc      = cache.get(C);
+        int cc = cache.get(C);
 
         if (cc == target) {
           return C;
@@ -136,7 +136,7 @@ public:
 
       while (L + 1 < R) {
         const int C = (R + L) / 2;
-        int cc      = cache.get(C);
+        int cc = cache.get(C);
 
         if (cc == target) {
           return C;

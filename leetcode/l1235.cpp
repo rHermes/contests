@@ -33,8 +33,8 @@ public:
 
     for (const auto idx : indexes) {
       // No because of the way we are processing them.
-      auto cit         = best.lower_bound(endTime[idx]);
-      auto kit         = best.lower_bound(startTime[idx]);
+      auto cit = best.lower_bound(endTime[idx]);
+      auto kit = best.lower_bound(startTime[idx]);
       const auto score = profit[idx];
 
       if (kit->second < cit->second + score) {

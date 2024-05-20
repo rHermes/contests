@@ -16,7 +16,7 @@ public:
   {
     std::bitset<256> seen;
 
-    int ans       = 0;
+    int ans = 0;
     std::size_t l = 0;
     for (std::size_t r = 0; r < s.size(); r++) {
       const unsigned char c = s[r];

@@ -16,7 +16,7 @@ public:
     // yeah, I got it. So we store the PSAs. Because what we are really
     // asking at this point is: Is there a psa[x] I can subtract from my
     // psa[y] that will be k.
-    int ans   = 0;
+    int ans = 0;
     int accum = 0;
     std::unordered_map<int, int> seen{ { 0, 1 } };
 

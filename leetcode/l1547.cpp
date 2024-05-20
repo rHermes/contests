@@ -18,7 +18,7 @@ public:
 
     // dp[l][r] == best possible solution when cut starts at cuts[l] and ends at cuts[r].
     for (std::size_t L = N - 2; 0 < L; L--) {
-      const auto LL    = L - 1;
+      const auto LL = L - 1;
       const auto LLcut = (LL == 0) ? 0 : cuts[LL - 1];
 
       for (std::size_t RR = LL + 2; RR < N; RR++) {
@@ -29,7 +29,7 @@ public:
         }
 
         const auto RRcut = (RR == N - 1) ? n : cuts[RR - 1];
-        dp[LL * N + RR]  = ans + (RRcut - LLcut);
+        dp[LL * N + RR] = ans + (RRcut - LLcut);
       }
     }
 

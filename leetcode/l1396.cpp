@@ -36,7 +36,7 @@ public:
 
   void checkOut(int id, const std::string& stationName, int t)
   {
-    auto nh                 = inFlight.extract(id);
+    auto nh = inFlight.extract(id);
     const auto& [src, srcT] = nh.mapped();
 
     std::size_t seed = 0;

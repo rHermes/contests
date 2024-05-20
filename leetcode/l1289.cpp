@@ -12,7 +12,7 @@ struct MinLess
     if (c < a) {
       b = a;
 
-      a  = c;
+      a = c;
       ai = i;
     } else if (c < b) {
       b = c;

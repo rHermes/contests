@@ -6,7 +6,7 @@ class Solution
 private:
   int maxHist(const std::vector<int>& height, std::stack<unsigned, std::vector<unsigned>>& st)
   {
-    const auto cols         = static_cast<unsigned>(height.size());
+    const auto cols = static_cast<unsigned>(height.size());
     const unsigned sentinel = static_cast<unsigned>(-1);
     st.push(sentinel);
 

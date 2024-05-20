@@ -30,12 +30,12 @@ class Solution
     while (a && b) {
       if (a->val < b->val) {
         prev->next = a;
-        prev       = a;
-        a          = a->next;
+        prev = a;
+        a = a->next;
       } else {
         prev->next = b;
-        prev       = b;
-        b          = b->next;
+        prev = b;
+        b = b->next;
       }
     }
 
@@ -55,8 +55,8 @@ class Solution
     } else if (l + 1 == r) {
       return merge2Lists(lists[l], lists[r]);
     } else {
-      const auto c  = (l + r) / 2;
-      auto leftOne  = mergeSort(lists, l, c);
+      const auto c = (l + r) / 2;
+      auto leftOne = mergeSort(lists, l, c);
       auto rightOne = mergeSort(lists, c + 1, r);
 
       return merge2Lists(leftOne, rightOne);

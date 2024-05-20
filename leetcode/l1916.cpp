@@ -10,8 +10,8 @@ class Solution
 public:
   int waysToBuildRooms(std::vector<int>& prevRoom)
   {
-    using UT          = std::uint64_t;
-    const UT N        = prevRoom.size();
+    using UT = std::uint64_t;
+    const UT N = prevRoom.size();
     constexpr UT MODN = 1000000007;
 
     // we are going to be building a forward graph.

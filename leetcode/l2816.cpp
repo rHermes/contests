@@ -26,10 +26,10 @@ private:
     ListNode* prev = nullptr;
 
     while (head) {
-      auto next  = head->next;
+      auto next = head->next;
       head->next = prev;
-      prev       = head;
-      head       = next;
+      prev = head;
+      head = next;
     }
 
     return prev;
@@ -45,14 +45,14 @@ public:
     int carry = 0;
     while (head) {
       auto next = head->next;
-      int sum   = carry + 2 * head->val;
+      int sum = carry + 2 * head->val;
 
       head->val = sum % 10;
-      carry     = sum / 10;
+      carry = sum / 10;
 
       head->next = prev;
-      prev       = head;
-      head       = next;
+      prev = head;
+      head = next;
     }
 
     head = prev;

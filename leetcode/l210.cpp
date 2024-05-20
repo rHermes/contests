@@ -18,7 +18,7 @@ public:
 
     for (const auto& edge : prerequisites) {
       const int from = edge[1];
-      const int to   = edge[0];
+      const int to = edge[0];
 
       counts[to]++;
       children[from].push_back(to);

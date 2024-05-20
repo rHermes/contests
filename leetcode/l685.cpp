@@ -23,7 +23,7 @@ public:
       // we iterate up again, to shorten it.
       while (x != root) {
         auto temp = x;
-        x         = par[x];
+        x = par[x];
         par[temp] = root;
       }
 

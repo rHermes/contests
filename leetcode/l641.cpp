@@ -16,7 +16,7 @@ public:
     if (isFull())
       return false;
 
-    head_        = (head_ + cap_ - 1) % cap_;
+    head_ = (head_ + cap_ - 1) % cap_;
     data_[head_] = value;
 
     return true;
@@ -28,7 +28,7 @@ public:
       return false;
 
     data_[tail_] = value;
-    tail_        = (tail_ + 1) % cap_;
+    tail_ = (tail_ + 1) % cap_;
     return true;
   }
 
