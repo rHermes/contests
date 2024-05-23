@@ -1,4 +1,4 @@
-#include <array>
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -11,41 +11,29 @@ inline const auto optimize = []() {
 
 class Solution
 {
-  using T = std::array<int, 20>;
+  using IT = std::vector<int>::iterator;
 
-  static int helper(T& nums, int sz, int k)
+  static int helper(IT beg, IT end, int k)
   {
-    if (sz == 0)
+    if (beg == end)
       return 1;
 
-    if (sz == 1)
+    if (beg + 1 == end)
       return 2;
 
-    T s{};
+    const int x = *(--end);
 
-    sz--;
-    int x = nums[sz];
-    int xz = 0;
-    for (int i = 0; i < sz; i++) {
-      if (nums[i] != x + k && nums[i] != x - k)
-        s[xz++] = nums[i];
-    }
+    const auto sec = std::partition(beg, end, [&](const int y) { return (y != x + k) && (y != x - k); });
 
-    if (sz == xz) {
-      return 2 * helper(nums, sz, k);
+    if (sec == end) {
+      return 2 * helper(beg, end, k);
     } else {
-      return helper(nums, sz, k) + helper(s, xz, k);
+      return helper(beg, sec, k) + helper(beg, end, k);
     }
   }
 
 public:
-  static int beautifulSubsets(std::vector<int>& nums, int k)
-  {
-    T hey;
-    std::copy(nums.begin(), nums.end(), hey.begin());
-    int sz = nums.size();
-    return helper(hey, sz, k) - 1;
-  }
+  static int beautifulSubsets(std::vector<int>& nums, int k) { return helper(nums.begin(), nums.end(), k) - 1; }
 };
 
 int
