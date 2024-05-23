@@ -1,5 +1,6 @@
-#include <algorithm>
 #include <iostream>
+#include <map>
+#include <unordered_map>
 #include <vector>
 
 inline const auto optimize = []() {
@@ -11,29 +12,45 @@ inline const auto optimize = []() {
 
 class Solution
 {
-  using IT = std::vector<int>::iterator;
-
-  static int helper(IT beg, IT end, int k)
-  {
-    if (beg == end)
-      return 1;
-
-    if (beg + 1 == end)
-      return 2;
-
-    const int x = *(--end);
-
-    const auto sec = std::partition(beg, end, [&](const int y) { return (y != x + k) && (y != x - k); });
-
-    if (sec == end) {
-      return 2 * helper(beg, end, k);
-    } else {
-      return helper(beg, sec, k) + helper(beg, end, k);
-    }
-  }
-
 public:
-  static int beautifulSubsets(std::vector<int>& nums, int k) { return helper(nums.begin(), nums.end(), k) - 1; }
+  static int beautifulSubsets(std::vector<int>& nums, int k)
+  {
+    int totalCount = 1;
+    std::unordered_map<int, std::map<int, int>> freqMap;
+    for (const auto x : nums) {
+      freqMap[x % k][x]++;
+    }
+
+    // we now just have to iterate through these.
+    for (const auto& freq : freqMap) {
+      int prevNum = -k;
+      int prev2 = 0;
+      int prev1 = 1;
+      int curr = 0;
+
+      for (const auto& [num, freq] : freq.second) {
+        // We count the number of subsets skipping the current number.
+        int skip = prev1;
+
+        // we count subsets that include the current number
+        int take;
+        if (num - prevNum == k) {
+          take = ((1 << freq) - 1) * prev2;
+        } else {
+          take = ((1 << freq) - 1) * prev1;
+        }
+
+        curr = skip + take;
+        prev2 = prev1;
+        prev1 = curr;
+        prevNum = num;
+      }
+
+      totalCount *= curr;
+    }
+
+    return totalCount - 1;
+  }
 };
 
 int
