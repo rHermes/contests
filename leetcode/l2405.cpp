@@ -1,5 +1,5 @@
-#include <iostream>
 #include <bitset>
+#include <iostream>
 #include <string>
 
 inline const auto optimize = []() {
@@ -9,31 +9,36 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class Solution {
+class Solution
+{
 public:
-    static constexpr int partitionString(const std::string& s) {
-        // ok, so we can easily figure out what the longest we can keep going.
-        const int N = s.size();
+  static constexpr int partitionString(const std::string& s)
+  {
+    // ok, so we can easily figure out what the longest we can keep going.
+    const int N = s.size();
 
-        // We don't need the extra bits, 26 is all that is needed, but by doing
-        // it this way, the compiler produces better code.
-        std::bitset<32> seen;
+    // We don't need the extra bits, 26 is all that is needed, but by doing
+    // it this way, the compiler produces better code.
+    std::bitset<32> seen;
 
-        int ans = 1;
+    int ans = 1;
 
-        // I think we can just be greedy here
-        for (int r = 0; r < N; r++) {
-            const auto c = s[r] - 'a';
-            if (seen[c]) {
-                seen.reset();
-                ans++;
-            }
-            seen[c] = true;
-        }
-
-
-        return ans;
+    // I think we can just be greedy here
+    for (int r = 0; r < N; r++) {
+      const auto c = s[r] - 'a';
+      if (seen[c]) {
+        seen.reset();
+        ans++;
+      }
+      seen[c] = true;
     }
+
+    return ans;
+  }
 };
 
-int main() { return 0; }
+int
+main()
+{
+  return 0;
+}
