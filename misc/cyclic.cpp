@@ -14,12 +14,13 @@ bool
 inc(std::array<int, MAX_DIGITS>& num, int len)
 {
   for (int i = len - 1; 0 <= i; i--) {
-    if (num[i] == 9) {
+    const std::size_t ii = static_cast<std::size_t>(i);
+    if (num[ii] == 9) {
       // we skip 0
       /* num[i] = 0; */
-      num[i] = 1;
+      num[ii] = 1;
     } else {
-      num[i]++;
+      num[ii]++;
       return true;
     }
   }
@@ -34,7 +35,7 @@ cyclic(const int n)
 
   std::array<int, MAX_DIGITS> lower{};
   for (int i = 0; i < n; i++)
-    lower[i] = 1;
+    lower[static_cast<std::size_t>(i)] = 1;
 
   // ok, I'm going to mutate the lower, until we arrive where we want.
   while (true) {
@@ -55,8 +56,10 @@ cyclic(const int n)
     }
     const int base = rots[0];
 
-    // ok, now we have it, let's check.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
     std::sort(std::begin(rots), std::next(rots.begin(), n));
+#pragma GCC diagnostic pop
 
     // ok, we check.
     bool good = true;
