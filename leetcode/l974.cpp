@@ -1,25 +1,5 @@
 #include <iostream>
-#include <unordered_map>
 #include <vector>
-
-class Solution
-{
-public:
-  static int subarraysDivByK(const std::vector<int>& nums, int k)
-  {
-
-    std::unordered_map<int, int> found{ { 0, 1 } };
-
-    int ans = 0;
-    int accum = 0;
-    for (const auto c : nums) {
-      accum = (accum + (c % k) + k) % k;
-      ans += found[accum]++;
-    }
-
-    return ans;
-  }
-};
 
 static const auto optimize = []() {
   std::ios::sync_with_stdio(false);
@@ -28,8 +8,29 @@ static const auto optimize = []() {
   return 0;
 }();
 
+class Solution
+{
+public:
+  static int subarraysDivByK(const std::vector<int>& nums, int k)
+  {
+
+    std::vector<int> found(k);
+    found[0] = 1;
+
+    int ans = 0;
+    int accum = 0;
+    for (const auto c : nums) {
+      accum = (((accum + c) % k) + k) % k;
+      ans += found[accum]++;
+    }
+
+    return ans;
+  }
+};
+
 int
 main()
 {
+
   return 0;
 }
