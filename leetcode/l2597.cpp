@@ -52,9 +52,3 @@ public:
     return totalCount - 1;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

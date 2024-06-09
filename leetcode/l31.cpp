@@ -33,9 +33,3 @@ public:
     reverse(nums.begin() + i + 1, nums.end());
   }
 };
-
-int
-main()
-{
-  return 0;
-}

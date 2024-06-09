@@ -36,9 +36,3 @@ public:
     return dp[servings * ROWS + servings];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -25,9 +25,3 @@ public:
     return static_cast<int>(n + 1);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

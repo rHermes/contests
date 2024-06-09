@@ -133,9 +133,3 @@ public:
     return out;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

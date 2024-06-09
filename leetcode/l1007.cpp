@@ -41,9 +41,3 @@ public:
     return static_cast<int>(std::min(N - topRow, topRow - common));
   }
 };
-
-int
-main()
-{
-  return 0;
-}

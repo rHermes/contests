@@ -41,8 +41,3 @@ public:
     return DP[gidx(K, false)];
   }
 };
-int
-main()
-{
-  return 0;
-}

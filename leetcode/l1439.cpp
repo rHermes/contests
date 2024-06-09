@@ -51,9 +51,3 @@ public:
     return current[k - 1];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

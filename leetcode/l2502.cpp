@@ -72,8 +72,3 @@ public:
  * int param_1 = obj->allocate(size,mID);
  * int param_2 = obj->free(mID);
  */
-int
-main()
-{
-  return 0;
-}

@@ -10,9 +10,3 @@ public:
     return static_cast<int>((xx ^ yy).count());
   }
 };
-
-int
-main()
-{
-  return 0;
-}

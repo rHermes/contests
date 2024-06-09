@@ -31,9 +31,3 @@ public:
     return sign ? -out : out;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -46,9 +46,3 @@ public:
 // Your Solution object will be instantiated and called as such:
 // Solution solution;
 // solution.decode(solution.encode(url));
-
-int
-main()
-{
-  return 0;
-}

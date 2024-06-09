@@ -14,7 +14,7 @@ for f in glob(["*/*.cpp", "*.cpp"], allow_empty=True):
     target, _ = splitext(base)
     # log.warning(base)
     # log.warning(target)
-    cc_binary(
+    cc_library(
         name = target,
         srcs = [f],
         # compiler_flags = ["-Wall", "-Wextra", "-Wconversion", "-std=c++2a", "-O2"],

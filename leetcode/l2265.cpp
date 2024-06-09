@@ -67,9 +67,3 @@ public:
     return static_cast<int>(ans.numMatches);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

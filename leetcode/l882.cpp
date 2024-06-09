@@ -63,9 +63,3 @@ public:
     return answer;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

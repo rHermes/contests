@@ -71,9 +71,3 @@ public:
  * obj->follow(followerId,followeeId);
  * obj->unfollow(followerId,followeeId);
  */
-
-int
-main()
-{
-  return 0;
-}

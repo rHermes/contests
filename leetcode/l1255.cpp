@@ -67,9 +67,3 @@ public:
     return solve(available, base, 0, 0);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

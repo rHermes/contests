@@ -61,9 +61,3 @@ public:
     return steps;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

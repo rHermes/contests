@@ -23,9 +23,3 @@ public:
     return { on, xo ^ on };
   }
 };
-
-int
-main()
-{
-  return 0;
-}

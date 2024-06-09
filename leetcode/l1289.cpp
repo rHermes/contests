@@ -49,9 +49,3 @@ public:
     return prevMin.a;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

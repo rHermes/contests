@@ -49,9 +49,3 @@ public:
     return stations.size() - fuels.size();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

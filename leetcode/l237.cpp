@@ -27,9 +27,3 @@ inline const auto optimize = []() {
   std::cout.tie(nullptr);
   return 0;
 }();
-
-int
-main()
-{
-  return 0;
-}

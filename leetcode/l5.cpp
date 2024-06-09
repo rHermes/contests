@@ -43,9 +43,3 @@ public:
     return s.substr(bestIdx, bestLen);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

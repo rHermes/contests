@@ -54,9 +54,3 @@ public:
     return solve(n, board, 0);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

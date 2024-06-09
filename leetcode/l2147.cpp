@@ -48,9 +48,3 @@ const int init = []() {
   std::cout.tie(0);
   return 0;
 }();
-
-int
-main()
-{
-  return 0;
-}

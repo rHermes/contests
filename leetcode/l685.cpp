@@ -94,9 +94,3 @@ public:
     return candidates[1];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

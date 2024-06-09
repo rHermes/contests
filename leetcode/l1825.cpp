@@ -120,8 +120,3 @@ public:
  * obj->addElement(num);
  * int param_2 = obj->calculateMKAverage();
  */
-int
-main()
-{
-  return 0;
-}

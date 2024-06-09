@@ -17,9 +17,3 @@ class Solution
 public:
   int tribonacci(int n) { return tribs[n]; }
 };
-
-int
-main()
-{
-  return 0;
-}

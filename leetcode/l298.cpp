@@ -98,9 +98,3 @@ public:
     return decode(view);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

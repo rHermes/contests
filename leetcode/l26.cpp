@@ -20,9 +20,3 @@ public:
     return nums.size();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

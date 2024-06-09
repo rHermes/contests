@@ -70,9 +70,3 @@ public:
 
   int getRandom() { return forward[gen() % forward.size()]; }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -14,9 +14,3 @@ public:
     return word;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

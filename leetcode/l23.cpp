@@ -72,9 +72,3 @@ public:
     return mergeSort(lists, 0, lists.size() - 1);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

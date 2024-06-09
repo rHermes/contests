@@ -117,9 +117,3 @@ public:
  * string param_3 = obj->getMaxKey();
  * string param_4 = obj->getMinKey();
  */
-
-int
-main()
-{
-  return 0;
-}

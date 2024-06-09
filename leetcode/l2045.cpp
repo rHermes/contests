@@ -77,9 +77,3 @@ public:
     return howLong(maxLength, time, change);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

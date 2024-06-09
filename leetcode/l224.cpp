@@ -65,9 +65,3 @@ public:
     return eval(view);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

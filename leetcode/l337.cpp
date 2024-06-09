@@ -40,9 +40,3 @@ public:
     return std::max(inc, exc);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

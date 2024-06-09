@@ -43,9 +43,3 @@ public:
     return dp.back();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -107,9 +107,3 @@ public:
     return std::min(hey.first, hey.second);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

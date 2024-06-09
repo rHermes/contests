@@ -45,9 +45,3 @@ static auto _ = []() {
   std::cout.tie(nullptr);
   return nullptr;
 }();
-
-int
-main()
-{
-  return 0;
-}

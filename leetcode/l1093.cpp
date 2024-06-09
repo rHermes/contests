@@ -68,9 +68,3 @@ public:
     throw std::runtime_error("We should never reach this");
   }
 };
-
-int
-main()
-{
-  return 0;
-}

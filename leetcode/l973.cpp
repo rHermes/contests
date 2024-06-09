@@ -26,9 +26,3 @@ public:
     return std::move(points);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

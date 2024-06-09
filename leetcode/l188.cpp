@@ -34,9 +34,3 @@ public:
     return profits[k - 1];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

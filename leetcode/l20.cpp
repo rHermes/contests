@@ -37,9 +37,3 @@ public:
     return lol.empty();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

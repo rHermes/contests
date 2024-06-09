@@ -59,9 +59,3 @@ public:
     throw std::runtime_error("Should not be reached");
   }
 };
-
-int
-main()
-{
-  return 0;
-}

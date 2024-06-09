@@ -66,9 +66,3 @@ public:
     return static_cast<int>(upperBound);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

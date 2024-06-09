@@ -37,9 +37,3 @@ public:
     return dp[N * ROW + k];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

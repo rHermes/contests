@@ -12,9 +12,3 @@ public:
     return score;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

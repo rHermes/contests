@@ -42,9 +42,3 @@ public:
     return (a + b) % MODN;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

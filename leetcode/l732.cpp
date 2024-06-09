@@ -34,9 +34,3 @@ public:
     return maxans;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

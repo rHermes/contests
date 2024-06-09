@@ -43,9 +43,3 @@ public:
     return good;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -40,9 +40,3 @@ public:
     return m_hist[m_watermark];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

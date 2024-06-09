@@ -84,8 +84,3 @@ public:
  * bool param_7 = obj->isEmpty();
  * bool param_8 = obj->isFull();
  */
-int
-main()
-{
-  return 0;
-}

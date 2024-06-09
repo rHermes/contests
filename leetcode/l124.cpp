@@ -57,9 +57,3 @@ public:
     return hey.first;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

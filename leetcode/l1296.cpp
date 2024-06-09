@@ -46,9 +46,3 @@ public:
     return groups.empty();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

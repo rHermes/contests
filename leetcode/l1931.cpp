@@ -62,9 +62,3 @@ public:
     return static_cast<int>(ans);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

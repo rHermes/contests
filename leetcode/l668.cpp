@@ -31,9 +31,3 @@ public:
     return hi;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -77,8 +77,3 @@ public:
     return canMatch(dp, s, p, 0, 0) == TriBool::True;
   }
 };
-int
-main()
-{
-  return 0;
-}

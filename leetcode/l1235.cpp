@@ -45,9 +45,3 @@ public:
     return best.begin()->second;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

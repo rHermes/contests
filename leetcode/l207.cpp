@@ -49,9 +49,3 @@ public:
     return done == N;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

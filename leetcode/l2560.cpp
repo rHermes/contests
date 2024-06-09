@@ -48,9 +48,3 @@ public:
     return lo;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

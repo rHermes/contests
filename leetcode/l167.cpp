@@ -31,9 +31,3 @@ public:
     __builtin_unreachable();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

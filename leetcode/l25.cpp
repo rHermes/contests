@@ -56,9 +56,3 @@ public:
     return newHead ? newHead : head;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

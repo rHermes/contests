@@ -38,9 +38,3 @@ public:
     return total += left;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

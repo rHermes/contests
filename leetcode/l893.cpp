@@ -43,9 +43,3 @@ public:
     return num.size();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

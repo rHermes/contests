@@ -67,9 +67,3 @@ public:
     return nums;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

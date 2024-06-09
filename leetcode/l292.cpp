@@ -14,9 +14,3 @@ public:
     return n % 4 != 0;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

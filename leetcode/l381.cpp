@@ -84,9 +84,3 @@ public:
 
   int getRandom() { return idx2val[gen() % idx2val.size()]; }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -40,9 +40,3 @@ public:
     return Q.size();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

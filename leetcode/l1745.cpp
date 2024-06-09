@@ -41,9 +41,3 @@ public:
     return dp[(N) * 4 + 3];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -46,9 +46,3 @@ public:
     return profit2;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

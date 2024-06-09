@@ -60,9 +60,3 @@ auto init = []() {
   std::cout.tie(nullptr);
   return 'c';
 }();
-
-int
-main()
-{
-  return 0;
-}

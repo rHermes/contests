@@ -79,9 +79,3 @@ public:
     return std::to_string(N - 1);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

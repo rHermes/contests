@@ -82,9 +82,3 @@ public:
     return pathSums;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

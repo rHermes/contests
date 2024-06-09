@@ -14,9 +14,3 @@ public:
     return ans + startValue - target;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

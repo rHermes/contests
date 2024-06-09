@@ -59,9 +59,3 @@ public:
     return w;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

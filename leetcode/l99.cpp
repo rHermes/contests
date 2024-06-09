@@ -55,9 +55,3 @@ public:
     std::swap(fa->val, sc->val);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

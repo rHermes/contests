@@ -66,9 +66,3 @@ public:
     return goodPaths(grid, ROWS, COLS, open - 1, start.first, start.second);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

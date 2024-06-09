@@ -31,9 +31,3 @@ public:
 
   int sumOfPower(std::vector<int>& nums, int k) { return getAnswer(nums, k, 0, 0); }
 };
-
-int
-main()
-{
-  return 0;
-}

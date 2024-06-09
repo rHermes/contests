@@ -60,9 +60,3 @@ public:
  * string param_3 = obj->cursorLeft(k);
  * string param_4 = obj->cursorRight(k);
  */
-
-int
-main()
-{
-  return 0;
-}

@@ -27,9 +27,3 @@ public:
     return M - gottem;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

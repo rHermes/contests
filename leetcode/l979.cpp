@@ -38,9 +38,3 @@ public:
     return moves;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

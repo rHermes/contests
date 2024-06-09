@@ -63,9 +63,3 @@ public:
     return prob[target - 1];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

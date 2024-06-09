@@ -70,9 +70,3 @@ public:
     return ways[N - 1];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

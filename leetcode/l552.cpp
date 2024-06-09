@@ -91,9 +91,3 @@ public:
     return std::reduce(ans.begin(), ans.end(), static_cast<T>(0)) % MODN;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

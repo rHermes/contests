@@ -77,9 +77,3 @@ public:
  * int param_3 = obj->maximum();
  * int param_4 = obj->minimum();
  */
-
-int
-main()
-{
-  return 0;
-}

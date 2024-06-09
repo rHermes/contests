@@ -104,9 +104,3 @@ public:
     return solve(0, 0, k - 1);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

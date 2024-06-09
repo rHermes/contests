@@ -44,9 +44,3 @@ public:
     return pi == PE;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

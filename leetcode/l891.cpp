@@ -57,9 +57,3 @@ public:
     return (ans + MODN) % MODN;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -72,9 +72,3 @@ public:
     return std::string(pathStart.size() - i, 'U') + pathEnd.substr(i);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

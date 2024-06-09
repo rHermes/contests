@@ -32,9 +32,3 @@ public:
     return dp[M];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

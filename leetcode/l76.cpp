@@ -47,9 +47,3 @@ public:
       return s.substr(startIndex, minLen);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

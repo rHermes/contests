@@ -82,9 +82,3 @@ public:
  * obj->addNum(value);
  * vector<vector<int>> param_2 = obj->getIntervals();
  */
-
-int
-main()
-{
-  return 0;
-}

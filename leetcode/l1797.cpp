@@ -61,9 +61,3 @@ public:
     return m_data.size();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

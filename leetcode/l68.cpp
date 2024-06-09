@@ -79,9 +79,3 @@ public:
     return lines;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

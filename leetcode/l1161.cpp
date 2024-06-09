@@ -48,9 +48,3 @@ public:
       dfs(root->right, ans, level + 1);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

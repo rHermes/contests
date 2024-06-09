@@ -54,9 +54,3 @@ public:
     return best(x, target);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

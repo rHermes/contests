@@ -50,9 +50,3 @@ public:
     return ans + key.size();
   }
 };
-
-int
-main()
-{
-  return 0;
-}

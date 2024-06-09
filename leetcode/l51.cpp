@@ -71,9 +71,3 @@ public:
     return outs;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

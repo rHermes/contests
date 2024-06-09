@@ -26,9 +26,3 @@ public:
     return cur;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -19,9 +19,3 @@ public:
     return s.size() - left + (left != 0);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -50,9 +50,3 @@ public:
     return logs;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

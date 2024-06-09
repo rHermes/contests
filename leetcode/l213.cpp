@@ -29,9 +29,3 @@ public:
     return std::max(helper(0, nums.size()), helper(nums[0], nums.size() - 1));
   }
 };
-
-int
-main()
-{
-  return 0;
-}

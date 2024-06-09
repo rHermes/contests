@@ -19,9 +19,3 @@ public:
     throw std::runtime_error("this should not be reachable");
   }
 };
-
-int
-main()
-{
-  return 0;
-}

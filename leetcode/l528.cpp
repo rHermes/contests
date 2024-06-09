@@ -42,9 +42,3 @@ public:
 
   int pickIndex() { return dist(rng); }
 };
-
-int
-main()
-{
-  return 0;
-}

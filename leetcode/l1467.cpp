@@ -118,9 +118,3 @@ public:
     return good / ways;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

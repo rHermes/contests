@@ -30,9 +30,3 @@ public:
       return dp[amount];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

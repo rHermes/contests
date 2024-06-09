@@ -81,9 +81,3 @@ public:
     return m_data;
   }
 };
-
-int
-main()
-{
-  return 0;
-}

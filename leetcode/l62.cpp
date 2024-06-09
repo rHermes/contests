@@ -32,9 +32,3 @@ public:
     return 1 * binom[(m + n - 2) * MAXN + (n - 1)];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

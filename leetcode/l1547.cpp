@@ -37,9 +37,3 @@ public:
     return dp[0 * N + N - 1];
   }
 };
-
-int
-main()
-{
-  return 0;
-}

@@ -23,9 +23,3 @@ public:
     return std::popcount(ans);
   }
 };
-
-int
-main()
-{
-  return 0;
-}

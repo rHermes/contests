@@ -164,9 +164,3 @@ public:
     return tree[1].even;
   }
 };
-
-int
-main()
-{
-  return 0;
-}
