@@ -6,7 +6,6 @@
 /* #include <functional> */
 /* #include <iostream> */
 
-
 class Solution
 {
 public:
@@ -37,10 +36,9 @@ public:
 /* template<typename F> */
 /* void performTest(F&& f) { */
 /* 	std::ranlux48 gen(100); */
-	
+
 /* 	constexpr int TIMES = 1000; */
 /* 	constexpr int SIZE = 1000; */
-	
 
 /* 	std::vector<int> input(SIZE); */
 /* 	std::iota(input.begin(), input.end(), 1); */
@@ -62,7 +60,7 @@ public:
 
 /* 	const double avgTimeMs = totalTimeSum / TIMES; */
 /* 	const double avgSwaps = totalSwapSum / TIMES; */
-	
+
 /* 	std::cout << "Average swaps: " << avgSwaps << ", average time spent: " << avgTimeMs << "ms\n"; */
 /* } */
 
