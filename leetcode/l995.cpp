@@ -8,89 +8,38 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-template<typename T>
-class BIT
-{
-  using IT = std::conditional_t<std::same_as<T, bool>, char, T>;
-  int m_n;
-  std::vector<IT> m_data;
-
-public:
-  explicit BIT(int N) : m_n{ N + 1 }, m_data(m_n) {}
-
-  constexpr void add(int r, T delta)
-  {
-    for (r++; r < m_n; r += r & -r) {
-      if constexpr (std::same_as<T, bool>) {
-        m_data[r] = (m_data[r] != delta);
-      } else {
-        m_data[r] += delta;
-      }
-    }
-  }
-
-  [[nodiscard]] constexpr T query(int r) const
-  {
-    T ret = 0;
-    for (r++; 0 < r; r -= r & -r) {
-      if constexpr (std::same_as<T, bool>) {
-        ret = (m_data[r] != ret);
-      } else {
-        ret += m_data[r];
-      }
-    }
-    return ret;
-  }
-
-  [[nodiscard]] constexpr T query(int l, int r) const
-  {
-    if (l == 0) {
-      return query(r);
-    } else {
-      if constexpr (std::same_as<T, bool>) {
-        return query(r) != query(l - 1);
-      } else {
-        return query(r) - query(l - 1);
-      }
-    }
-  }
-};
-
 class Solution
 {
 public:
-  static int minKBitFlips(const std::vector<int>& nums, int k)
+  static int minKBitFlips(const std::vector<int>& nums, const int k)
   {
     const int N = nums.size();
 
-    BIT<bool> tree(N + 1);
+    std::vector<unsigned char> Q(k, false);
+    int Qidx = 0;
 
-    int ans = 0;
+    int result = 0;
+    bool flipped = 0;
 
-    for (int i = 0; i < N - k + 1; i++) {
-      if (nums[i] == 1) {
-        tree.add(i, true);
-        tree.add(i + 1, true);
+    for (int i = 0; i < N; i++) {
+      flipped = (flipped != Q[Qidx]);
+
+      if (flipped == nums[i]) {
+        if (N < i + k)
+          return -1;
+
+        Q[Qidx++] = true;
+        flipped = !flipped;
+
+        result += 1;
+      } else {
+        Q[Qidx++] = false;
       }
 
-      if (!tree.query(i)) {
-        ans++;
-        tree.add(i, true);
-        tree.add(i + k, true);
-      }
+      if (Qidx == k)
+        Qidx = 0;
     }
 
-    for (int i = N - k + 1; i < N; i++) {
-      if (nums[i] == 1) {
-        tree.add(i, true);
-        tree.add(i + 1, true);
-      }
-
-      if (!tree.query(i)) {
-        return -1;
-      }
-    }
-
-    return ans;
+    return result;
   }
 };
