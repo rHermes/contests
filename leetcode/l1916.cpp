@@ -1,34 +1,83 @@
 // https://leetcode.com/problems/count-ways-to-build-rooms-in-an-ant-colony/
 // https://codeforces.com/blog/entry/75627
-//
-#include <cinttypes>
+
+#include <cstdint>
 #include <iostream>
 #include <vector>
 
+using UT = std::int64_t;
+constexpr UT MODN = 1000000007;
+
+inline const auto optimize = []() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  std::cout.tie(nullptr);
+  return 0;
+}();
+
+std::vector<int> facCache = { 1, 1 };
+static int
+facMod(int n)
+{
+  const int curSize = facCache.size();
+  if (n < curSize)
+    return facCache[n];
+
+  facCache.resize(n + 1);
+  for (UT i = curSize; i <= n; i++) {
+    facCache[i] = (i * facCache[i - 1]) % MODN;
+  }
+
+  return facCache[n];
+}
+
+UT
+invMod(UT a)
+{
+  if (a <= 1) {
+    return a;
+  } else {
+    return MODN - (UT)(MODN / a) * invMod(MODN % a) % MODN;
+  }
+}
+
 class Solution
 {
-public:
-  int waysToBuildRooms(std::vector<int>& prevRoom)
+  static std::pair<int, int> dfs(const std::vector<std::vector<int>>& G, const int cur)
   {
-    using UT = std::uint64_t;
-    const UT N = prevRoom.size();
-    constexpr UT MODN = 1000000007;
+    UT ways = 1;
+    UT totalLength = 0;
+    UT smallLengths = 1;
 
-    // we are going to be building a forward graph.
-    std::vector<UT> facs(N);
-    facs[0] = 1;
-    for (UT i = 1; i < facs.size(); i++)
-      facs[i] = (i * facs[i - 1]) % MODN;
-
-    std::vector<std::vector<std::size_t>> G(N);
-    for (UT i = 1; i < N; i++) {
-      G[static_cast<std::size_t>(prevRoom[i])].push_back(i);
+    for (const auto next : G[cur]) {
+      auto [cWays, cDepth] = dfs(G, next);
+      ways = (ways * cWays) % MODN;
+      totalLength += cDepth;
+      smallLengths = (smallLengths * facMod(cDepth)) % MODN;
     }
 
-    // We will also need an algorithm to calculate
-    // inverses, since we are going to be divinding
-    // in our
-    // std::priority_queue<std::pair<int,std::
-    return 0;
+    const UT finalAns = facMod(totalLength);
+    const UT invBid = invMod(smallLengths);
+
+    const UT waysPlain = (finalAns * invBid) % MODN;
+
+    UT ans = (waysPlain * ways) % MODN;
+
+    return { static_cast<int>(ans), 1 + totalLength };
+  }
+
+public:
+  static int waysToBuildRooms(std::vector<int>& prevRoom)
+  {
+    const int N = prevRoom.size();
+    std::vector<std::vector<int>> G(N);
+
+    for (int i = 1; i < N; i++) {
+      G[prevRoom[i]].push_back(i);
+    }
+
+    auto [ans, depth] = dfs(G, 0);
+    return ans;
   }
 };
+;
