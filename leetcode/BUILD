@@ -15,12 +15,13 @@ for f in glob(["*/*.cpp", "*.cpp"], allow_empty=True):
     # log.warning(base)
     # log.warning(target)
 
-    if target == "x1248":
+    if target == "x1146":
         cc_binary(
             name = target,
             srcs = [f],
             # compiler_flags = ["-Wall", "-Wextra", "-Wconversion", "-std=c++2a", "-O2"],
-            compiler_flags = ["-Wall", "-Wextra", "-pedantic", "-std=c++2a", "-O2"],
+            # compiler_flags = ["-Wall", "-Wextra", "-pedantic", "-std=c++2a", "-O2"],
+            compiler_flags = ["-Wall", "-Wextra", "-pedantic", "-std=c++2a"],
         )
     else:
         cc_library(
