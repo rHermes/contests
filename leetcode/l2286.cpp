@@ -1,100 +1,148 @@
 #include <cstdint>
-#include <list>
+#include <iostream>
+#include <numeric>
+#include <optional>
+#include <utility>
 #include <vector>
+
+inline const auto optimize = []() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  std::cout.tie(nullptr);
+  return 0;
+}();
+
 class BookMyShow
 {
-
   using ST = std::int64_t;
-  ST m_rows;
-  ST m_seats;
-  ST m_left{ m_rows * m_seats };
-  std::list<std::pair<ST, ST>> m_data;
+  int m_rows;
+  int m_seats;
 
-public:
-  BookMyShow(int n, int m) : m_rows{ n }, m_seats{ m }
+  std::vector<ST> m_data;
+  std::vector<ST> m_max;
+
+  void build(int root, int targetL, int targetR)
   {
-    for (int i = 0; i < m_rows; i++) {
-      m_data.emplace_back(i * m_seats, (i + 1) * m_seats);
+    if (targetL == targetR) {
+      m_data[root] = m_seats;
+    } else {
+      const int targetM = std::midpoint(targetL, targetR);
+      build(root * 2, targetL, targetM);
+      build(root * 2 + 1, targetM + 1, targetR);
+      m_data[root] = m_data[root * 2] + m_data[root * 2 + 1];
     }
   }
 
-  // We are always eating from the front.
-  // The front will almost always be the smallest?
+  ST sum(int root, int targetL, int targetR, int arrL, int arrR)
+  {
+    // We should figure out if it's at all possible.
+    if (targetL == arrL && targetR == arrR) {
+      return m_data[root];
+    } else {
+      const int targetM = std::midpoint(targetL, targetR);
+      ST ans = 0;
+      if (arrL <= targetM) {
+        ans += sum(2 * root, targetL, targetM, arrL, std::min(arrR, targetM));
+      }
+      if (targetM < arrR) {
+        ans += sum(2 * root + 1, targetM + 1, targetR, std::max(arrL, targetM + 1), arrR);
+      }
+      return ans;
+    }
+  }
+
+  void removeScatter(int root, int targetL, int targetR, int arrL, int arrR, ST delta)
+  {
+    if (m_data[root] < delta) {
+      throw std::runtime_error("Bad call to remove");
+    }
+
+    m_data[root] -= delta;
+
+    // We stop once we reach a single.
+    if (targetL == targetR) {
+      m_max[root] -= delta;
+      return;
+    }
+
+    const int targetM = std::midpoint(targetL, targetR);
+    if (arrL <= targetM) {
+      auto theyHave = m_data[2 * root];
+      removeScatter(2 * root, targetL, targetM, arrL, std::min(arrR, targetM), std::min(theyHave, delta));
+
+      delta -= std::min(theyHave, delta);
+    }
+
+    if (targetM < arrR) {
+      removeScatter(2 * root + 1, targetM + 1, targetR, std::max(arrL, targetM + 1), arrR, delta);
+    }
+
+    m_max[root] = std::max(m_max[root * 2], m_max[2 * root + 1]);
+  }
+
+  std::optional<std::pair<int, int>> removeGather(int root,
+                                                  int targetL,
+                                                  int targetR,
+                                                  int arrL,
+                                                  int arrR,
+                                                  const ST delta)
+  {
+    if (m_max[root] < delta) {
+      return std::nullopt;
+    }
+
+    if (targetL == targetR) {
+      const auto seat = m_seats - m_max[root];
+      m_max[root] -= delta;
+      m_data[root] -= delta;
+      return std::make_pair(targetL, seat);
+    }
+
+    const int targetM = std::midpoint(targetL, targetR);
+    if (arrL <= targetM) {
+
+      auto res = removeGather(2 * root, targetL, targetM, arrL, std::min(arrR, targetM), delta);
+      if (res) {
+        m_data[root] -= delta;
+        m_max[root] = std::max(m_max[root * 2], m_max[root * 2 + 1]);
+        return res;
+      }
+    }
+
+    if (targetM < arrR) {
+      auto res = removeGather(2 * root + 1, targetM + 1, targetR, std::max(arrL, targetM + 1), arrR, delta);
+      if (res) {
+        m_data[root] -= delta;
+        m_max[root] = std::max(m_max[root * 2], m_max[root * 2 + 1]);
+        return res;
+      }
+    }
+
+    return std::nullopt;
+  }
+
+public:
+  BookMyShow(int n, int m) : m_rows{ n }, m_seats{ m }, m_data(4 * m_rows), m_max(4 * m_rows, m_seats)
+  {
+    build(1, 0, m_rows - 1);
+  }
 
   std::vector<int> gather(int k, int maxRow)
   {
-    if (m_seats < k || m_left < k || m_data.empty())
+    auto res = removeGather(1, 0, m_rows - 1, 0, maxRow, k);
+    if (!res) {
       return {};
-
-    for (auto it = m_data.begin(); it != m_data.end(); it++) {
-      const auto start = it->first;
-      const auto end = it->second;
-
-      const auto curRow = start / m_seats;
-      if (maxRow < curRow)
-        return {};
-
-      const auto sz = end - start;
-
-      if (k <= sz) {
-        const auto beg = start % m_seats;
-
-        if (sz != k) {
-          it->first = start + k;
-        } else {
-          m_data.erase(it);
-        }
-
-        m_left -= k;
-
-        return { static_cast<int>(curRow), static_cast<int>(beg) };
-      }
+    } else {
+      return { res->first, res->second };
     }
-
-    return {};
   }
 
-  bool scatter(const int k, const int maxRow)
+  bool scatter(int k, int maxRow)
   {
-    if (m_left < k || (maxRow + 1) < (k / m_seats)) {
+    if (sum(1, 0, m_rows - 1, 0, maxRow) < k)
       return false;
-    }
 
-    int curSeats = 0;
-    for (auto it = m_data.begin(); it != m_data.end(); it++) {
-      const auto start = it->first;
-      const auto end = it->second;
-
-      const auto curRow = start / m_seats;
-      if (maxRow < curRow)
-        break;
-
-      const auto sz = end - start;
-      curSeats += sz;
-
-      if (curSeats < k) {
-        continue;
-      }
-
-      const auto leftOver = curSeats - k;
-      m_data.erase(m_data.begin(), it);
-
-      if (leftOver != 0) {
-        it->first = end - leftOver;
-      } else {
-        m_data.erase(it);
-      }
-
-      m_left -= k;
-      return true;
-    }
-    return false;
+    removeScatter(1, 0, m_rows - 1, 0, maxRow, k);
+    return true;
   }
 };
-
-/**
- * Your BookMyShow object will be instantiated and called as such:
- * BookMyShow* obj = new BookMyShow(n, m);
- * vector<int> param_1 = obj->gather(k,maxRow);
- * bool param_2 = obj->scatter(k,maxRow);
- */
