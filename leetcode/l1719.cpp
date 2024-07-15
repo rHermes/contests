@@ -13,9 +13,6 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-template<typename R, typename V>
-concept RAR = std::ranges::random_access_range<R> && std::same_as<std::ranges::range_value_t<R>, V>;
-
 template<typename T, std::size_t N>
 class DSU
 {
@@ -57,29 +54,28 @@ public:
       return false;
     }
 
-    if (m_size[b] < m_size[a]) {
+    if (m_size[a] < m_size[b]) {
       std::swap(a, b);
     }
 
-    m_parent[a] = b;
-    m_size[b] += m_size[a];
+    m_parent[b] = a;
+    m_size[a] += m_size[b];
 
     return true;
   }
 };
+
+template<typename R, typename V>
+concept RAR = std::ranges::random_access_range<R> && std::same_as<std::ranges::range_value_t<R>, V>;
 
 class Solution
 {
   static constexpr int MAXN = 500;
   using ST = std::int16_t;
 
-  using MEMARR = std::array<ST, MAXN + 1>;
-
   template<RAR<std::pair<int, int>> R>
   static int solve(R&& edges, R&& counts, const int numNodes, const int removed)
   {
-    // ok, so we assume that all elements in this range is a single graph.
-    // Then we just go through and we should keep track of an element.
     if (std::ranges::size(edges) == 0) {
       return 1;
     } else if (std::ranges::size(edges) == 1) {
@@ -92,72 +88,56 @@ class Solution
 
     auto newCounts = std::ranges::partition(counts, [&](const auto& pp) { return target == pp.second; });
 
-    auto potentialRoots = std::ranges::subrange(counts.begin(), newCounts.begin());
-    if (potentialRoots.empty()) {
+    for (auto it = counts.begin(); it != newCounts.begin(); it++) {
+      dsu.merge(0, it->first);
+    }
+
+    const int numRoots = dsu.group_size(0) - 1;
+    if (numRoots == 0) {
       return 0;
     }
 
-    for (const auto& [k, v] : potentialRoots) {
-      dsu.merge(0, k);
-    }
+    // Here is the exciting thing. We can just remove all the roots from the setup, as if we can do it with one, they
+    // are exchangeable, as they have the exact same set of edges.
 
     const auto emptyGroup = dsu.parent(0);
-    // Here is the exciting thing. We can just remove all the roots from the
-    // setup, as if we can do it with one, they are exchangeable, as they
-    // have the exact same set of edges.
-    auto newRange = std::ranges::partition(edges, [&](const auto& pp) {
+    auto newEdges = std::ranges::partition(edges, [&](const auto& pp) {
       return (dsu.parent(pp.first) == emptyGroup) || (dsu.parent(pp.second) == emptyGroup);
     });
 
-    // now comes the hard part. We must now parittion the remaining
-    // elements into subgraphs.
-    for (const auto& [a, b] : newRange) {
+    for (const auto& [a, b] : newEdges) {
       dsu.merge(a, b);
     }
 
-    // now we have our engines ready.
-    auto localAns = 1;
-
-    while (!newRange.empty()) {
+    auto localAns = std::clamp<int>(numRoots, 1, 2);
+    while (!newEdges.empty()) {
       const auto groupParent = dsu.parent(newCounts.front().first);
 
-      auto nextRange =
-        std::ranges::partition(newRange, [&](const auto& pp) { return groupParent == dsu.parent(pp.first); });
+      auto nextEdges =
+        std::ranges::partition(newEdges, [&](const auto& pp) { return groupParent == dsu.parent(pp.first); });
 
-      // We create our new nodes.
       auto nextCounts =
         std::ranges::partition(newCounts, [&](const auto& pp) { return groupParent == dsu.parent(pp.first); });
 
-      auto innerAns = solve(std::ranges::subrange(newRange.begin(), nextRange.begin()),
-                            std::ranges::subrange(newCounts.begin(), nextCounts.begin()),
-                            dsu.group_size(groupParent),
-                            removed + potentialRoots.size());
+      const auto innerAns = solve(std::ranges::subrange(newEdges.begin(), nextEdges.begin()),
+                                  std::ranges::subrange(newCounts.begin(), nextCounts.begin()),
+                                  dsu.group_size(groupParent),
+                                  removed + numRoots);
       if (innerAns == 0) {
         return 0;
       }
       localAns = std::max(localAns, innerAns);
 
-      newRange = nextRange;
-      newCounts = nextCounts;
-
-      // add to 0, the seen set.
-      dsu.merge(0, groupParent);
+      newEdges = std::move(nextEdges);
+      newCounts = std::move(nextCounts);
     }
 
-    if (1 < potentialRoots.size()) {
-      return 2;
-    } else {
-      return localAns;
-    }
+    return localAns;
   }
 
 public:
   static int checkWays(const std::vector<std::vector<int>>& PEARS)
   {
-    // What if we only operate on the pairs themselves. We can always
-    // partition it.
-    // This can be precomputed if I wants
-
     std::unordered_map<int, int> count;
 
     std::vector<std::pair<int, int>> pairs;
