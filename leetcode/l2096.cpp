@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 /**
@@ -13,62 +14,58 @@ struct TreeNode
   TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
+inline const auto optimize = []() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  std::cout.tie(nullptr);
+  return 0;
+}();
+
 class Solution
 {
-  // we could do this better, but no need. Once we find the end node, it's
-  // good.
-
-  static bool dfs(std::string& srcStr,
-                  std::string& dstStr,
-                  int startValue,
-                  int destValue,
-                  std::string& curStr,
-                  TreeNode* cur)
+  static bool solve(const TreeNode* root, std::string& path, const int dst)
   {
-    if (cur->val == startValue) {
-      srcStr = curStr;
-      if (!dstStr.empty())
-        return true;
-    } else if (cur->val == destValue) {
-      dstStr = curStr;
-      if (!srcStr.empty())
-        return true;
+    if (root->val == dst) {
+      return true;
     }
 
-    if (cur->left) {
-      curStr.push_back('L');
-      if (dfs(srcStr, dstStr, startValue, destValue, curStr, cur->left))
+    if (root->left) {
+      path.push_back('L');
+      if (solve(root->left, path, dst)) {
         return true;
-      curStr.pop_back();
+      }
+      path.pop_back();
     }
 
-    if (cur->right) {
-      curStr.push_back('R');
-      if (dfs(srcStr, dstStr, startValue, destValue, curStr, cur->right))
+    if (root->right) {
+      path.push_back('R');
+      if (solve(root->right, path, dst)) {
         return true;
-      curStr.pop_back();
+      }
+      path.pop_back();
     }
 
     return false;
   }
 
 public:
-  static std::string getDirections(TreeNode* root, int startValue, int destValue)
+  static std::string getDirections(const TreeNode* root, int startValue, int destValue)
   {
-    // We can convert these two step sequences into each other. Because
-    // either the path goes into us or it's completly in one of the
-    // subtrees. if it goes through us, then we just replace everything
-    // before it with `U`
-    std::string pathStart;
-    std::string pathEnd;
-    std::string cur;
+    std::string srcPath;
+    solve(root, srcPath, startValue);
 
-    dfs(pathStart, pathEnd, startValue, destValue, cur, root);
+    std::string dstPath;
+    solve(root, dstPath, destValue);
 
+    // Just remove the prefix.
     std::size_t i = 0;
-    for (; i < pathStart.size() && i < pathEnd.size() && pathStart[i] == pathEnd[i]; i++) {
+    while (i < srcPath.size() && i < dstPath.size() && srcPath[i] == dstPath[i]) {
+      i++;
     }
 
-    return std::string(pathStart.size() - i, 'U') + pathEnd.substr(i);
+    std::string out(srcPath.size() - i, 'U');
+    out += dstPath.substr(i);
+
+    return out;
   }
 };
