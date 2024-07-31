@@ -1,5 +1,5 @@
-#include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <iostream>
 #include <limits>
 #include <numeric>
@@ -16,16 +16,6 @@ class Solution
 {
 
   using GRAPH = std::vector<std::vector<int>>;
-  static constexpr void calcSubsums(const GRAPH& G, std::vector<int>& subSums, const int parent, const int cur)
-  {
-    for (const auto next : G[cur]) {
-      if (next == parent)
-        continue;
-
-      calcSubsums(G, subSums, cur, next);
-      subSums[cur] += subSums[next];
-    }
-  }
 
   static constexpr int dfs(const GRAPH& G,
                            const std::vector<int>& nums,
@@ -33,7 +23,7 @@ class Solution
                            const int parent,
                            const int cur)
   {
-    int sum = nums[cur];
+    std::int64_t sum = nums[cur];
 
     for (const auto next : G[cur]) {
       if (next == parent)
@@ -41,14 +31,10 @@ class Solution
 
       sum += dfs(G, nums, target, cur, next);
       if (target < sum)
-        return std::numeric_limits<int>::max() / 2;
+        return std::numeric_limits<int>::max();
     }
 
-    if (sum == target) {
-      return 0;
-    } else {
-      return sum;
-    }
+    return (sum == target) ? 0 : sum;
   }
 
   static constexpr int tryAllPrimes(const int numSum,
@@ -58,8 +44,7 @@ class Solution
                                     const int soFar,
                                     const int curIdx)
   {
-    const int PN = primes.size();
-    if (curIdx == PN) {
+    if (curIdx == -1) {
       const int target = numSum / soFar;
       if (dfs(G, nums, target, -1, 0) == 0)
         return soFar - 1;
@@ -70,7 +55,7 @@ class Solution
     const auto [prime, cnt] = primes[curIdx];
     int cur = soFar;
     for (int i = 0; i <= cnt; i++) {
-      const int res = tryAllPrimes(numSum, G, nums, primes, cur, curIdx + 1);
+      const int res = tryAllPrimes(numSum, G, nums, primes, cur, curIdx - 1);
       if (0 < res) {
         return res;
       }
@@ -96,15 +81,15 @@ public:
     }
 
     auto primes = primeFactor(N, numSum);
-    std::ranges::reverse(primes);
 
-    return tryAllPrimes(numSum, G, nums, primes, numSum, 0);
+    return tryAllPrimes(numSum, G, nums, primes, numSum, primes.size() - 1);
   }
 
 private:
   static constexpr std::vector<std::pair<int, int>> primeFactor(const int N, const int target)
   {
-    // Let's get all the primes up to N, which is the maximum number of parts we can split it into
+    // Let's get all the primes up to N, which is the maximum number of
+    // parts we can split it into
     const int maxPrime = static_cast<int>(std::sqrt(N)) + 1;
 
     // The max prime we want to test is N
