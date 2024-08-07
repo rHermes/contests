@@ -12,6 +12,15 @@ Various datastructures:
 
 ## Status
 
+### Leetcode
+
+This is the place I find task the most these days, and where I have most solved tasks. As of
+2024-08-07 I have all tasks here, and there are 410 of them. I am working on a tool to plot average
+execution time compared to other solutions.
+
+https://leetcode.com/u/teodor_spaeren/
+
+
 ### Kattis
 https://open.kattis.com/users/rhermes
 
