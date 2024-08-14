@@ -64,7 +64,7 @@ public:
 
 class Solution
 {
-  static bool connected(std::vector<std::vector<int>>& grid, const int ROWS, const int COLS, DSU& dsu)
+  static constexpr bool connected(std::vector<std::vector<int>>& grid, const int ROWS, const int COLS, DSU& dsu)
   {
     int lastNode = 0;
     int seen = 0;
