@@ -1,3 +1,4 @@
+#include <array>
 #include <iostream>
 #include <ranges>
 #include <vector>
@@ -37,27 +38,30 @@ public:
       return {};
     }
 
-    std::vector<int> out;
-    std::vector<std::pair<const Node*, bool>> st;
-    out.reserve(1000);
-    st.reserve(1000);
 
-    st.emplace_back(root, false);
+		// We use arrays, to prevent resizing in the loop. Can easily
+		// be switched to vectors.
+    constexpr int MAXN = 10001;
+    std::array<int, MAXN> tmp;
+    std::array<std::pair<const Node*, bool>, MAXN> st;
+    int tmpIdx = 0;
+    int stIdx = 0;
 
-    while (!st.empty()) {
-      const auto [cur, terminal] = std::move(st.back());
-      st.pop_back();
-      if (terminal) {
-        out.push_back(cur->val);
-        continue;
-      }
+    st[stIdx++] = { root, false };
 
-      st.emplace_back(cur, true);
-      for (const auto& child : cur->children | std::views::reverse) {
-        st.emplace_back(child, false);
+    while (0 < stIdx) {
+      if (st[stIdx - 1].second) {
+        tmp[tmpIdx++] = st[--stIdx].first->val;
+      } else {
+        const auto cur = st[stIdx - 1].first;
+        st[stIdx - 1].second = true;
+
+        for (const auto& child : cur->children | std::views::reverse) {
+          st[stIdx++] = { child, false };
+        }
       }
     }
 
-    return out;
+    return { tmp.begin(), tmp.begin() + tmpIdx };
   }
 };
