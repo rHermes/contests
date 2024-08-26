@@ -3,6 +3,10 @@
 #include <random>
 #include <vector>
 
+#ifdef DEBUG
+#include <iomanip>
+#endif
+
 class Solution
 {
 public:
@@ -12,77 +16,47 @@ public:
     // OK, let's do something cheeky.
     const int N = hours.size();
 
-		std::vector<int> PSA(N+1, 0);
-		for (int i = 0; i < N; i++) {
-			PSA[i + 1] = PSA[i];
-			if (8 < hours[i]) {
-				PSA[i+1]++;
-			} else {
-				PSA[i+1]--;
-			}
-		}
+    std::vector<int> PSA(N + 1, 0);
+    for (int i = 0; i < N; i++) {
+      PSA[i + 1] = PSA[i];
+      if (8 < hours[i]) {
+        PSA[i + 1]++;
+      } else {
+        PSA[i + 1]--;
+      }
+    }
 
-		// Ok, we are going to be running a
+    // ok, so by definition, we are now just trying to find the largest pair of
+    // l, r in PSA, where l < r and PSA[l] < PSA[r]. Now how do we find that
+    // interval.
+    //
+    // We do this in the following, by exploiting that if l1 < l2 and PSA[l1] < PSA[l2],
+    // then if l2 < r and PSA[l2] < PSA[r], then we will also have l1 < r and PSA[l1] < PSA[r].
+    // This means that we first just build up a montonic decreasing stack, of all the lowest points
+    // in the series, going from left to right. We can then go from right to left and just pop elements
+    // as long as They are smaller than the current element. This will by definition be the biggest interval
+    // where PSA[l] < PSA[r].
 
-		
-		std::vector<std::pair<int,int>> runs;
-		for (int i = 0; i < N; i++) {
-			const auto tiring = 8 < hours[i];
+    std::vector<int> stk;
+    for (int l = 0; l <= N; l++) {
+      if (stk.empty() || PSA[l] < PSA[stk.back()]) {
+        stk.push_back(l);
+      }
+    }
 
-			if (!tiring) {
-				continue;
-			}
+    int ans = 0;
+    for (int r = N; 0 <= r; r--) {
+      while (!stk.empty() && PSA[stk.back()] < PSA[r]) {
+        // ok, so now we are in a spot where the PSA overall is growing.
+        // meaning that from stk.back() to r there was an increase.
+        ans = std::max(ans, r - stk.back());
+        stk.pop_back();
+      }
+    }
 
-			if (!runs.empty() && runs.back().second == i) {
-				runs.back().second++;
-			} else {
-				runs.emplace_back(i, i+1);
-			}
-		}
-
-		std::cout << "We have the following runs:\n";
-		for (const auto& [start, end] : runs) {
-			std::cout << "- [" << start << ", " << end << ")\n";
-		}
-
-		// Now we really have a sort of graphish problem. Finding the costliest path throughout the
-		// network that still works. I think this might be NP hard, but the datasets are so small here.
-		// Can I view it as an act of moving the ones and zeros?
-		//
-
-		// ok, how about a monotonic queue?
-		
-
-
-		
-		int ans = 0;
     return ans;
   }
 };
-
-constexpr int
-bruteForce1(const std::vector<int>& hours)
-{
-  const int N = hours.size();
-  std::vector<int> PSA(N + 1, 0);
-  for (int i = 0; i < N; i++) {
-    PSA[i + 1] = PSA[i] + (8 < hours[i]);
-  }
-
-  // Now we just need to find the largest interval for each
-  int ans = 0;
-  for (int l = 0; l < N; l++) {
-    for (int r = N - 1; l <= r; r--) {
-      int numDays = r - l + 1;
-      int numGood = PSA[r + 1] - PSA[l];
-      if (numDays < 2 * numGood) {
-        ans = std::max(ans, numDays);
-        break;
-      }
-    }
-  }
-  return ans;
-}
 
 constexpr int
 bruteForce2(const std::vector<int>& hours)
@@ -183,14 +157,14 @@ main()
   constexpr int defaultTimes = 1000;
 
   std::random_device rd;
-	const auto seed = rd();
-	std::cout << "My seed is: " << seed << "\n";
-  /* runBattery(rd(), defaultTimes, defaultSize, 0.00); */
-  /* runBattery(rd(), defaultTimes, defaultSize, 0.05); */
-  /* runBattery(rd(), defaultTimes, defaultSize, 0.10); */
-  /* runBattery(rd(), defaultTimes, defaultSize, 0.15); */
+  const auto seed = rd();
+  std::cout << "My seed is: " << seed << "\n";
+  runBattery(rd(), defaultTimes, defaultSize, 0.00);
+  runBattery(rd(), defaultTimes, defaultSize, 0.05);
+  runBattery(rd(), defaultTimes, defaultSize, 0.10);
+  runBattery(rd(), defaultTimes, defaultSize, 0.15);
   runBattery(seed, defaultTimes, defaultSize, 0.30);
-  /* runBattery(rd(), defaultTimes, defaultSize, 0.50); */
+  runBattery(rd(), defaultTimes, defaultSize, 0.50);
 
   return 0;
 }
