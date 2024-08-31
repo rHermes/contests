@@ -1,5 +1,5 @@
 #include <iostream>
-#include <queue>
+#include <memory>
 #include <vector>
 
 inline const auto optimize = []() {
@@ -18,46 +18,32 @@ public:
                                const int start_node,
                                const int end_node)
   {
-    // Since the probability can only shrink, it means that we can use a shortest
-    // path algorithm like dijekstra to solve this.
-    std::vector<std::vector<std::pair<int, double>>> graph(N);
+    // We avoid building a graph here, to minimize the overall cost.
+    auto prob = std::make_unique<double[]>(N);
+    prob[start_node] = 1.0;
 
-    const int EN = edges.size();
-    for (int i = 0; i < EN; i++) {
-      const auto a = edges[i][0];
-      const auto b = edges[i][1];
-      const auto w = succProb[i];
+    const int SN = edges.size();
+    for (int i = 0; i < N; i++) {
+      bool connected = false;
+      for (int j = 0; j < SN; j++) {
+        const int a = edges[j][0];
+        const int b = edges[j][1];
+        const double p = succProb[j];
 
-      graph[a].emplace_back(b, w);
-      graph[b].emplace_back(a, w);
-    }
+        if (prob[b] < prob[a] * p) {
+          prob[b] = prob[a] * p;
+          connected = true;
+        }
 
-    std::vector<double> bestProb(N, 0);
-
-    std::priority_queue<std::pair<double, int>> Q;
-    Q.emplace(1, start_node);
-
-    while (!Q.empty()) {
-      const auto [curW, curIdx] = Q.top();
-      Q.pop();
-
-      if (curW < bestProb[curIdx])
-        continue;
-
-      if (curIdx == end_node) {
-        return curW;
-      }
-
-      for (const auto& [nextIdx, nextP] : graph[curIdx]) {
-        const double nextW = curW * nextP;
-
-        if (bestProb[nextIdx] < nextW) {
-          bestProb[nextIdx] = nextW;
-          Q.emplace(nextW, nextIdx);
+        if (prob[a] < prob[b] * p) {
+          prob[a] = prob[b] * p;
+          connected = true;
         }
       }
-    }
 
-    return 0;
+      if (!connected)
+        break;
+    }
+    return prob[end_node];
   }
 };

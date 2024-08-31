@@ -38,9 +38,8 @@ public:
       return {};
     }
 
-
-		// We use arrays, to prevent resizing in the loop. Can easily
-		// be switched to vectors.
+    // We use arrays, to prevent resizing in the loop. Can easily
+    // be switched to vectors.
     constexpr int MAXN = 10001;
     std::array<int, MAXN> tmp;
     std::array<std::pair<const Node*, bool>, MAXN> st;
