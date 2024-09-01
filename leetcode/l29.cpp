@@ -11,7 +11,7 @@ public:
       return 1;
     }
 
-    bool isPositive = (dividend < 0 == divisor < 0);
+    bool isPositive = (dividend < 0) == (divisor < 0);
     unsigned int a = std::abs(dividend);
     unsigned int b = std::abs(divisor);
 
