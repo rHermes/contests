@@ -24,7 +24,7 @@ inline const auto optimize = []() {
 class Solution
 {
 public:
-  static constexpr ListNode* modifiedList(const std::vector<int>& nums, ListNode* head)
+  static ListNode* modifiedList(const std::vector<int>& nums, ListNode* head)
   {
     // this is stupid, but a bitset is large enough for the input.
     // The more reasonable solution is to use a unordered_set, or even to just sort the nums list and do a binary search
