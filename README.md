@@ -15,10 +15,10 @@ Various datastructures:
 ### Leetcode
 
 This is the place I find task the most these days, and where I have most solved tasks. As of
-2024-08-31 I have all tasks here, and there are 446 of them. I am working on a tool to plot average
+2024-09-17 I have all tasks here, and there are 476 of them. I am working on a tool to plot average
 execution time compared to other solutions.
 
-( Note that there is one task which has two versions, so there will be one more file than there are tasks)
+( Note that there is two tasks which has two versions, so there will be two more file than there are tasks)
 
 https://leetcode.com/u/teodor_spaeren/
 
