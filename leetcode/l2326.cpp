@@ -1,6 +1,13 @@
 #include <iostream>
 #include <vector>
 
+// This can be removed once: https://github.com/llvm/llvm-project/issues/109402
+// is resolved
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wfor-loop-analysis"
+#endif
+
+
 /**
  * Definition for singly-linked list.
  */

@@ -2,4 +2,4 @@ If:
   PathMatch: .*\.(cpp|hpp)
 
 CompileFlags:
-  Add: [ -Wall, -Wextra, -pedantic, -std=c++20 ]
+  Add: [ -Wall, -Wextra, -pedantic, -std=c++23 ]
