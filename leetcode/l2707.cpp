@@ -34,54 +34,6 @@ inline const auto optimize = []() {
 
 class Solution
 {
-  using CACHE = std::vector<int>;
-
-  static int solve(CACHE& cache,
-                   const int SN,
-                   const TrieNode& root,
-                   const std::string_view& s,
-                   const int L,
-                   const int R)
-  {
-    if (R < L) {
-      return 0;
-    }
-
-    // ok, so let's get the key
-    const int key = L * SN + R;
-    if (cache[key] != -1) {
-      return cache[key];
-    }
-
-    // this is the max answer of course.
-    int ans = R - L + 1;
-
-    for (int l = L; l <= R; l++) {
-      // ok, we are going to be iterating now.
-      TrieNode const* cur = &root;
-
-      int r = l;
-      while (r <= R) {
-        const int idx = s[r] - 'a';
-        cur = cur->children[idx].get();
-        if (!cur)
-          break;
-
-        if (cur->found) {
-          // ok, so we can split here.
-          const int pre = solve(cache, SN, root, s, L, l - 1);
-          const int post = solve(cache, SN, root, s, r + 1, R);
-          ans = std::min(ans, pre + post);
-        }
-
-        r++;
-      }
-    }
-
-    cache[key] = ans;
-    return ans;
-  }
-
 public:
   static int minExtraChar(const std::string& s, const std::vector<std::string>& dictionary)
   {
@@ -92,8 +44,31 @@ public:
     }
 
     const int SN = s.size();
-    std::vector<int> cache(SN * SN, -1);
+    std::array<int, 51> dp;
+    std::ranges::fill_n(dp.begin() + 1, 50, std::numeric_limits<int>::max());
+    dp[0] = 0;
 
-    return solve(cache, SN, root, s, 0, SN - 1);
+    for (int l = 0; l < SN; l++) {
+      // We always make sure to init the one in front of us.
+      dp[l + 1] = std::min(dp[l + 1], dp[l] + 1);
+
+      // we will now follow the trie. We could do more here maybe?
+      TrieNode const* cur = &root;
+      for (int r = l; r < SN; r++) {
+        const auto idx = s[r] - 'a';
+        cur = cur->children[idx].get();
+
+        if (!cur) {
+          break;
+        }
+
+        if (cur->found) {
+          // ok, so now we have a new oppertunity
+          dp[r + 1] = std::min(dp[r + 1], dp[l]);
+        }
+      }
+    }
+
+    return dp[SN];
   }
 };
