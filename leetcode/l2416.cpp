@@ -9,71 +9,96 @@ inline const auto optimize = []() {
   return 0;
 }();
 
-class Solution
+// This is setup, so we can also create one tree of each length, to search
+// faster. I ended up not doing that here, as this actually ends up being just
+// as fast, and we spend less memory. The thing that speeds a lot of stuff up
+// here, is that we end up pooling the nodes, so both acquiring and release is
+// easy. It also means we get better cache locality, except in certain
+// pathalogical cases.
+class TrieForest
 {
-
   struct TrieNode
   {
-    int children{ 0 };
-    std::array<int, 26> data{};
+    std::array<int, 26> children{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+                                  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+    int under{ 0 };
   };
+  std::vector<TrieNode> m_nodes;
 
-  static int trieInsert(std::vector<TrieNode>& tree, int root, const std::string& str, const int idx)
+  [[nodiscard]] constexpr TrieNode& getNode(int idx) { return m_nodes[idx]; }
+  [[nodiscard]] constexpr const TrieNode& getNode(int idx) const { return m_nodes[idx]; }
+
+public:
+  [[nodiscard]] constexpr int getFreshNode()
   {
-    auto node = &tree[root];
-    node->children++;
-
-    if (static_cast<int>(str.size()) == idx)
-      return root;
-
-    const int next = str[idx] - 'a';
-
-    if (node->data[next] == 0)
-      if (tree[root].data[next] == 0) {
-        node->data[next] = tree.size();
-        tree.emplace_back();
-        node = &tree[root];
-      }
-
-    return trieInsert(tree, node->data[next], str, idx + 1);
+    int id = m_nodes.size();
+    m_nodes.emplace_back();
+    return id;
   }
 
-  static void triePushDown(std::vector<TrieNode>& tree, int root, int above)
+  constexpr void reserve(const int len) { m_nodes.reserve(len); }
+
+  constexpr int insert(const int curIdx, const std::string& str, const int idx)
   {
-    auto& node = tree[root];
+    auto& node = getNode(curIdx);
+    node.under++;
 
-    node.children += above;
+    if (idx == static_cast<int>(str.size())) {
+      return curIdx;
+    }
 
-    for (int i = 0; i < 26; i++) {
-      if (node.data[i] != 0)
-        triePushDown(tree, node.data[i], node.children);
+    const int cidx = str[idx] - 'a';
+    if (node.children[cidx] < 0) {
+      auto newId = getFreshNode();
+      getNode(curIdx).children[cidx] = newId;
+      return insert(newId, str, idx + 1);
+    } else {
+      return insert(node.children[cidx], str, idx + 1);
     }
   }
 
+  [[nodiscard]] constexpr int getUnder(const int curIdx) const { return getNode(curIdx).under; }
+
+  constexpr void pushDown(const int curIdx, const int above)
+  {
+    auto& node = getNode(curIdx);
+
+    node.under += above;
+
+    for (int i = 0; i < 26; i++) {
+      if (node.children[i] != -1) {
+        pushDown(node.children[i], node.under);
+      }
+    }
+  }
+};
+
+class Solution
+{
 public:
   static std::vector<int> sumPrefixScores(const std::vector<std::string>& words)
   {
     const int N = words.size();
 
-    // we are doing this with a vector instead of pointers, because it
-    // performs a lot better. This just shows that cache locality is the
-    // most important thing.
-    std::vector<TrieNode> tree;
-    tree.reserve(100);
-    tree.emplace_back();
-    int root = 0;
+    TrieForest forest;
+    forest.reserve(10000);
+
+    const auto root = forest.getFreshNode();
 
     std::vector<int> nodes(N);
     for (int i = 0; i < N; i++) {
-      nodes[i] = trieInsert(tree, root, words[i], 0);
+      nodes[i] = forest.insert(root, words[i], 0);
     }
 
-    triePushDown(tree, root, -tree[root].children);
+    // We are now going to reverse the tally, so it's not
+    // how many you have below you, but rather how many you have above you.
+    forest.pushDown(root, -forest.getUnder(root));
 
     std::vector<int> out(N);
     for (int i = 0; i < N; i++) {
-      out[i] = tree[nodes[i]].children;
+      out[i] = forest.getUnder(nodes[i]);
     }
     return out;
   }
 };
+;
