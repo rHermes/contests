@@ -86,7 +86,7 @@ public:
 
       const std::string_view num{ buf.data(), ptr };
 
-      if (ans < static_cast<int>(num.size()) <= ans)
+      if (ans < static_cast<int>(num.size()))
         ans = std::max(ans, forest.maxDepth(rootIdx, num));
     }
 

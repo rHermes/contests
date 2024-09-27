@@ -11,7 +11,7 @@ inline const auto optimize = []() {
 class MyCalendarTwo
 {
 public:
-  std::map<int, int> mp = { { -1, 0 }, { 1000000001, 0 } };
+  std::map<int, char> mp = { { -1, 0 }, { 1000000001, 0 } };
 
   bool book(int start, int end)
   {

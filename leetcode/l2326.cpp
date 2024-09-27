@@ -7,7 +7,6 @@
 #pragma clang diagnostic ignored "-Wfor-loop-analysis"
 #endif
 
-
 /**
  * Definition for singly-linked list.
  */
