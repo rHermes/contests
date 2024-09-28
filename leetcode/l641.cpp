@@ -1,57 +1,74 @@
-#include <cstdint>
-#include <vector>
+#include <iostream>
+#include <memory>
+
+inline const auto optimize = []() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  std::cout.tie(nullptr);
+  return 0;
+}();
 
 class MyCircularDeque
 {
   std::size_t cap_;
   std::size_t head_{ 0 };
   std::size_t tail_{ 0 };
-  std::vector<int> data_;
+  std::unique_ptr<int[]> data_{ std::make_unique_for_overwrite<int[]>(cap_ + 1) };
+
+  [[nodiscard]] constexpr std::size_t nextIdx(const std::size_t idx) const { return (idx != cap_) ? (idx + 1) : 0; }
+
+  [[nodiscard]] constexpr std::size_t prevIdx(const std::size_t idx) const { return (idx != 0) ? (idx - 1) : cap_; }
 
 public:
-  MyCircularDeque(int k) : cap_{ static_cast<std::size_t>(k) + 1 }, data_(cap_) {}
+  constexpr MyCircularDeque(int k) : cap_{ static_cast<std::size_t>(k) } {}
 
-  bool insertFront(int value)
+  constexpr bool insertFront(int value)
   {
     if (isFull())
       return false;
 
-    head_ = (head_ + cap_ - 1) % cap_;
+    head_ = prevIdx(head_);
     data_[head_] = value;
 
     return true;
   }
 
-  bool insertLast(int value)
+  constexpr bool insertLast(int value)
   {
     if (isFull())
       return false;
 
     data_[tail_] = value;
-    tail_ = (tail_ + 1) % cap_;
+    tail_ = nextIdx(tail_);
     return true;
   }
 
-  bool deleteFront()
+  constexpr bool deleteFront()
   {
     if (isEmpty()) {
       return false;
     }
 
-    head_ = (head_ + 1) % cap_;
+    // What this would do in real life to free the resource
+    // std::ranges::destroy_at(&(data_[head_]));
+
+    head_ = nextIdx(head_);
     return true;
   }
 
-  bool deleteLast()
+  constexpr bool deleteLast()
   {
     if (isEmpty())
       return false;
 
-    tail_ = (tail_ + cap_ - 1) % cap_;
+    tail_ = prevIdx(tail_);
+
+    // What we would do in real life to release the resource.
+    // std::ranges::destroy_at(&data_[tail_]);
     return true;
   }
 
-  int getFront()
+  [[nodiscard]] constexpr int getFront() const
   {
     if (isEmpty())
       return -1;
@@ -59,17 +76,17 @@ public:
     return data_[head_];
   }
 
-  int getRear()
+  [[nodiscard]] constexpr int getRear() const
   {
     if (isEmpty())
       return -1;
 
-    return data_[(tail_ + cap_ - 1) % cap_];
+    return data_[prevIdx(tail_)];
   }
 
-  bool isEmpty() { return head_ == tail_; }
+  [[nodiscard]] constexpr bool isEmpty() const { return head_ == tail_; }
 
-  bool isFull() { return ((tail_ + 1) % cap_) == head_; }
+  [[nodiscard]] constexpr bool isFull() const { return head_ == nextIdx(tail_); }
 };
 
 /**
