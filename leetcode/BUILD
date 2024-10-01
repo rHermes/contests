@@ -15,7 +15,7 @@ for f in glob(["*/*.cpp", "*.cpp"], allow_empty=True):
     # log.warning(base)
     # log.warning(target)
 
-    if target == "l432_vec":
+    if target == "x432_vec":
         cc_binary(
             name = target,
             srcs = [f],
