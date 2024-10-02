@@ -1,5 +1,5 @@
-#include <alloca.h>
 #include <iostream>
+#include <memory>
 #include <vector>
 
 inline const auto optimize = []() {
@@ -15,8 +15,7 @@ public:
   static bool canArrange(const std::vector<int>& arr, const int K)
   {
     // just because I can, I will use a static array here.
-    auto freqs = static_cast<int*>(alloca(sizeof(int) * K));
-    std::ranges::fill_n(freqs, K, 0);
+    auto freqs = std::make_unique<int[]>(K);
 
     for (const auto x : arr) {
       // this is faster than the general solution, as it avoids a second
