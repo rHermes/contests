@@ -31,8 +31,7 @@ public:
     for (int i = 0; i < N1; i++)
       seen[s2[i] - 'a']--;
 
-    // now we count the number of characters that are
-    // set
+    // now we count the number of characters that are set
     char uniq = 0;
     for (int i = 0; i < 26; i++)
       uniq += seen[i] != 0;
