@@ -15,13 +15,14 @@ for f in glob(["*/*.cpp", "*.cpp"], allow_empty=True):
     # log.warning(base)
     # log.warning(target)
 
-    if target == "x432_vec":
+    if target == "l1813_simd":
         cc_binary(
             name = target,
             srcs = [f],
             # compiler_flags = ["-Wall", "-Wextra", "-Wconversion", "-std=c++2a", "-O2"],
             # compiler_flags = ["-Wall", "-Wextra", "-pedantic", "-std=c++2a", "-O2"],
-            compiler_flags = ["-Wall", "-Wextra", "-pedantic", "-D_GLIBCXX_DEBUG", "-g", "-std=c++23", "-Wno-unused-parameter"],
+            # compiler_flags = ["-Wall", "-Wextra", "-pedantic", "-D_GLIBCXX_DEBUG", "-g", "-std=c++23", "-Wno-unused-parameter"],
+            compiler_flags = ["-Wall", "-Wextra", "-pedantic", "-D_GLIBCXX_DEBUG", "-g", "-march=native", "-std=c++23", "-Wno-unused-but-set-variable", "-Wno-unused-parameter", "-Wno-unused-variable"],
         )
     else:
         cc_library(
