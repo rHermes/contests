@@ -14,18 +14,13 @@ inline const auto optimize = []() {
 
 class Solution
 {
-public:
-  static bool areSentencesSimilar(const std::string& s1, const std::string& s2) __attribute__((target("avx,avx2")))
+
+  static bool __attribute__((target("avx,avx2"))) areSimilar1(const char* __restrict__ s1,
+                                                              const int SN1,
+                                                              const char* __restrict__ s2,
+                                                              const int SN2)
+
   {
-    const int SN1 = s1.size();
-    const int SN2 = s2.size();
-
-    if (SN1 == SN2) {
-      return s1 == s2;
-    } else if (SN2 < SN1) {
-      return areSentencesSimilar(s2, s1);
-    }
-
     // ok, so since this is so small strings, we will cheat a bit here
     // and create a buffer with 128 bytes, which frees us from doing much else
 
@@ -36,8 +31,8 @@ public:
     std::ranges::fill(buf1, ' ');
     std::ranges::fill(buf2, ' ');
 
-    std::ranges::copy(s1, buf1.begin());
-    std::ranges::copy(s2, buf2.begin());
+    std::ranges::copy_n(s1, SN1, buf1.begin());
+    std::ranges::copy_n(s2, SN2, buf2.begin());
 
     // This stores the last valid space we saw
     int leftPos = 0;
@@ -102,6 +97,106 @@ public:
     }
 
     return true;
+  }
+
+  // SN1 must be smaller than SN2
+  // Version which does not allocate extra memory, and does not rely on max length of the strings.
+  static bool __attribute__((target("avx,avx2"))) areSimilar2(const char* __restrict__ s1,
+                                                              const int SN1,
+                                                              const char* __restrict__ s2,
+                                                              const int SN2)
+
+  {
+    // 256 bit vector approach
+    const __m256i spaceVec = _mm256_set1_epi8(' ');
+    constexpr std::uint32_t ALL_ONES = std::numeric_limits<std::uint32_t>::max();
+
+    int leftPos = 0;
+
+    // ok, so since this is so small strings, we will cheat a bit here
+    // and create a buffer with 128 bytes, which frees us from doing much else
+    bool allMatched = true;
+    int i;
+    for (i = 0; i < SN1 - 32; i += 32) {
+      const __m256i b1 = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(s1 + i));
+      const __m256i b2 = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(s2 + i));
+
+      const std::uint32_t whereEq = _mm256_movemask_epi8(_mm256_cmpeq_epi8(b1, b2));
+      const std::uint32_t whereSpace = _mm256_movemask_epi8(_mm256_cmpeq_epi8(b1, spaceVec));
+
+      if (whereEq == ALL_ONES) {
+        const int spacePos = 31 - static_cast<int>(std::countl_zero(whereSpace));
+        if (spacePos != -1) {
+          leftPos = i + spacePos;
+        }
+        continue;
+      }
+
+      allMatched = false;
+
+      const auto badSpot = std::countr_one(whereEq);
+
+      const std::uint32_t goodMask = (static_cast<std::uint32_t>(1) << badSpot) - 1;
+      const std::uint32_t modSpace = goodMask & whereSpace;
+
+      const int spacePos = 31 - static_cast<int>(std::countl_zero(modSpace));
+      if (spacePos != -1) {
+        leftPos = i + spacePos;
+      }
+      break;
+    }
+
+    // let's do the comparision
+    if (allMatched) {
+      for (; i < SN1; i++) {
+        if (s1[i] != s2[i]) {
+          allMatched = false;
+          break;
+        }
+        if (s1[i] == ' ') {
+          leftPos = i;
+        }
+      }
+    }
+
+    if (allMatched && (s2[SN1] == ' '))
+      return true;
+
+    // We can do a quick check to see if
+    if (leftPos == 0 && s2[SN2 - SN1 - 1] != ' ')
+      return false;
+
+    int j = leftPos;
+    for (; j < SN1 - 32; j += 32) {
+      const __m256i b1 = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(s1 + j));
+      const __m256i b2 = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(s2 + SN2 - SN1 + j));
+
+      const std::uint32_t whereEq = _mm256_movemask_epi8(_mm256_cmpeq_epi8(b1, b2));
+      if (whereEq != ALL_ONES)
+        return false;
+    }
+
+    for (; j < SN1; j++) {
+      if (s1[j] != s2[SN2 - SN1 + j])
+        return false;
+    }
+
+    return true;
+  }
+
+public:
+  static bool areSentencesSimilar(const std::string& s1, const std::string& s2) __attribute__((target("avx,avx2")))
+  {
+    const int SN1 = s1.size();
+    const int SN2 = s2.size();
+
+    if (SN1 == SN2) {
+      return s1 == s2;
+    } else if (SN2 < SN1) {
+      return areSimilar2(s2.data(), SN2, s1.data(), SN1);
+    } else {
+      return areSimilar2(s1.data(), SN1, s2.data(), SN2);
+    }
   }
 };
 
