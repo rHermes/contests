@@ -185,7 +185,7 @@ class Solution
   }
 
 public:
-  static bool areSentencesSimilar(const std::string& s1, const std::string& s2) __attribute__((target("avx,avx2")))
+  static bool __attribute__((target("avx,avx2"))) areSentencesSimilar(const std::string& s1, const std::string& s2)
   {
     const int SN1 = s1.size();
     const int SN2 = s2.size();
