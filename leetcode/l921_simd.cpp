@@ -12,55 +12,81 @@ inline const auto optimize = []() {
 class Solution
 {
 public:
-  static int __attribute__((target("sse4.2"))) minAddToMakeValid(const std::string& s)
+  static int __attribute__((target("avx2"))) minAddToMakeValid(const std::string& s)
   {
     const int N = s.size();
 
-    int ans = 0;
-    int balance = 0;
+    const auto ALL_ZERO = _mm256_setzero_si256();
+    const auto ALL_ONE = _mm256_set1_epi8(0x01);
+    const auto ALL_SET = _mm256_set1_epi8(-1);
 
-    const auto ALL_ONE = _mm_set1_epi8(0x01);
-    const auto ALL_SET = _mm_set1_epi8(0xFF);
+    auto ans = _mm256_setzero_si256();
+    auto balance = _mm256_setzero_si256();
 
     int i = 0;
-    for (; i + 16 <= N; i += 16) {
-      const auto chunk = _mm_loadu_si128(reinterpret_cast<__m128i const*>(s.data() + i));
-      const auto leftBraces = _mm_sub_epi8(chunk, _mm_set1_epi8(')'));
-      const auto rightBraces = _mm_andnot_si128(leftBraces, ALL_SET);
-      const auto valueChunk = _mm_or_si128(rightBraces, ALL_ONE);
+    for (; i + 32 <= N; i += 32) {
+      const auto chunk = _mm256_loadu_si256(reinterpret_cast<__m256i const*>(s.data() + i));
+      const auto leftBraces = _mm256_sub_epi8(chunk, _mm256_set1_epi8(')'));
+      const auto rightBraces = _mm256_andnot_si256(leftBraces, ALL_SET);
+      const auto valueChunk = _mm256_or_si256(rightBraces, ALL_ONE);
 
-      auto psa = _mm_add_epi8(valueChunk, _mm_bslli_si128(valueChunk, 1));
-      psa = _mm_add_epi8(psa, _mm_bslli_si128(psa, 2));
-      psa = _mm_add_epi8(psa, _mm_bslli_si128(psa, 4));
-      psa = _mm_add_epi8(psa, _mm_bslli_si128(psa, 8));
+      auto psa = _mm256_add_epi8(valueChunk, _mm256_bslli_epi128(valueChunk, 1));
+      psa = _mm256_add_epi8(psa, _mm256_bslli_epi128(psa, 2));
+      psa = _mm256_add_epi8(psa, _mm256_bslli_epi128(psa, 4));
+      psa = _mm256_add_epi8(psa, _mm256_bslli_epi128(psa, 8));
 
-      // Now if I have more than 16 in balance,  I can skip the next bit,
-      // but I don't, since it's better to just pipeline everything.
-      auto min = _mm_min_epi8(psa, _mm_bslli_si128(psa, 1));
-      min = _mm_min_epi8(min, _mm_bslli_si128(min, 2));
-      min = _mm_min_epi8(min, _mm_bslli_si128(min, 4));
-      min = _mm_min_epi8(min, _mm_bslli_si128(min, 8));
+      auto min = _mm256_min_epi8(psa, _mm256_bslli_epi128(psa, 1));
+      min = _mm256_min_epi8(min, _mm256_bslli_epi128(min, 2));
+      min = _mm256_min_epi8(min, _mm256_bslli_epi128(min, 4));
+      min = _mm256_min_epi8(min, _mm256_bslli_epi128(min, 8));
 
-      const std::int8_t finPsa = static_cast<std::int8_t>(_mm_extract_epi8(psa, 15));
-      const std::int8_t minVal = -static_cast<std::int8_t>(_mm_extract_epi8(min, 15));
+      // ok, let's swap min and psa.
+      const auto flippedPSA = _mm256_permute2x128_si256(psa, psa, 0x01);
+      const auto flippedMin = _mm256_permute2x128_si256(min, min, 0x01);
 
-      const int padding = std::max(0, minVal - balance);
-      balance += finPsa + padding;
-      ans += padding;
+      // ok, now we add these together.
+      const auto finalPsa = _mm256_add_epi8(flippedPSA, psa);
+      const auto finalMin = _mm256_add_epi8(flippedMin, psa);
+
+      // ok, so now we just have to compare.
+      const auto totalMin = _mm256_min_epi8(min, finalMin);
+      const auto negMin = _mm256_sub_epi8(ALL_ZERO, totalMin);
+
+      // now then, we are going to revesre the totalMin, since we need that.
+      // ok, so this is nice, we can actually get both of them like we want by shifting 15 to the right.
+      const auto onlyPSA = _mm256_bsrli_epi128(finalPsa, 15);
+      const auto onlyMin = _mm256_bsrli_epi128(negMin, 15);
+
+      // Now then, we are going to convert this.
+      const auto lowOnlyPSA = _mm256_castsi256_si128(onlyPSA);
+      const auto lowOnlyMin = _mm256_castsi256_si128(onlyMin);
+
+      // We need to use 32, because there there is no max_epi64
+      const auto onlyPSA_32 = _mm256_cvtepi8_epi32(lowOnlyPSA);
+      const auto onlyMin_32 = _mm256_cvtepi8_epi32(lowOnlyMin);
+
+      const auto padding = _mm256_max_epi32(_mm256_sub_epi32(onlyMin_32, balance), ALL_ZERO);
+      const auto tempAdd = _mm256_add_epi32(padding, onlyPSA_32);
+
+      balance = _mm256_add_epi32(balance, tempAdd);
+      ans = _mm256_add_epi32(ans, padding);
     }
+
+    int scalarBalance = _mm256_cvtsi256_si32(balance);
+    int scalarAns = _mm256_cvtsi256_si32(ans);
 
     for (; i < N; i++) {
       if (s[i] == '(') {
-        balance++;
+        scalarBalance++;
       } else {
-        balance--;
-        if (balance < 0) {
-          ans++;
-          balance = 0;
+        scalarBalance--;
+        if (scalarBalance < 0) {
+          scalarAns++;
+          scalarBalance = 0;
         }
       }
     }
 
-    return ans + balance;
+    return scalarAns + scalarBalance;
   }
 };
