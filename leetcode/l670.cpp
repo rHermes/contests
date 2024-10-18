@@ -7,6 +7,8 @@ class Solution
 public:
   static int maximumSwap(const int num)
   {
+    [[assume((0 <= num) && (num <= 100'000'000))]];
+
     // ok, so it's always going to be to swap the largest number with the first number.
     // Max input is 10^8
     std::array<char, 9> buf;
