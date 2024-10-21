@@ -15,10 +15,15 @@ Various datastructures:
 ### Leetcode
 
 This is the place I find task the most these days, and where I have most solved tasks. As of
-2024-09-29 I have all tasks here, and there are 483 of them. I am working on a tool to plot average
+2024-10-21 I have all tasks here, and there are 504 of them. I am working on a tool to plot average
 execution time compared to other solutions.
 
-( Note that there is three tasks which has two versions, so there will be three more file than there are tasks)
+There are some tasks that have alternate solutions, which are cool or unusual in some way. These will
+have a `lXXX_YYY.cpp` name, and to avoid counting them when checking, we use the following command:
+
+```
+tokei -e '*_*.cpp'
+```
 
 https://leetcode.com/u/teodor_spaeren/
 
