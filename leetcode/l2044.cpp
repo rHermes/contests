@@ -31,7 +31,7 @@ public:
   {
     // ok, this is stupid. The maximum OR is always going to be the total OR. So the question is to
     // see how many we can remove without triggering a bit to be lost.
-    [[assume(0 <= nums.size() && nums.size() <= 16)]];
+    [[assume(nums.size() <= 16)]];
     const int N = nums.size();
 
     const int target = std::reduce(nums.begin(), nums.end(), 0, std::bit_or{});
